@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>红包倒置</title>
+    <link
+      href="./libs/element-ui/2.15.3/theme-chalk/index.css"
+      rel="stylesheet"
+    />
+    <style>
+      .expand__table {
+        width: 100%;
+      }
+      .expand__table td {
+        padding-left: 20px;
+      }
+      .el-table__expanded-cell {
+        padding-right: 0 !important;
+      }
+      .pointer {
+        cursor: pointer;
+      }
+      .tac {
+        text-align: center;
+      }
+      .table-wrap {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      .form-item__pb0 {
+        margin-bottom: 0 !important;
+      }
+      .el-button + .el-button {
+        margin-left: 0;
+      }
+      .col-width-auto {
+        width: auto;
+      }
+      .form-item__mb0 {
+        margin-bottom: 0 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <template>
+        <el-form :inline="true" :model="filter" size="small">
+          <el-form-item>
+            <el-input
+              v-model="filter.planName"
+              placeholder="请输入方案名称"
+              maxlength="20"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-date-picker
+              v-model="filter.startTime"
+              type="datetime"
+              placeholder="请选择开始时间"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-date-picker
+              v-model="filter.endTime"
+              type="datetime"
+              placeholder="请选择结束时间"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSearch">查询</el-button>
+            <el-button type="primary" @click="onAdd()">添加方案</el-button>
+          </el-form-item>
+        </el-form>
+
+        <el-table :data="tableData" class="table-wrap">
+          <el-table-column label="方案名称" prop="planName"></el-table-column>
+          <el-table-column label="池" prop="planNumber"></el-table-column>
+          <el-table-column label="创建时间" prop="createTime"></el-table-column>
+          <el-table-column label="开始时间" prop="startTime"></el-table-column>
+          <el-table-column label="结束时间" prop="endTime"></el-table-column>
+          <el-table-column
+            label="对应项目"
+            prop="projectName"
+          ></el-table-column>
+          <el-table-column label="策略" prop="strategys"></el-table-column>
+          <el-table-column label="操作" width="150">
+            <template slot-scope="scope">
+              <el-button type="text" size="small" @click="onEdit(scope.row)"
+                >编辑</el-button
+              >
+              <el-button type="text" size="small" @click="onDel(scope.row)"
+                >删除</el-button
+              >
+              <el-button
+                type="text"
+                size="small"
+                @click="onSwitchStatus(scope.row)"
+                v-if="scope.row.switch == 1"
+                >启用</el-button
+              >
+              <el-button
+                type="text"
+                size="small"
+                @click="onSwitchStatus(scope.row)"
+                v-else
+                >停用</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          class="tac"
+          background
+          layout="prev, pager, next"
+          :total="page.total"
+          :current-page.sync="filter.pageNum"
+          :page-size.sync="filter.pageSize"
+          @current-change="fetchList"
+        >
+        </el-pagination>
+      </template>
+    </div>
+    <script src="./libs/vue/2.6.12/vue.min.js"></script>
+    <script src="./libs/element-ui/2.15.3/index.min.js"></script>
+    <script src="./libs/axios/0.21.1/axios.min.js"></script>
+    <script src="./js/request.js"></script>
+    <script>
+      var el = new Vue({
+        el: '#app',
+        data() {
+          return {
+            filter: {
+              planName: '',
+              startTime: '',
+              endTime: '',
+              pageNum: 1,
+              pageSize: 10,
+            },
+            page: {
+              total: 0,
+            },
+            tableData: [],
+            rows: {},
+          }
+        },
+        computed: {},
+        methods: {
+          onAdd(rows) {
+            location.href = `./redPacketInvertDetails.html`
+          },
+          onEdit(rows) {
+            location.href = `./redPacketInvertDetails.html?id=${rows.id}`
+          },
+          fetchList() {
+            service({
+              url: '/user/strategy/inversion/list',
+              method: 'get',
+              data: this.filter,
+            }).then(({ data }) => {
+              this.tableData = data.list
+              this.page.total = data.total
+            })
+          },
+          //搜索
+          onSearch() {
+            this.filter.pageNum = 1
+            this.filter.pageSize = 10
+            this.fetchList()
+          },
+          //启用停用
+          getSwitchStatus() {
+            service({
+              url: '/qmFactoryLine/v1/updateFactory',
+              method: 'post',
+              data: {
+                factoryId: this.rows.id,
+                isClose: this.rows.status,
+              },
+            }).then(() => {
+              this.fetchList()
+            })
+          },
+          onDel(rows) {
+            this.rows = rows
+            this.$confirm('确认删除吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            })
+              .then(() => {
+                this.getDel()
+              })
+              .catch(() => {})
+          },
+          // 删除
+          getDel() {
+            service({
+              url: '/user/strategy/inversion/delete.shtml',
+              method: 'post',
+              data: {
+                id: this.rows.id,
+              },
+            }).then(() => {
+              this.fetchList()
+            })
+          },
+          onSwitchStatus(rows) {
+            this.rows = rows
+            this.$confirm('确认切换此状态吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            })
+              .then(() => {
+                this.getSwitchStatus()
+              })
+              .catch(() => {})
+          },
+          // 切换状态
+          getSwitchStatus() {
+            service({
+              url: '/user/strategy/inversion/switch',
+              method: 'put',
+              data: {
+                id: this.rows.id,
+                switch: Number(!this.rows.switch),
+              },
+            }).then(() => {
+              this.fetchList()
+            })
+          },
+        },
+        created() {
+          this.fetchList()
+        },
+      })
+    </script>
+  </body>
+</html>

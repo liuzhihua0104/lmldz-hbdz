@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>红包倒置详情页</title>
+    <link
+      href="./libs/element-ui/2.15.3/theme-chalk/index.css"
+      rel="stylesheet"
+    />
+    <style>
+      .col-width-auto {
+        width: auto;
+      }
+      .form-item__mb0 {
+        margin-bottom: 0 !important;
+      }
+
+      .section-table th {
+        text-align: left;
+      }
+      .section-table th,
+      .section-table td {
+        padding: 0 10px;
+      }
+
+      .pointer {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <template>
+        <el-form
+          :model="formData"
+          :rules="formRules"
+          ref="form"
+          label-width="auto"
+          size="small"
+        >
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>方案详情页</span>
+            </div>
+            <el-row>
+              <el-col :span="6">
+                <el-form-item label="方案名称:" prop="planName">
+                  <el-input
+                    v-model="formData.planName"
+                    placeholder="请输入方案名称"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6" :offset="6">
+                <el-form-item label="池:" prop="planNumber">
+                  <el-input
+                    v-model="formData.planNumber"
+                    placeholder="请输入池数值"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="5">
+                <el-form-item label="开始时间:" prop="startTime">
+                  <el-date-picker
+                    v-model="formData.startTime"
+                    type="datetime"
+                    placeholder="请选择开始时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                  >
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5" :offset="7">
+                <el-form-item label="结束时间:" prop="endTime">
+                  <el-date-picker
+                    v-model="formData.endTime"
+                    type="datetime"
+                    placeholder="请选择结束时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                  >
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-card>
+          <el-card>
+            <div slot="header" class="clearfix">
+              <span>配置关联</span>
+            </div>
+            <el-row>
+              <el-col :span="6">
+                <el-form-item label="项目:" prop="projectCodes">
+                  <el-select
+                    v-model="formData.projectCodes"
+                    multiple
+                    placeholder="请选择项目"
+                    filterable
+                  >
+                    <el-option
+                      v-for="item in projectList"
+                      :key="item.code"
+                      :label="item.name"
+                      :value="item.code"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6" :offset="6">
+                <el-form-item label="策略:" prop="strategyIds">
+                  <el-select
+                    v-model="formData.strategyIds"
+                    multiple
+                    placeholder="请选择策略"
+                    filterable
+                  >
+                    <el-option
+                      v-for="item in strategyList"
+                      :key="item.id"
+                      :label="item.projectName + '-' + item.strategyName + (item.isTrue == 3 ? '(红包)' : '')"
+                      :value="item.id"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-divider></el-divider>
+
+            <div style="text-align: right">
+              <el-button type="primary" @click="onAddRow" size="mini"
+                >加一行</el-button
+              >
+            </div>
+            <br />
+
+            <table class="section-table">
+              <tr>
+                <th width="100">区间</th>
+                <th>补量策略选择</th>
+                <th>补量抵扣值</th>
+                <th>补量率(%)</th>
+                <th>处理方式</th>
+                <th>策略选择</th>
+                <th>策略抵扣值</th>
+                <th>概率(%)</th>
+                <th>处理方式</th>
+                <th></th>
+              </tr>
+              <tr v-for="(item, index) in formData.section" :key="index">
+                <td>
+                  <!-- 区间 -->
+                  <el-form-item label-width="auto">
+                    {{sectionType[item.type] || item.type}}
+                  </el-form-item>
+                </td>
+                <td>
+                  <!-- 补量策略选择 -->
+                  <el-form-item label-width="auto">
+                    <el-select
+                      v-model="item.replenishmentStrategySelection"
+                      @change="changeSelect"
+                    >
+                      <el-option
+                        v-for="item in strategySelectionList"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </td>
+                <td>
+                  <!-- 补量抵扣值 -->
+                  <el-form-item
+                    label-width="auto"
+                    :prop="'section.' + index + '.replenishmentDeduction'"
+                    :rules="{
+                      required: item.replenishmentStrategySelection == 1 ? false : true, message: '请输入', trigger: 'blur'
+                    }"
+                  >
+                    <el-input
+                      v-model="item.replenishmentDeduction"
+                      :disabled="item.replenishmentStrategySelection == 1"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <!-- 补量率(%) -->
+                  <el-form-item
+                    label-width="auto"
+                    :prop="'section.' + index + '.replenishmentRate'"
+                    :rules="{
+                      required: item.replenishmentStrategySelection == 1 ? false : true, message: '请输入', trigger: 'blur'
+                    }"
+                  >
+                    <el-input
+                      v-model="item.replenishmentRate"
+                      :disabled="item.replenishmentStrategySelection == 1"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <!-- 处理方式 -->
+                  <el-form-item label-width="auto">
+                    <el-select
+                      v-model="item.replenishmenthandleType"
+                      :disabled="item.replenishmentStrategySelection == 1"
+                    >
+                      <el-option
+                        v-for="item in replenishmenthandleType"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </td>
+                <td>
+                  <!-- 策略选择 -->
+                  <el-form-item label-width="auto">
+                    <el-select
+                      v-model="item.strategySelection"
+                      @change="changeSelect"
+                    >
+                      <el-option
+                        v-for="item in strategySelectionList"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </td>
+                <td>
+                  <!-- 策略抵扣值 -->
+                  <el-form-item
+                    label-width="auto"
+                    :prop="'section.' + index + '.strategyDeduction'"
+                    :rules="{
+                    required: item.strategySelection == 1 ? false : true, message: '请输入', trigger: 'blur'
+                  }"
+                  >
+                    <el-input
+                      v-model="item.strategyDeduction"
+                      :disabled="item.strategySelection == 1"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <!-- 概率(%) -->
+                  <el-form-item
+                    label-width="auto"
+                    :prop="'section.' + index + '.probability'"
+                    :rules="{
+                    required: item.strategySelection == 1 ? false : true, message: '请输入', trigger: 'blur'
+                  }"
+                  >
+                    <el-input
+                      v-model="item.probability"
+                      :disabled="item.strategySelection == 1"
+                      placeholder="请输入"
+                    ></el-input>
+                  </el-form-item>
+                </td>
+                <td>
+                  <!-- 处理方式 -->
+                  <el-form-item label-width="auto">
+                    <el-select
+                      v-model="item.handleType"
+                      :disabled="item.strategySelection == 1"
+                    >
+                      <el-option
+                        v-for="item in replenishmenthandleType"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </td>
+                <td>
+                  <el-form-item label-width="auto"
+                    ><i
+                      class="el-icon-delete pointer"
+                      v-if="item.type != -1 && item.type != 'other' && item.type != 1"
+                      @click="onDel(index)"
+                    ></i
+                  ></el-form-item>
+                </td>
+              </tr>
+            </table>
+            <el-form-item label-width="auto" style="text-align: center">
+              <el-button @click="onCancel">取消</el-button>
+              <el-button type="primary" @click="onConfirm('form')"
+                >确定</el-button
+              >
+            </el-form-item>
+          </el-card>
+        </el-form>
+      </template>
+    </div>
+    <script src="./libs/vue/2.6.12/vue.min.js"></script>
+    <script src="./libs/element-ui/2.15.3/index.min.js"></script>
+    <script src="./libs/axios/0.21.1/axios.min.js"></script>
+    <script src="./js/request.js"></script>
+    <script>
+      function getUrlQuery() {
+        let search = location.search
+        let obj = {}
+        if (search) {
+          let query = search.substring(1).split('&')
+          query.forEach((queryItem) => {
+            let keyValue = queryItem.split('=')
+            let [key, value] = keyValue
+            if (key) {
+              obj[key] = value
+            }
+          })
+        }
+        return obj
+      }
+
+      var el = new Vue({
+        el: '#app',
+        data() {
+          return {
+            sectionType: {
+              '-1': '新用户',
+              other: '其他',
+            },
+            strategySelectionList: [
+              {
+                name: '常规策略',
+                value: '1',
+              },
+              {
+                name: '红包倒置',
+                value: '2',
+              },
+            ],
+            replenishmenthandleType: [
+              {
+                name: '清零',
+                value: '1',
+              },
+              {
+                name: '扣值',
+                value: '2',
+              },
+            ],
+            formData: {
+              id: '',
+              planName: '',
+              planNumber: '',
+              startTime: '',
+              endTime: '',
+              projectCodes: [],
+              strategyIds: [],
+              section: [
+                {
+                  type: '-1',
+                  replenishmentStrategySelection: '1',
+                  replenishmentDeduction: '',
+                  replenishmentRate: '',
+                  replenishmenthandleType: '1',
+                  strategySelection: '1',
+                  strategyDeduction: '',
+                  probability: '',
+                  handleType: '1',
+                },
+                {
+                  type: '1',
+                  replenishmentStrategySelection: '1',
+                  replenishmentDeduction: '',
+                  replenishmentRate: '',
+                  replenishmenthandleType: '1',
+                  strategySelection: '1',
+                  strategyDeduction: '',
+                  probability: '',
+                  handleType: '1',
+                },
+                {
+                  type: 'other',
+                  replenishmentStrategySelection: '1',
+                  replenishmentDeduction: '',
+                  replenishmentRate: '',
+                  replenishmenthandleType: '1',
+                  strategySelection: '1',
+                  strategyDeduction: '',
+                  probability: '',
+                  handleType: '1',
+                },
+              ],
+            },
+            formRules: {
+              planName: [
+                { required: true, message: '请输入', trigger: 'change' },
+              ],
+              planNumber: [
+                { required: true, message: '请输入', trigger: 'change' },
+              ],
+              startTime: [
+                { required: true, message: '请选择', trigger: 'change' },
+              ],
+              endTime: [
+                { required: true, message: '请选择', trigger: 'change' },
+              ],
+              projectCodes: [
+                { required: true, message: '请选择', trigger: 'change' },
+              ],
+              strategyIds: [
+                { required: true, message: '请选择', trigger: 'change' },
+              ],
+            },
+
+            projectList: [],
+            strategyList: [],
+          }
+        },
+        watch: {
+          'formData.projectCodes': function () {
+            console.log('watch projectCodes')
+            // 获取策略列表
+            this.getStrategyList()
+          },
+        },
+        methods: {
+          // 获取项目列表
+          getProjectList() {
+            service({
+              url: '/project/list',
+              method: 'get',
+            }).then(({ data }) => {
+              this.projectList = data
+            })
+          },
+          // 获取策略列表
+          getStrategyList() {
+            console.log(this.formData.projectCodes)
+            service({
+              url: '/user/prizestrategy/list',
+              method: 'get',
+              data: {
+                projectCodes: this.formData.projectCodes,
+              },
+            }).then(({ data }) => {
+              this.strategyList = data
+            })
+          },
+          onAddRow() {
+            this.formData.section.splice(-1, 0, {
+              type: this.formData.section.length - 1,
+              replenishmentStrategySelection: '1',
+              replenishmentDeduction: '',
+              replenishmentRate: '',
+              replenishmenthandleType: '1',
+              strategySelection: '1',
+              strategyDeduction: '',
+              probability: '',
+              handleType: '1',
+            })
+          },
+          onCancel() {
+            window.history.go(-1)
+          },
+          onConfirm(formName) {
+            this.$refs[formName].validate((valid) => {
+              if (valid) {
+                this.getStrategyAddEdit()
+              } else {
+                console.log('error submit!!')
+                return false
+              }
+            })
+          },
+          // 新增/编辑
+          getStrategyAddEdit() {
+            service({
+              url: '/user/strategy/inversion/create',
+              method: 'post',
+              data: this.formData,
+            }).then(({ data }) => {})
+          },
+          changeSelect() {
+            this.$refs['form'].clearValidate()
+          },
+          onDel(index) {
+            this.formData.section.splice(index, 1)
+            for (let i = index; i < this.formData.section.length - 1; i++) {
+              this.formData.section[i].type = i
+            }
+          },
+          getDetails() {
+            service({
+              url: '/user/strategy/inversion/detail',
+              method: 'get',
+              data: {
+                id: this.formData.id,
+              },
+            }).then(({ data }) => {
+              Object.keys(this.formData).forEach((key) => {
+                console.log(key, data[key])
+                this.formData[key] = data[key]
+              })
+            })
+          },
+        },
+        created() {
+          let query = getUrlQuery()
+          if (query.id) {
+            this.formData.id = query.id
+            this.getDetails()
+          }
+          // 获取项目列表
+          this.getProjectList()
+        },
+      })
+    </script>
+  </body>
+</html>
