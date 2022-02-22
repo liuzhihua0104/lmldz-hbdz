@@ -28,14 +28,58 @@
     .pointer {
       cursor: pointer;
     } */
+
+    /* .el-form-item__label{
+      width:200px;
+    } */
   </style>
 </head>
 
 <body>
   <div id="app">
     <template>
-      <div style="font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">信息</div>
-      <div style="font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">配置信息</div>
+
+      <el-form label-width="auto" :inline="true" :rules="formRules" ref="formData" :model="formData" class="demo-form-inline">
+
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>信息</span>
+          </div>
+          <!-- 定向名称 -->
+          <el-row>
+            <el-col :span="24">
+              <el-form-item style="margin-right:0" label="定向名称:" prop="user">
+                <el-input v-model="formData.user" placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <!-- 备注 -->
+          <el-row>
+            <el-col :span="24">
+              <el-form-item style="margin-right:0" label="备注:" prop="remark">
+                <el-input type="textarea" :rows="4" v-model="formData.remark" placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+        </el-card>
+
+
+
+
+
+        <el-form-item>
+          <el-button type="default" @click="onConfirm('formData')">搜索</el-button>
+        </el-form-item>
+      </el-form>
+
+      <!-- <div
+        style="font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">
+        信息</div>
+      <div
+        style="font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">
+        配置信息</div> -->
 
 
     </template>
@@ -65,7 +109,16 @@
       el: '#app',
       data() {
         return {
+          formData: {
+            user: '123',
+            remark: ''
+          },
+          formRules: {
+            user: [
+              { required: true, message: '请输入定向名称', trigger: 'change' },
+            ],
 
+          },
 
         }
       },
