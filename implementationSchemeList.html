@@ -50,8 +50,8 @@
     }
 
     /* 设置dialog宽度 */
-    .el-dialog{
-      width:600px !important;
+    .el-dialog {
+      width: 600px !important;
     }
   </style>
 </head>
@@ -88,7 +88,7 @@
         <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="">应用</el-button>
+            <el-button type="text" size="small" @click="applicationFn(scope.row)">应用</el-button>
             <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
             <el-button type="text" size="small" @click="onDel(scope.row)">删除</el-button>
             <el-button type="text" size="small" @click="">复制</el-button>
@@ -102,7 +102,7 @@
 
       <!-- 奖品定向应用列表弹框 -->
       <el-dialog title="奖品定向应用列表" :visible.sync="applicationListVisible" center customClass="customWidth">
-        <div  style="margin-bottom: 20px">执行方案名称: 执行方案A01</div>
+        <div style="margin-bottom: 20px">执行方案名称: 执行方案A01</div>
         <el-table :data="tableData" class="table-wrap" :border="true" size="mini">
           <el-table-column label="序号" type="index" width="100"></el-table-column>
           <el-table-column label="奖品ID名称">
@@ -115,12 +115,56 @@
         <el-pagination class="tac" background layout="prev, pager, next" :total="page.total"
           :current-page.sync="filter.pageNum" :page-size.sync="filter.pageSize" @current-change="fetchList">
         </el-pagination>
-
-        <!-- footer -->
         <span slot="footer" class="dialog-footer">
           <el-button type="default" @click="applicationListVisible = false">关 闭</el-button>
         </span>
       </el-dialog>
+
+
+      <!-- 批量应用弹框 -->
+      <el-dialog title="批量应用" :visible.sync="batchApplicationVisible" center customClass="customWidth">
+        <div style="margin-bottom: 20px;display: flex; justify-content: space-between;align-items: center;">
+          <div> 执行方案名称: <span style="font-weight:bold">执行方案A01</span></div>
+          <el-button size="mini" type="primary" @click="releaseFn">发布</el-button>
+        </div>
+        <!-- 表单 -->
+        <el-form size="mini" :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item label="关键字:">
+            <el-input v-model="formInline.user" placeholder="请输入内容"></el-input>
+          </el-form-item>
+          <el-form-item label="">
+            <el-select v-model="formInline.region" placeholder="活动区域">
+              <el-option label="奖品ID名称" value="shanghai"></el-option>
+              <el-option label="策略名称" value="beijing1"></el-option>
+              <el-option label="素材源名称" value="beijing2"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="default" @click="onSubmit">搜索</el-button>
+          </el-form-item>
+        </el-form>
+
+        <!-- 列表 -->
+        <el-table :data="tableData" class="table-wrap" :border="true" size="mini"
+          @selection-change="handleSelectionChange">
+          <el-table-column label="序号" type="selection"></el-table-column>
+          <el-table-column label="奖品ID名称">
+            <template slot-scope="scope">
+              10
+            </template>
+          </el-table-column>
+          <el-table-column label="策略名称" prop="planNumber1"></el-table-column>
+          <el-table-column label="素材源名称" prop="planNumber2"></el-table-column>
+        </el-table>
+        <el-pagination class="tac" background layout="prev, pager, next" :total="page.total"
+          :current-page.sync="filter.pageNum" :page-size.sync="filter.pageSize" @current-change="fetchList">
+        </el-pagination>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="default" @click="batchApplicationVisible = false">关 闭</el-button>
+        </span>
+      </el-dialog>
+
+
 
     </template>
   </div>
@@ -146,7 +190,15 @@
           },
           tableData: [],
           rows: {},
-          applicationListVisible: false // 控制奖品定向应用列表弹框弹框的展示与隐藏
+          applicationListVisible: false, // 控制奖品定向应用列表弹框弹框的展示与隐藏
+
+
+          batchApplicationVisible: false,// 控制批量应用弹框的展示与隐藏
+          multipleSelection: [], //批量应用中触发多选
+          formInline: {
+            user: '',
+            region: ''
+          }
         }
       },
       computed: {},
@@ -241,6 +293,24 @@
           console.log(rows)
           this.applicationListVisible = true;
 
+        },
+        // 点击批量应用，弹出“批量应用”弹框
+        applicationFn(rows) {
+          console.log(rows)
+          this.batchApplicationVisible = true;
+        },
+        // 批量应用弹框-触发多选
+        handleSelectionChange(val) {
+          this.multipleSelection = val;
+          console.log(this.multipleSelection)
+        },
+        // 批量应用弹框-点击发布
+        releaseFn() {
+          console.log("点击了发布")
+        },
+        // 批量应用弹框-点击搜索
+        onSubmit() {
+          console.log('submit!');
         }
       },
       created() {
