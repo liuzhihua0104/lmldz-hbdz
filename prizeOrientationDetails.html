@@ -47,133 +47,131 @@
   <div id="app">
     <template>
 
-
       <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>信息</span>
-          </div>
-          <!-- 定向名称 -->
-          <el-row>
-            <el-col :span="24">
-              <el-form-item style="margin-right:0" label="定向名称:" prop="user">
-                <el-input class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+        <div
+          style="margin-bottom:20px;font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">
+          信息</div>
 
-          <!-- 备注 -->
-          <el-row>
-            <el-col :span="24">
-              <el-form-item style="margin-right:0" label="备注:" prop="remark">
-                <el-input class="inputWidth" type="textarea" :rows="4" v-model="formData.remark" placeholder="请输入内容">
-                </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-card>
+        <!-- 定向名称 -->
+        <el-row>
+          <el-col :span="24">
+            <el-form-item style="margin-right:0" label="定向名称:" prop="user">
+              <el-input class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
 
-
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>配置信息</span>
-          </div>
-          <!-- 定向名称 -->
-          <el-row>
-            <el-col :span="24">
-              <el-form-item style="margin-right:0" label="区域:" prop="radio1">
-                <el-radio-group v-model="formData.radio1">
-                  <el-radio :label="1">不限制</el-radio>
-                  <el-radio :label="2">省市区</el-radio>
-                  <el-radio :label="3">城市线级</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 定向名称 -->
-          <el-row>
-            <el-col :span="24">
-              <el-form-item style="margin-right:0" label="性别:" prop="radio2">
-                <el-radio-group v-model="formData.radio2">
-                  <el-radio :label="1">不限制</el-radio>
-                  <el-radio :label="2">男</el-radio>
-                  <el-radio :label="3">女</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 定向名称 -->
-          <el-row>
-            <el-col :span="24">
-              <el-form-item style="margin-right:0" label="联网方式:" prop="radio3">
-                <el-radio-group v-model="formData.radio3">
-                  <el-radio :label="1">不限制</el-radio>
-                  <el-radio :label="2">WIFI</el-radio>
-                  <el-radio :label="3">运营商数据</el-radio>
-                  <el-radio :label="4">自定义</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 定向名称 -->
-          <el-row>
-            <el-col :span="24">
-              <el-form-item style="margin-right:0" label="扫码工具:" prop="radio4">
-                <el-radio-group v-model="formData.radio4">
-                  <el-radio :label="1">不限制</el-radio>
-                  <el-radio :label="2">微信</el-radio>
-                  <el-radio :label="3">支付宝
-
-                  </el-radio>
-                  <el-radio :label="4">其他</el-radio>
-                  <el-radio :label="5">自定义
-
-                  </el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 定向名称 -->
-          <el-row>
-            <el-col :span="24">
-              <el-form-item style="margin-right:0" label="时段:" prop="radio5">
-                <el-radio-group v-model="formData.radio5">
-                  <el-radio :label="1">不限制</el-radio>
-                  <el-radio :label="2">时间段</el-radio>
-                  <el-radio :label="3">自定义</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 定向名称 -->
-          <el-row>
-            <el-col :span="24">
-              <el-form-item style="margin-right:0" label="节假日:" prop="radio6">
-                <el-radio-group v-model="formData.radio6">
-                  <el-radio :label="1">不限制</el-radio>
-                  <el-radio :label="2">法定</el-radio>
-                  <el-radio :label="3">星期</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <!-- 定向名称 -->
-          <el-row>
-            <el-col :span="24">
-              <el-form-item style="margin-right:0" label="设备平台:" prop="radio7">
-                <el-radio-group v-model="formData.radio7">
-                  <el-radio :label="1">不限制</el-radio>
-                  <el-radio :label="2">IOS</el-radio>
-                  <el-radio :label="3">Android</el-radio>
-                  <el-radio :label="4">HarmonyOS</el-radio>
-                  <el-radio :label="5">自定义</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
+        <!-- 备注 -->
+        <el-row>
+          <el-col :span="24">
+            <el-form-item style="margin-right:0" label="备注:" prop="remark">
+              <el-input class="inputWidth" type="textarea" :rows="4" v-model="formData.remark" placeholder="请输入内容">
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
 
 
-        </el-card>
+        <div
+          style="margin-bottom:20px;font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">
+          配置信息</div>
+
+        <!-- 区域 -->
+        <el-row>
+          <el-col :span="24">
+            <el-form-item style="margin-right:0" label="区域:" prop="radio1">
+              <el-radio-group v-model="formData.radio1">
+                <el-radio :label="1">不限制</el-radio>
+                <el-radio :label="2">省市区</el-radio>
+                <el-radio :label="3">城市线级</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 性别 -->
+        <el-row>
+          <el-col :span="24">
+            <el-form-item style="margin-right:0" label="性别:" prop="radio2">
+              <el-radio-group v-model="formData.radio2">
+                <el-radio :label="1">不限制</el-radio>
+                <el-radio :label="2">男</el-radio>
+                <el-radio :label="3">女</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 联网方式 -->
+        <el-row>
+          <el-col :span="24">
+            <el-form-item style="margin-right:0" label="联网方式:" prop="radio3">
+              <el-radio-group v-model="formData.radio3">
+                <el-radio :label="1">不限制</el-radio>
+                <el-radio :label="2">WIFI</el-radio>
+                <el-radio :label="3">运营商数据</el-radio>
+                <el-radio :label="4">自定义</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 扫码工具 -->
+        <el-row>
+          <el-col :span="24">
+            <el-form-item style="margin-right:0" label="扫码工具:" prop="radio4">
+              <el-radio-group v-model="formData.radio4">
+                <el-radio :label="1">不限制</el-radio>
+                <el-radio :label="2">微信</el-radio>
+                <el-radio :label="3">支付宝
+
+                </el-radio>
+                <el-radio :label="4">其他</el-radio>
+                <el-radio :label="5">自定义
+
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 时段 -->
+        <el-row>
+          <el-col :span="24">
+            <el-form-item style="margin-right:0" label="时段:" prop="radio5">
+              <el-radio-group v-model="formData.radio5">
+                <el-radio :label="1">不限制</el-radio>
+                <el-radio :label="2">时间段</el-radio>
+                <el-radio :label="3">自定义</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 节假日 -->
+        <el-row>
+          <el-col :span="24">
+            <el-form-item style="margin-right:0" label="节假日:" prop="radio6">
+              <el-radio-group v-model="formData.radio6">
+                <el-radio :label="1">不限制</el-radio>
+                <el-radio :label="2">法定</el-radio>
+                <el-radio :label="3">星期</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 设备平台 -->
+        <el-row>
+          <el-col :span="24">
+            <el-form-item style="margin-right:0" label="设备平台:" prop="radio7">
+              <el-radio-group v-model="formData.radio7">
+                <el-radio :label="1">不限制</el-radio>
+                <el-radio :label="2">IOS</el-radio>
+                <el-radio :label="3">Android</el-radio>
+                <el-radio :label="4">HarmonyOS</el-radio>
+                <el-radio :label="5">自定义</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+
+
 
 
 
