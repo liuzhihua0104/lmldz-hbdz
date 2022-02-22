@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>奖品定向详情</title>
+  <link href="./libs/element-ui/2.15.3/theme-chalk/index.css" rel="stylesheet" />
+  <style>
+    /* .col-width-auto {
+      width: auto;
+    }
+
+    .form-item__mb0 {
+      margin-bottom: 0 !important;
+    }
+
+    .section-table th {
+      text-align: left;
+    }
+
+    .section-table th,
+    .section-table td {
+      padding: 0 10px;
+    }
+
+    .pointer {
+      cursor: pointer;
+    } */
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <template>
+      <div style="font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">信息</div>
+      <div style="font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">配置信息</div>
+
+
+    </template>
+  </div>
+  <script src="./libs/vue/2.6.12/vue.min.js"></script>
+  <script src="./libs/element-ui/2.15.3/index.min.js"></script>
+  <script src="./libs/axios/0.21.1/axios.min.js"></script>
+  <script src="./js/request.js"></script>
+  <script>
+    function getUrlQuery() {
+      let search = location.search
+      let obj = {}
+      if (search) {
+        let query = search.substring(1).split('&')
+        query.forEach((queryItem) => {
+          let keyValue = queryItem.split('=')
+          let [key, value] = keyValue
+          if (key) {
+            obj[key] = value
+          }
+        })
+      }
+      return obj
+    }
+
+    var el = new Vue({
+      el: '#app',
+      data() {
+        return {
+
+
+        }
+      },
+      watch: {
+
+      },
+      methods: {
+        // 返回
+        onCancel() {
+          window.history.go(-1)
+        },
+        onConfirm(formName) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.getStrategyAddEdit()
+            } else {
+              console.log('error submit!!')
+              return false
+            }
+          })
+        },
+        // 新增/编辑保存表单
+        getStrategyAddEdit() {
+          service({
+            url: '/user/strategy/inversion/create',
+            method: 'post',
+            data: this.formData,
+          }).then(({ data }) => { })
+        },
+
+        // 编辑获取表单详情
+        getDetails() {
+          service({
+            url: '/user/strategy/inversion/detail',
+            method: 'get',
+            data: {
+              id: this.formData.id,
+            },
+          }).then(({ data }) => {
+            Object.keys(this.formData).forEach((key) => {
+              console.log(key, data[key])
+              this.formData[key] = data[key]
+            })
+          })
+        },
+      },
+      created() {
+        let query = getUrlQuery()
+        if (query.id) {
+          this.formData.id = query.id
+          this.getDetails()
+        }
+        // 获取项目列表
+        // this.getProjectList()
+      },
+    })
+  </script>
+</body>
+
+</html>

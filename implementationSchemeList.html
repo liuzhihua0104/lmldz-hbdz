@@ -197,21 +197,18 @@
           batchApplicationVisible: false,// 控制批量应用弹框的展示与隐藏
           multipleSelection: [], //批量应用中触发多选
           formInline: {
-            user: '',
-            region: ''
+            user: '123',
+            region: 'shanghai'
           },
-          numberValidateForm: {
-            age: ''
-          }
         }
       },
       computed: {},
       methods: {
         onAdd(rows) {
-          location.href = `./redPacketInvertDetails.html`
+          location.href = `./prizeOrientationDetails.html`
         },
         onEdit(rows) {
-          location.href = `./redPacketInvertDetails.html?id=${rows.id}`
+          location.href = `./prizeOrientationDetails.html?id=${rows.id}`
         },
         fetchList() {
           service({
