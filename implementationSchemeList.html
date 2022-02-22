@@ -128,19 +128,23 @@
           <el-button size="mini" type="primary" @click="releaseFn">发布</el-button>
         </div>
         <!-- 表单 -->
-        <el-form size="mini" :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="关键字:">
+        <el-form ref="formInline" size="mini" :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item style="margin-right:0" label="关键字:" prop="user" :rules="[
+              { required: true, message: '关键字不能为空'}
+            ]">
             <el-input v-model="formInline.user" placeholder="请输入内容"></el-input>
           </el-form-item>
-          <el-form-item label="">
-            <el-select v-model="formInline.region" placeholder="活动区域">
+          <el-form-item label="" prop="region" :rules="[
+          { required: true, message: '请选择'}
+        ]">
+            <el-select v-model="formInline.region" placeholder="">
               <el-option label="奖品ID名称" value="shanghai"></el-option>
               <el-option label="策略名称" value="beijing1"></el-option>
               <el-option label="素材源名称" value="beijing2"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="default" @click="onSubmit">搜索</el-button>
+            <el-button type="default" @click="onSubmit('formInline')">搜索</el-button>
           </el-form-item>
         </el-form>
 
@@ -163,9 +167,6 @@
           <el-button type="default" @click="batchApplicationVisible = false">关 闭</el-button>
         </span>
       </el-dialog>
-
-
-
     </template>
   </div>
   <script src="./libs/vue/2.6.12/vue.min.js"></script>
@@ -198,6 +199,9 @@
           formInline: {
             user: '',
             region: ''
+          },
+          numberValidateForm: {
+            age: ''
           }
         }
       },
@@ -309,8 +313,21 @@
           console.log("点击了发布")
         },
         // 批量应用弹框-点击搜索
-        onSubmit() {
-          console.log('submit!');
+        // onSubmit() {
+        //   console.log('submit!');
+        // },
+        onSubmit(formName) {
+          console.log(formName)
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              console.log(this.formInline)
+              console.log(valid)
+              // alert('submit!');
+            } else {
+              // console.log('error submit!!');
+              return false;
+            }
+          });
         }
       },
       created() {
