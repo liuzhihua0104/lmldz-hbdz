@@ -14,16 +14,18 @@ function getUrlQuery() {
     return obj
   }
 
+  
 
    var Vm=new Vue({
     el: '#app',
+    
     data() {
       return {
-        centerDialogVisible: true,
+        centerDialogVisible: false,
         formData: {
           user: '123',
           remark: '',
-          radio1: ""
+          radio1: 1
         },
         formRules: {
           user: [
@@ -41,6 +43,10 @@ function getUrlQuery() {
 
     },
     methods: {
+      testFn(){
+        console.log("触发function")
+        this.formData.radio1=2
+      },
       // 返回
       onCancel() {
         window.history.go(-1)
@@ -93,10 +99,4 @@ function getUrlQuery() {
 
 
 
-//   module.exports={
-//    Vm:Vm
-// }
-
-// module.exports={
-//     Vm:Vm,
-// }
+export default Vm
