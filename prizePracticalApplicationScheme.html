@@ -8,21 +8,13 @@
   <title> 奖品实际应用方案</title>
   <link href="./libs/element-ui/2.15.3/theme-chalk/index.css" rel="stylesheet" />
   <style>
-    .inputWidth {
-      /* width: 500px; */
-    }
-
-    .el-card {
-      box-shadow: 0 !important;
-    }
-
     .title {
       margin-bottom: 20px;
       font-weight: 500;
-      font-size: 16px;
+      font-size: 14px;
       background: #e5e9f2;
       border-radius: 4px;
-      line-height: 40px;
+      line-height: 30px;
       padding-left: 20px;
 
     }
@@ -66,6 +58,7 @@
             </el-col>
           </el-row>
           <div class="title">实际应用方案</div>
+          <el-button type="primary" plain size="small">添加方案</el-button>
           <el-form-item>
             <el-button type="default" @click="onConfirm('formData')">搜索</el-button>
           </el-form-item>

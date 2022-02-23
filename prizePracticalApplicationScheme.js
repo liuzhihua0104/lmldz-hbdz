@@ -20,7 +20,7 @@ function getUrlQuery() {
     el: '#app',    
     data() {
       return {
-        centerDialogVisible: false,
+        centerDialogVisible: true,
         formData: {
           user: '123',
           remark: '',
