@@ -15,10 +15,11 @@ function getUrlQuery() {
   }
 
 
-   let Vm=new Vue({
+   var Vm=new Vue({
     el: '#app',
     data() {
       return {
+        centerDialogVisible: true,
         formData: {
           user: '123',
           remark: '',
@@ -96,6 +97,6 @@ function getUrlQuery() {
 //    Vm:Vm
 // }
 
-module.exports={
-    Vm:Vm,
-}
+// module.exports={
+//     Vm:Vm,
+// }

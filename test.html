@@ -12,20 +12,25 @@
 
 <body>
     <button id="btn" bindId="rose">点击换起vue弹框</button>
+
+    
 </body>
 
 </html>
 
 <script src="./libs/vue/2.6.12/vue.min.js"></script>
-<script type="module" src="./vue1.js"></script>
+<script src="./vue1.js"></script>
 
 <script>
 
     window.onload = function () {
+        console.log(Vm)
         let btn = document.getElementById("btn");
         btn.addEventListener("click", function (e) {
             console.log(e.target.attributes.bindId)
         })
+
+
 
 
 
