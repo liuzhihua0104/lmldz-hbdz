@@ -19,9 +19,13 @@
 </head>
 
 <body>
+
+  <button id="btn" bindId="rose" onClick="fn(123)">点击换起vue弹框</button>
+
+
   <div id="app">
     <template>
-      <el-dialog title="提示" :visible.sync="centerDialogVisible" width="30%" center>
+      <el-dialog title="提示" :visible.sync="centerDialogVisible" center>
         <!-- 表单 -->
 
         <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData">
@@ -162,63 +166,121 @@
         </span>
       </el-dialog>
 
-
-
-
-
-
-
-
-      <!-- <el-form label-width="auto" :inline="true" :rules="formRules" ref="formData" :model="formData" class="demo-form-inline">
-
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>信息</span>
-          </div>
-    
-          <el-row>
-            <el-col :span="24">
-              <el-form-item style="margin-right:0" label="定向名称:" prop="user">
-                <el-input v-model="formData.user" placeholder="请输入内容"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-
-          <el-row>
-            <el-col :span="24">
-              <el-form-item style="margin-right:0" label="备注:" prop="remark">
-                <el-input type="textarea" :rows="4" v-model="formData.remark" placeholder="请输入内容"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-        </el-card>
-
-
-
-
-
-        <el-form-item>
-          <el-button type="default" @click="onConfirm('formData')">搜索</el-button>
-        </el-form-item>
-      </el-form> -->
-
-      <!-- <div
-        style="font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">
-        信息</div>
-      <div
-        style="font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">
-        配置信息</div> -->
-
-
     </template>
   </div>
   <script src="./libs/vue/2.6.12/vue.min.js"></script>
   <script src="./libs/element-ui/2.15.3/index.min.js"></script>
   <script src="./libs/axios/0.21.1/axios.min.js"></script>
   <script src="./js/request.js"></script>
-  <script src="./vue1.js"></script>
+  <!-- <script src="./vue1.js"></script> -->
 </body>
 
 </html>
+
+<script >
+  function getUrlQuery() {
+    let search = location.search
+    let obj = {}
+    if (search) {
+      let query = search.substring(1).split('&')
+      query.forEach((queryItem) => {
+        let keyValue = queryItem.split('=')
+        let [key, value] = keyValue
+        if (key) {
+          obj[key] = value
+        }
+      })
+    }
+    return obj
+  }
+
+  var Vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+        centerDialogVisible: false,
+        formData: {
+          user: '123',
+          remark: '',
+          radio1: ""
+        },
+        formRules: {
+          user: [
+            { required: true, message: '请输入定向名称', trigger: 'change' },
+          ],
+          radio1: [
+            { required: true, message: '请选择', trigger: 'change' },
+          ],
+        },
+      }
+    },
+    watch: {
+
+    },
+    methods: {
+      // 返回
+      onCancel() {
+        window.history.go(-1)
+      },
+      onConfirm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.getStrategyAddEdit()
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
+      },
+      // 新增/编辑保存表单
+      getStrategyAddEdit() {
+        service({
+          url: '/user/strategy/inversion/create',
+          method: 'post',
+          data: this.formData,
+        }).then(({ data }) => { })
+      },
+
+      // 编辑获取表单详情
+      getDetails() {
+        service({
+          url: '/user/strategy/inversion/detail',
+          method: 'get',
+          data: {
+            id: this.formData.id,
+          },
+        }).then(({ data }) => {
+          Object.keys(this.formData).forEach((key) => {
+            console.log(key, data[key])
+            this.formData[key] = data[key]
+          })
+        })
+      },
+    },
+    created() {
+      let query = getUrlQuery()
+      if (query.id) {
+        this.formData.id = query.id
+        this.getDetails()
+      }
+      // 获取项目列表
+      // this.getProjectList()
+    },
+  })
+</script>
+
+<script>
+  window.onload = function () {
+    console.log(Vm)
+    let btn = document.getElementById("btn");
+    btn.addEventListener("click", function (e) {
+      console.log(e.target.attributes.bindId)
+      Vm.centerDialogVisible = true;
+    })
+
+    function fn(e, value) {
+      console.log(e, value)
+    }
+  }
+
+</script>
