@@ -61,8 +61,8 @@
   <div id="app">
     <template>
       <el-form :inline="true" :model="filter" size="small">
-        <el-form-item>
-          <el-input v-model="filter.planName" placeholder="执行方案名称" maxlength="20"></el-input>
+        <el-form-item style="margin-right:0" label="关键字:">
+          <el-input v-model="filter.planName" placeholder="执行方案名称"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSearch">查询</el-button>
@@ -308,6 +308,12 @@
         },
         // 批量应用弹框-点击发布
         releaseFn() {
+          if (!this.multipleSelection.length) {
+            this.$message({
+              message: '请先勾选数据',
+              type: 'warning'
+            });
+          }
           console.log("点击了发布")
         },
         // 批量应用弹框-点击搜索
