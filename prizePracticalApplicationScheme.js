@@ -37,36 +37,43 @@ var Vm = new Vue({
       },
 
       planListData: [{
+        id: 1,
         status: 1,
         date: '执行方案A001',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
       }, {
+        id: 2,
         status: 0,
         date: '执行方案A0011',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
       }, {
+        id: 3,
         status: 0,
         date: '执行方案A001111',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
       }, {
+        id: 4,
         status: 1,
         date: '执行方案A00101',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
       }, {
+        id: 5,
         status: 1,
         date: '执行方案A00108',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
       }, {
+        id: 6,
         status: 1,
         date: '执行方案A00106',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
       }, {
+        id: 7,
         status: 1,
         date: '执行方案A00107',
         name: '王小虎',
@@ -127,6 +134,15 @@ var Vm = new Vue({
       //   this.fetchList()
       // })
     },
+    // 切换switch
+    changeSwitch(record) {
+      console.log(record)
+      this.planListData.filter((item) => {
+        if (item.id == record.id) {
+          item.status = item.status == 1 ? 2 : 1
+        }
+      })
+    }
 
     // // 新增/编辑保存表单
     // getStrategyAddEdit() {

@@ -31,7 +31,7 @@
     }
 
     .el-switch.is-checked .el-switch__core:after {
-      margin-left: -22px;
+      margin-left: -23px;
     }
 
     .el-switch .el-switch__label,
@@ -65,7 +65,7 @@
 
     .el-switch .el-switch__label--right.is-active {
       color: #fff;
-      right: 24px;
+     left: 10px;
     }
 
     .el-switch .el-switch__label--right>span {
@@ -121,18 +121,11 @@
             :header-cell-style="{background:'#e5e9f2'}">
             <el-table-column label="开关" width="180">
               <template slot-scope="scope">
-                <!-- <el-switch active-text="开" v-model="scope.row.status==1" active-color="#13ce66"
-                  inactive-color="#ff4949"> -->
-                <el-switch v-model="scope.row.status==1" 
-                  :active-text="scope.row.status == 1 ? '开' : '关'" :width="50"
-                  ></el-switch>
+                <el-switch  inactive-color="#cccccc" @change="changeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+                </el-switch>
               </template>
 
             </el-table-column>
-            <!-- <el-form-item class="defineSwitch" label="是否开关" prop="isLeaf">
-              <el-switch :width="50" active-color="#13ce66" inactive-color="#e5e5e5"> </el-switch>
-            </el-form-item>
-        -->
 
 
             <el-table-column prop="date" label="执行方案名称" width="180">
