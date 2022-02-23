@@ -17,8 +17,7 @@ function getUrlQuery() {
   
 
    var Vm=new Vue({
-    el: '#app',
-    
+    el: '#app',    
     data() {
       return {
         centerDialogVisible: false,
