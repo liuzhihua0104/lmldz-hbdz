@@ -56,7 +56,7 @@
     }
 
     .el-switch .el-switch__label--right {
-      margin-left: 0px;
+      margin-left: -28px;
       position: absolute;
       right: 5px;
       top: -1px;
@@ -93,7 +93,7 @@
           size="mini">
           <div class="title">信息</div>
 
-          <!-- 定向名称 -->
+          <!-- 主要信息-展示用 -->
           <el-row>
             <el-col :span="12">
               <el-form-item style="margin-right:0" label="奖品ID:" prop="user">
@@ -145,7 +145,7 @@
             </el-table-column>
           </el-table>
 
-          <!-- 条件表格 -->
+          <!-- 条件表格-最多3条-->
           <el-table :data="conditionListData" border style="width: 100%" size="mini"
             :header-cell-style="{background:'#e5e9f2'}">
             <el-table-column align="center" label="开关" width="100">
