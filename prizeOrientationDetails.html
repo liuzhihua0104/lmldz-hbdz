@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -30,7 +31,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item style="margin-right:0" label="定向名称:" prop="user">
-              <el-input class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+              <el-input :clearable="true" class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -39,7 +40,8 @@
         <el-row>
           <el-col :span="24">
             <el-form-item style="margin-right:0" label="备注:" prop="remark">
-              <el-input class="inputWidth" type="textarea" :rows="4" v-model="formData.remark" placeholder="请输入内容">
+              <el-input :clearable="true" class="inputWidth" type="textarea" :rows="4" v-model="formData.remark"
+                placeholder="请输入内容">
               </el-input>
             </el-form-item>
           </el-col>
