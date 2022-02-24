@@ -23,17 +23,11 @@ var Vm = new Vue({
       centerDialogVisible: true,
       formData: {
         user: '123',
-        remark: '',
-        radio1: 1
       },
       formRules: {
         user: [
-          { required: true, message: '请输入定向名称', trigger: 'change' },
-        ],
-        radio1: [
-          { required: true, message: '请选择', trigger: 'change' },
-        ],
-
+          { required: false, message: '请输入定向名称', trigger: 'change' },
+        ]
       },
 
       planListData: [{
@@ -78,8 +72,30 @@ var Vm = new Vue({
         date: '执行方案A00107',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
-      }]
-      // 
+      }],
+
+
+      conditionListData: [{
+        id: 1,
+        status: 1,
+        date: '条件A',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 2,
+        status: 0,
+        date: '条件A1',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 3,
+        status: 0,
+        date: '条件A111',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }],
+
+      rowData: {} //；列表当前行数据
 
     }
   },
@@ -101,57 +117,81 @@ var Vm = new Vue({
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 校验表单通过
-
         } else {
           console.log('error submit!!')
           return false
         }
       })
     },
+    // 执行方案-切换switch
+    planChangeSwitch(row) {
+      this.planListData.filter((item) => {
+        if (item.id == row.id) {
+          item.status = item.status == 1 ? 2 : 1
+        }
+      })
+    },
+    // 执行方案-查看
+    planlook(row) {
+      console.log("planlook")
+    },
+    // 执行方案-编辑
+    planEdit(row) {
+      console.log("执行方案-编辑")
+    },
     // 执行方案列表-删除按钮
-    onDel(rows) {
-      this.rows = rows
+    planDel(row) {
+      this.rowData = row
       this.$confirm('确认删除吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       })
         .then(() => {
-          this.getDel()
+          this.planGetDel()
         })
         .catch(() => { })
     },
     // 执行方案-执行删除请求
-    getDel() {
+    planGetDel() {
       console.log("发送删除请求")
-      // service({
-      //   url: '/user/strategy/inversion/delete.shtml',
-      //   method: 'post',
-      //   data: {
-      //     id: this.rows.id,
-      //   },
-      // }).then(() => {
-      //   this.fetchList()
-      // })
     },
-    // 切换switch
-    changeSwitch(record) {
-      console.log(record)
-      this.planListData.filter((item) => {
-        if (item.id == record.id) {
+
+
+    // 执行方案-切换switch
+    conditionChangeSwitch(row) {
+      this.conditionListData.filter((item) => {
+        if (item.id == row.id) {
           item.status = item.status == 1 ? 2 : 1
         }
       })
-    }
+    },
+    // 条件列表-查看
+    conditionlook(row) {
+      console.log("planlook")
+    },
+    // 条件列表-编辑
+    conditionEdit(row) {
+      console.log("条件列表-编辑")
+    },
+    // 条件列表列表-删除按钮
+    conditionDel(row) {
+      this.rowData = row
+      this.$confirm('确认删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          this.conditionGetDel()
+        })
+        .catch(() => { })
+    },
+    // 条件列表-执行删除请求
+    conditionGetDel() {
+      console.log("发送删除请求")
+    },
 
-    // // 新增/编辑保存表单
-    // getStrategyAddEdit() {
-    //   service({
-    //     url: '/user/strategy/inversion/create',
-    //     method: 'post',
-    //     data: this.formData,
-    //   }).then(({ data }) => { })
-    // },
 
     // // 编辑获取表单详情
     // getDetails() {
