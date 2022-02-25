@@ -1,19 +1,521 @@
-<template>
-  <div class="hello">Hello {{who}}</div>
+ <template>
+  <div class="wrap">
+    <el-dialog title="奖品实际应用方案" :visible.sync="applicationSchemeVisible" center>
+      <!-- 表单 -->
+
+      <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData" size="mini">
+        <div class="title">信息</div>
+
+        <!-- 主要信息-展示用 -->
+        <el-row>
+          <el-col :span="12">
+            <el-form-item style="margin-right:0" label="奖品ID:" prop="user">
+              <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item style="margin-right:0" label="策略名称:" prop="user">
+              <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item style="margin-right:0" label="奖品名称:" prop="user">
+              <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item style="margin-right:0" label="素材源名称:" prop="user">
+              <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <div class="title">实际应用方案</div>
+
+        <el-button @click="showPlan" style="margin-bottom:10px" type="primary" plain size="small">添加方案</el-button>
+
+        <!-- 执行方案列表表格 -->
+        <el-table :data="planListData" height="250" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}">
+          <el-table-column label="开关" width="100" align="center">
+            <template slot-scope="scope">
+              <el-switch inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+              </el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="date" label="执行方案名称">
+          </el-table-column>
+          <el-table-column align="center" prop="name" label="最近一次操作人">
+          </el-table-column>
+          <el-table-column align="center" label="操作" width="150">
+            <template slot-scope="scope">
+              <el-button type="text" size="small" @click="planlook(scope.row)">查看</el-button>
+              <el-button type="text" size="small" @click="planEdit(scope.row)">编辑</el-button>
+              <el-button type="text" size="small" @click="planDel(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <!-- 条件表格-最多3条-->
+        <el-table :data="conditionListData" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}" style="margin-bottom:20px">
+          <el-table-column align="center" label="开关" width="100">
+            <template slot-scope="scope">
+              <el-switch inactive-color="#cccccc" @change="conditionChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+              </el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="date" label="商务投放限制条件" width="180">
+          </el-table-column>
+          <el-table-column align="center" prop="date" label="状态">
+          </el-table-column>
+          <el-table-column align="center" prop="name" label="最近一次操作人">
+          </el-table-column>
+          <el-table-column align="center" label="操作" width="150">
+            <template slot-scope="scope">
+              <el-button type="text" size="small" @click="conditionlook(scope.row)">查看</el-button>
+              <el-button type="text" size="small" @click="conditionEdit(scope.row)">编辑</el-button>
+              <el-button type="text" size="small" @click="conditionDel(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <!-- <el-form-item>
+            <el-button type="default" @click="onConfirm('formData')">搜索</el-button>
+          </el-form-item> -->
+      </el-form>
+
+      <!-- 底部关闭按钮 -->
+      <!-- <span slot="footer" class="dialog-footer">
+          <el-button @click="centerDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+        </span> -->
+    </el-dialog>
+
+    <!-- 执行方案列表弹框 -->
+    <el-dialog :width="'600px'" height="250" title="执行方案列表" :visible.sync="implementationSchemeVisible" center customClass="customWidth">
+      <div style="margin-bottom: 20px;display: flex; justify-content: space-between;align-items: center;">
+        <div></div>
+        <el-button size="mini" type="primary" @click="releaseFn">应用</el-button>
+      </div>
+      <!-- 表单 -->
+      <el-form ref="formInline" size="mini" :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form-item style="margin-right:0" label="执行方案名称:" prop="user" :rules="[
+              { required: true, message: '执行方案名称不能为空'}
+            ]">
+          <el-input v-model="formInline.user" placeholder="请输入执行方案名称" :clearable="true"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="default" @click="planListSearch('formInline')">搜索</el-button>
+        </el-form-item>
+      </el-form>
+
+      <!-- 列表 -->
+      <el-table :data="implementationSchemeListData" class="table-wrap" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}" @selection-change="handleSelectionChange" height="250">
+        <el-table-column align="center" width="100" label="序号" type="selection"></el-table-column>
+
+        <el-table-column align="center" label="执行方案名称" prop="date"></el-table-column>
+      </el-table>
+      <!-- <el-pagination class="tac" background layout="prev, pager, next" :total="page.total"
+          :current-page.sync="filter.pageNum" :page-size.sync="filter.pageSize" @current-change="fetchList">
+        </el-pagination> -->
+      <span slot="footer" class="dialog-footer">
+        <el-button type="default" @click="closeImplementationPlan">关 闭</el-button>
+      </span>
+    </el-dialog>
+  </div>
 </template>
  
 <script>
-module.exports = {
-  data: function () {
-    return {
-      who: 'world'
-    }
+
+function getUrlQuery() {
+  let search = location.search
+  let obj = {}
+  if (search) {
+    let query = search.substring(1).split('&')
+    query.forEach((queryItem) => {
+      let keyValue = queryItem.split('=')
+      let [key, value] = keyValue
+      if (key) {
+        obj[key] = value
+      }
+    })
   }
+  return obj
+}
+
+module.exports = {
+  data() {
+    return {
+      applicationSchemeVisible: true, // 奖品实际应用方案弹框的显示与隐藏
+
+      implementationSchemeVisible: false, // 执行方案弹框的显示与隐藏
+      implementationSchemeListData: [{
+        id: 1,
+        status: 1,
+        date: '执行方案A001',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 2,
+        status: 0,
+        date: '执行方案A0011',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 3,
+        status: 0,
+        date: '执行方案A001111',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 4,
+        status: 1,
+        date: '执行方案A00101',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 5,
+        status: 1,
+        date: '执行方案A00108',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 6,
+        status: 1,
+        date: '执行方案A00106',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 7,
+        status: 1,
+        date: '执行方案A00107',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }], //执行方案列表数据
+      multipleSelection: [], //多选执行方案弹框数据
+      // filter: {
+      //   planName: '',
+      //   startTime: '',
+      //   endTime: '',
+      //   pageNum: 1,
+      //   pageSize: 10,
+      // },
+      // page: {
+      //   total: 0,
+      // },
+
+
+      // 执行方案列表弹框搜索表单
+      formInline: {
+        user: '123',
+        region: 'shanghai'
+      },
+
+      formData: {
+        user: '123',
+      },
+      formRules: {
+        user: [
+          { required: false, message: '请输入定向名称', trigger: 'change' },
+        ]
+      },
+      // 方案列表
+      planListData: [{
+        id: 1,
+        status: 1,
+        date: '执行方案A001',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 2,
+        status: 0,
+        date: '执行方案A0011',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 3,
+        status: 0,
+        date: '执行方案A001111',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 4,
+        status: 1,
+        date: '执行方案A00101',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 5,
+        status: 1,
+        date: '执行方案A00108',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 6,
+        status: 1,
+        date: '执行方案A00106',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 7,
+        status: 1,
+        date: '执行方案A00107',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }],
+
+      // 条件列表
+      conditionListData: [{
+        id: 1,
+        status: 1,
+        date: '条件A',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 2,
+        status: 0,
+        date: '条件A1',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        id: 3,
+        status: 0,
+        date: '条件A111',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }],
+
+      // 方案列表||条件列表当前激活的数据
+      rowData: {} //；列表当前行数据
+
+    }
+  },
+  watch: {
+
+  },
+  methods: {
+    // testFn() {
+    //   console.log("触发function")
+    //   this.formData.radio1 = 2
+    // },
+    // // 返回
+    // onCancel() {
+    //   window.history.go(-1)
+    // },
+    // 点击添加方案:展示执行方案弹框
+    showPlan() {
+      this.implementationSchemeVisible = true;
+    },
+    closeImplementationPlan() {
+      this.implementationSchemeVisible = false;
+      this.multipleSelection = [];//清空选中的数据
+    },
+    // 执行方案列表弹框-搜索
+    planListSearch(formName) {
+      console.log(formName)
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log(this.formInline)
+          console.log(valid)
+          // alert('submit!');
+        } else {
+          // console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    // 执行方案列表弹框-触发多选
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      console.log(this.multipleSelection)
+    },
+    // 执行方案列表弹框-应用
+    releaseFn() { },
+
+    // 保存
+    onConfirm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // 校验表单通过
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    // 执行方案-切换switch
+    planChangeSwitch(row) {
+      this.planListData.filter((item) => {
+        if (item.id == row.id) {
+          item.status = item.status == 1 ? 2 : 1
+        }
+      })
+    },
+    // 执行方案-查看
+    planlook(row) {
+      console.log("planlook")
+    },
+    // 执行方案-编辑
+    planEdit(row) {
+      console.log("执行方案-编辑")
+    },
+    // 执行方案列表-删除按钮
+    planDel(row) {
+      this.rowData = row
+      this.$confirm('确认删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          this.planGetDel()
+        })
+        .catch(() => { })
+    },
+    // 执行方案-执行删除请求
+    planGetDel() {
+      console.log("发送删除请求")
+    },
+
+
+    // 执行方案-切换switch
+    conditionChangeSwitch(row) {
+      this.conditionListData.filter((item) => {
+        if (item.id == row.id) {
+          item.status = item.status == 1 ? 2 : 1
+        }
+      })
+    },
+    // 条件列表-查看
+    conditionlook(row) {
+      console.log("planlook")
+    },
+    // 条件列表-编辑
+    conditionEdit(row) {
+      console.log("条件列表-编辑")
+    },
+    // 条件列表列表-删除按钮
+    conditionDel(row) {
+      this.rowData = row
+      this.$confirm('确认删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          this.conditionGetDel()
+        })
+        .catch(() => { })
+    },
+    // 条件列表-执行删除请求
+    conditionGetDel() {
+      console.log("发送删除请求")
+    },
+
+
+    // // 编辑获取表单详情
+    // getDetails() {
+    //   service({
+    //     url: '/user/strategy/inversion/detail',
+    //     method: 'get',
+    //     data: {
+    //       id: this.formData.id,
+    //     },
+    //   }).then(({ data }) => {
+    //     Object.keys(this.formData).forEach((key) => {
+    //       console.log(key, data[key])
+    //       this.formData[key] = data[key]
+    //     })
+    //   })
+    // },
+  },
+  created() {
+    let query = getUrlQuery()
+    if (query.id) {
+      this.formData.id = query.id
+      this.getDetails()
+    }
+    // 获取项目列表
+    // this.getProjectList()
+  },
 }
 </script>
  
-<style>
-.hello {
-  background-color: #ffe;
+<style scope>
+
+.wrap{
+  width:100%;
+  height:100%;
 }
+.title {
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 14px;
+  background: #e5e9f2;
+  border-radius: 4px;
+  line-height: 30px;
+  padding-left: 20px;
+}
+
+/* switch */
+.el-switch {
+  position: relative;
+  height: 24px;
+  line-height: 24px;
+}
+
+.el-switch.is-checked .el-switch__core {
+  background: #179bff;
+}
+
+.el-switch.is-checked .el-switch__core:after {
+  margin-left: -23px;
+}
+
+.el-switch .el-switch__label,
+.el-switch .el-switch__core {
+  height: 24px;
+}
+
+.el-switch .el-switch__core {
+  border-radius: 12px;
+  border: none;
+  background: #f1f1f1;
+}
+
+.el-switch .el-switch__core:after {
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.3);
+  width: 22px;
+  height: 22px;
+}
+
+.el-switch .el-switch__label.is-active {
+  color: #333;
+}
+
+.el-switch .el-switch__label--right {
+  margin-left: -28px;
+  position: absolute;
+  right: 5px;
+  top: -1px;
+  color: #999;
+}
+
+.el-switch .el-switch__label--right.is-active {
+  color: #fff;
+  left: 10px;
+}
+
+.el-switch .el-switch__label--right > span {
+  font-size: 12px;
+}
+
+/* table */
+.el-table {
+  margin-bottom: 20px;
+}
+
+/* dialog */
+/* .el-dialog__body {
+      padding-bottom: 0 !important;
+    } */
 </style>
