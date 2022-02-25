@@ -1,5 +1,5 @@
  <template>
-  <div class="wrap">
+ 
     <el-dialog title="奖品实际应用方案" :visible.sync="applicationSchemeVisible" center>
       <!-- 表单 -->
 
@@ -88,40 +88,40 @@
           <el-button @click="centerDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
         </span> -->
-    </el-dialog>
 
-    <!-- 执行方案列表弹框 -->
-    <el-dialog :width="'600px'" height="250" title="执行方案列表" :visible.sync="implementationSchemeVisible" center customClass="customWidth">
-      <div style="margin-bottom: 20px;display: flex; justify-content: space-between;align-items: center;">
-        <div></div>
-        <el-button size="mini" type="primary" @click="releaseFn">应用</el-button>
-      </div>
-      <!-- 表单 -->
-      <el-form ref="formInline" size="mini" :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item style="margin-right:0" label="执行方案名称:" prop="user" :rules="[
+      <!-- 执行方案列表弹框 -->
+      <el-dialog append-to-body :width="'600px'" height="250" title="执行方案列表" :visible.sync="implementationSchemeVisible" center customClass="customWidth">
+        <div style="margin-bottom: 20px;display: flex; justify-content: space-between;align-items: center;">
+          <div></div>
+          <el-button size="mini" type="primary" @click="releaseFn">应用</el-button>
+        </div>
+        <!-- 表单 -->
+        <el-form ref="formInline" size="mini" :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item style="margin-right:0" label="执行方案名称:" prop="user" :rules="[
               { required: true, message: '执行方案名称不能为空'}
             ]">
-          <el-input v-model="formInline.user" placeholder="请输入执行方案名称" :clearable="true"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="default" @click="planListSearch('formInline')">搜索</el-button>
-        </el-form-item>
-      </el-form>
+            <el-input v-model="formInline.user" placeholder="请输入执行方案名称" :clearable="true"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="default" @click="planListSearch('formInline')">搜索</el-button>
+          </el-form-item>
+        </el-form>
 
-      <!-- 列表 -->
-      <el-table :data="implementationSchemeListData" class="table-wrap" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}" @selection-change="handleSelectionChange" height="250">
-        <el-table-column align="center" width="100" label="序号" type="selection"></el-table-column>
+        <!-- 列表 -->
+        <el-table :data="implementationSchemeListData" class="table-wrap" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}" @selection-change="handleSelectionChange" height="250">
+          <el-table-column align="center" width="100" label="序号" type="selection"></el-table-column>
 
-        <el-table-column align="center" label="执行方案名称" prop="date"></el-table-column>
-      </el-table>
-      <!-- <el-pagination class="tac" background layout="prev, pager, next" :total="page.total"
+          <el-table-column align="center" label="执行方案名称" prop="date"></el-table-column>
+        </el-table>
+        <!-- <el-pagination class="tac" background layout="prev, pager, next" :total="page.total"
           :current-page.sync="filter.pageNum" :page-size.sync="filter.pageSize" @current-change="fetchList">
         </el-pagination> -->
-      <span slot="footer" class="dialog-footer">
-        <el-button type="default" @click="closeImplementationPlan">关 闭</el-button>
-      </span>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="default" @click="closeImplementationPlan">关 闭</el-button>
+        </span>
+      </el-dialog>
     </el-dialog>
-  </div>
+
 </template>
  
 <script>
@@ -441,10 +441,9 @@ module.exports = {
 </script>
  
 <style scope>
-
-.wrap{
-  width:100%;
-  height:100%;
+.wrap {
+  width: 100%;
+  height: 100%;
 }
 .title {
   margin-bottom: 20px;

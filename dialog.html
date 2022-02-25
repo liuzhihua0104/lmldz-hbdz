@@ -2,19 +2,19 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>奖品实际应用方案page</title>
-  <link href="./libs/element-ui/2.15.3/theme-chalk/index.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奖品实际应用方案page</title>
+    <link href="./libs/element-ui/2.15.3/theme-chalk/index.css" rel="stylesheet" />
 
 </head>
 
 <body>
-  <button id="btn" bindId="rose" onclick="fn('123')">点击换起vue弹框dialogPage</button>
-  <div id="my-app">
-    <dialog-component></dialog-component>
-  </div>
+    <button id="btn" bindId="rose" onclick="fn('123')">点击换起vue弹框dialogPage</button>
+    <div id="my-app">
+        <dialog-component></dialog-component>
+    </div>
 </body>
 
 </html>
@@ -27,32 +27,32 @@
 <script src="./js/request.js"></script>
 
 <script type="text/javascript">
-  new Vue({
-    el: '#my-app',
-    components: {
-      'dialog-component': httpVueLoader('dialog-component.vue')
-    }
-  });
+    new Vue({
+        el: '#my-app',
+        components: {
+            'dialog-component': httpVueLoader('dialog-component.vue')
+        }
+    });
 </script>
 
 <script>
-  window.onload = function () {
-    let btn = document.getElementById("btn");
-    btn.addEventListener("click", function (e) {
-      console.log(e.target.attributes.bindId)
-      Vm.applicationSchemeVisible = true;
-      // Vm.formData.user = 456;
+    window.onload = function () {
+        let btn = document.getElementById("btn");
+        btn.addEventListener("click", function (e) {
+            console.log(e.target.attributes.bindId)
+            Vm.applicationSchemeVisible = true;
+            // Vm.formData.user = 456;
 
-      // setTimeout(function () {
-      //   console.log(111)
-      //   Vm.testFn();
-      // }, 3000)
-    })
+            // setTimeout(function () {
+            //   console.log(111)
+            //   Vm.testFn();
+            // }, 3000)
+        })
 
 
-  }
-  function fn(e, value) {
-    console.log(e, value)
-  }
+    }
+    function fn(e, value) {
+        console.log(e, value)
+    }
 
 </script>
