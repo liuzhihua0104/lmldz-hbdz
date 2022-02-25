@@ -3,8 +3,6 @@
     <!-- 表单 -->
     <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData" size="mini">
       <div class="title">信息</div>
-
-      {{type}}
       <!-- 主要信息-展示用 -->
       <el-row>
         <el-col :span="12">
