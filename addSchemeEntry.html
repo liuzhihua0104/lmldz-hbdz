@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奖品添加定向执行方案入口</title>
+    <link href="./libs/element-ui/2.15.3/theme-chalk/index.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <!-- <button id="addPlan" bindId="rose" onclick="fn('123')">添加</button> -->
+    <button id="addPlan" bindId="rose">添加</button>
+    <button id="lookPlan" bindId="rose" onclick="fn('123')">执行方案</button>
+    <div id="app">
+        <el-dialog title="奖品实际应用方案" :visible.sync="applicationSchemeVisible" center>
+            <dialog-component></dialog-component>
+        </el-dialog>
+    </div>
+</body>
+
+</html>
+<script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/http-vue-loader"></script>
+
+<script src="./libs/vue/2.6.12/vue.min.js"></script>
+<script src="./libs/element-ui/2.15.3/index.min.js"></script>
+<script src="./libs/axios/0.21.1/axios.min.js"></script>
+<script src="./js/request.js"></script>
+
+<script type="text/javascript">
+    var dialogVm = new Vue({
+        el: '#app',
+        data() {
+            return {
+                applicationSchemeVisible: false, // 奖品实际应用方案弹框的显示与隐藏
+            }
+        },
+        components: {
+            'dialog-component': httpVueLoader('./components/dialog-component.vue')
+        }
+    });
+</script>
+
+<script>
+    window.onload = function () {
+        // 添加奖品实际应用方案-进入新页面
+        let addPlan = document.getElementById("addPlan");
+        addPlan.addEventListener("click", function (e) {
+            console.log(e.target.attributes.bindId)
+            location.href = `./prizePracticalApplicationScheme.html`
+        })
+
+        // 查看奖品实际应用方案-展示弹框
+        let lookPlan = document.getElementById("lookPlan");
+        lookPlan.addEventListener("click", function (e) {
+            console.log(e.target.attributes.bindId)
+            dialogVm.applicationSchemeVisible = true;
+        })
+    }
+
+    function fn(e, value) {
+        console.log(e, value)
+    }
+
+</script>
