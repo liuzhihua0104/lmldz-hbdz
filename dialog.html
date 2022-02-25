@@ -13,7 +13,9 @@
 <body>
     <button id="btn" bindId="rose" onclick="fn('123')">点击换起vue弹框dialogPage</button>
     <div id="my-app">
-        <dialog-component></dialog-component>
+        <el-dialog title="奖品实际应用方案" :visible.sync="applicationSchemeVisible" center>
+            <dialog-component></dialog-component>
+        </el-dialog>
     </div>
 </body>
 
@@ -27,8 +29,13 @@
 <script src="./js/request.js"></script>
 
 <script type="text/javascript">
-    new Vue({
+    var dialogVm = new Vue({
         el: '#my-app',
+        data() {
+            return {
+                applicationSchemeVisible: true, // 奖品实际应用方案弹框的显示与隐藏
+            }
+        },
         components: {
             'dialog-component': httpVueLoader('dialog-component.vue')
         }
@@ -40,7 +47,7 @@
         let btn = document.getElementById("btn");
         btn.addEventListener("click", function (e) {
             console.log(e.target.attributes.bindId)
-            Vm.applicationSchemeVisible = true;
+            dialogVm.applicationSchemeVisible = true;
             // Vm.formData.user = 456;
 
             // setTimeout(function () {

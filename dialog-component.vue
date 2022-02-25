@@ -1,6 +1,5 @@
  <template>
-
-  <el-dialog title="奖品实际应用方案" :visible.sync="applicationSchemeVisible" center>
+  <div class="out-dialog">
     <!-- 表单 -->
     <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData" size="mini">
       <div class="title">信息</div>
@@ -89,7 +88,7 @@
         </span> -->
 
     <!-- 执行方案列表弹框 -->
-    <el-dialog append-to-body :width="'600px'" height="250" title="执行方案列表" :visible.sync="implementationSchemeVisible" center customClass="customWidth">
+    <el-dialog :append-to-body="true" :width="'600px'" height="250" title="执行方案列表" :visible.sync="implementationSchemeVisible" center customClass="customWidth">
       <div style="margin-bottom: 20px;display: flex; justify-content: space-between;align-items: center;">
         <div></div>
         <el-button size="mini" type="primary" @click="releaseFn">应用</el-button>
@@ -119,12 +118,11 @@
         <el-button type="default" @click="closeImplementationPlan">关 闭</el-button>
       </span>
     </el-dialog>
-
     <div class="btns">
       <el-button class="back">返回</el-button>
       <el-button type="primary">保存</el-button>
     </div>
-  </el-dialog>
+  </div>
 
 </template>
  
@@ -149,7 +147,7 @@ function getUrlQuery() {
 module.exports = {
   data() {
     return {
-      applicationSchemeVisible: true, // 奖品实际应用方案弹框的显示与隐藏
+      // applicationSchemeVisible: true, // 奖品实际应用方案弹框的显示与隐藏
 
       implementationSchemeVisible: false, // 执行方案弹框的显示与隐藏
       implementationSchemeListData: [{
