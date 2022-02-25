@@ -16,7 +16,7 @@
     <button id="lookPlan" bindId="rose" onclick="fn('123')">执行方案</button>
     <div id="app">
         <el-dialog title="奖品实际应用方案" :visible.sync="applicationSchemeVisible" center>
-            <dialog-component></dialog-component>
+            <dialog-component type="dialog"></dialog-component>
         </el-dialog>
     </div>
 </body>
@@ -36,6 +36,7 @@
         data() {
             return {
                 applicationSchemeVisible: false, // 奖品实际应用方案弹框的显示与隐藏
+                planId: ""//方案ID
             }
         },
         components: {
@@ -45,6 +46,9 @@
 </script>
 
 <script>
+    // 重新调取列表
+    console.log("这个位置需要重新调取列表,刷新")
+
     window.onload = function () {
         // 添加奖品实际应用方案-进入新页面
         let addPlan = document.getElementById("addPlan");

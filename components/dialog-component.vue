@@ -4,6 +4,7 @@
     <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData" size="mini">
       <div class="title">信息</div>
 
+      {{type}}
       <!-- 主要信息-展示用 -->
       <el-row>
         <el-col :span="12">
@@ -30,13 +31,13 @@
 
       <div class="title">实际应用方案</div>
 
-      <el-button @click="showPlan" style="margin-bottom:10px" type="primary" plain size="small">添加方案</el-button>
+      <el-button v-if="type=='page'" @click="showPlan" style="margin-bottom:10px" type="primary" plain size="small">添加方案</el-button>
 
       <!-- 执行方案列表表格 -->
       <el-table :data="planListData" height="250" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}">
         <el-table-column label="开关" width="100" align="center">
           <template slot-scope="scope">
-            <el-switch inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+            <el-switch :disabled="type=='dialog'" inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
             </el-switch>
           </template>
         </el-table-column>
@@ -44,7 +45,7 @@
         </el-table-column>
         <el-table-column align="center" prop="name" label="最近一次操作人">
         </el-table-column>
-        <el-table-column align="center" label="操作" width="150">
+        <el-table-column v-if="type=='page'" align="center" label="操作" width="150">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="planlook(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="planEdit(scope.row)">编辑</el-button>
@@ -57,7 +58,7 @@
       <el-table :data="conditionListData" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}" style="margin-bottom:20px">
         <el-table-column align="center" label="开关" width="100">
           <template slot-scope="scope">
-            <el-switch inactive-color="#cccccc" @change="conditionChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+            <el-switch :disabled="type=='dialog'" inactive-color="#cccccc" @change="conditionChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
             </el-switch>
           </template>
         </el-table-column>
@@ -67,7 +68,7 @@
         </el-table-column>
         <el-table-column align="center" prop="name" label="最近一次操作人">
         </el-table-column>
-        <el-table-column align="center" label="操作" width="150">
+        <el-table-column v-if="type=='page'" align="center" label="操作" width="150">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="conditionlook(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="conditionEdit(scope.row)">编辑</el-button>
@@ -114,13 +115,13 @@
       <!-- <el-pagination class="tac" background layout="prev, pager, next" :total="page.total"
           :current-page.sync="filter.pageNum" :page-size.sync="filter.pageSize" @current-change="fetchList">
         </el-pagination> -->
-      <span slot="footer" class="dialog-footer">
+      <!-- <span slot="footer" class="dialog-footer">
         <el-button type="default" @click="closeImplementationPlan">关 闭</el-button>
-      </span>
+      </span> -->
     </el-dialog>
-    <div class="btns">
-      <el-button class="back">返回</el-button>
-      <el-button type="primary">保存</el-button>
+    <div class="btns" v-if="type=='page'">
+      <el-button class="back" @click="goBack">返回</el-button>
+      <el-button type="primary" @click="saveFn">保存</el-button>
     </div>
   </div>
 
@@ -145,6 +146,13 @@ function getUrlQuery() {
 }
 
 module.exports = {
+  props: {
+    // type用来标记当前组件是当做dialog使用还是page使用
+    type: {
+      type: String,
+      default: 'page'
+    },
+  },
   data() {
     return {
       // applicationSchemeVisible: true, // 奖品实际应用方案弹框的显示与隐藏
@@ -299,10 +307,19 @@ module.exports = {
     //   console.log("触发function")
     //   this.formData.radio1 = 2
     // },
-    // // 返回
-    // onCancel() {
-    //   window.history.go(-1)
-    // },
+    // 返回
+    goBack() {
+      window.history.go(-1)
+    },
+    // 保存成功后返回其他页面
+    saveFn() {
+
+      setTimeout(() => {
+        this.goBack();
+      }, 3000)
+
+    },
+
     // 点击添加方案:展示执行方案弹框
     showPlan() {
       this.implementationSchemeVisible = true;
