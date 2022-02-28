@@ -57,8 +57,8 @@
           <el-radio-group v-model="formData.networking">
             <el-radio :label="0">不限制</el-radio>
             <el-radio :label="1">WIFI</el-radio>
-            <el-radio :label="2">运营商数据</el-radio>
-            <el-radio :label="4">自定义</el-radio>
+            <!-- <el-radio :label="2">运营商数据</el-radio>
+            <el-radio :label="4">自定义</el-radio> -->
           </el-radio-group>
         </el-form-item>
       </el-col>
@@ -73,10 +73,10 @@
             <el-radio :label="2">支付宝
 
             </el-radio>
-            <el-radio :label="4">其他</el-radio>
+            <!-- <el-radio :label="4">其他</el-radio>
             <el-radio :label="5">自定义
 
-            </el-radio>
+            </el-radio> -->
           </el-radio-group>
         </el-form-item>
       </el-col>
@@ -106,7 +106,7 @@
       </el-form-item>
     </el-card>
     <!-- 时段子项 -->
-    <el-card class="box-card" v-if="formData.radio5==3" style="text-align:center">
+    <el-card class="box-card timeList" v-if="formData.radio5==3" style="text-align:center">
       <div slot="header" class="clearfix">
         <span>自定义</span>
       </div>
@@ -117,22 +117,25 @@
         <el-table-column align="center" label="时间段" prop="date">
 
         </el-table-column>
-        <el-table-column align="center" label="时间范围">
+        <el-table-column align="center" label="时间范围"  width="250"> 
           <template slot-scope="scope">
-            <el-time-select placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
+            <div  style="display:flex;align-items:center">
+              <el-time-select placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
       start: '00:00',
       step: '01:00',
       end: '23:00'
     }">
-            </el-time-select>
-            <span>至</span>
-            <el-time-select placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
+              </el-time-select>
+              <span style="padding:0 10px">至</span>
+              <el-time-select placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
      start: '00:00',
       step: '01:00',
       end: '23:00',
       minTime: scope.row.startTime
     }">
-            </el-time-select>
+              </el-time-select>
+            </div>
+
           </template>
 
         </el-table-column>
@@ -354,4 +357,5 @@ module.exports = {
 .back {
   margin-right: 40px;
 }
+
 </style>
