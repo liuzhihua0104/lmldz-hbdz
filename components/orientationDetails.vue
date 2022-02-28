@@ -112,14 +112,16 @@
       </div>
 
       <el-table :data="rangeListData" class="table-wrap" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}" height="250">
-        <el-table-column align="center" width="100" label="序号" type="index"></el-table-column>
-
-        <el-table-column align="center" label="时间段" prop="date">
-
-        </el-table-column>
-        <el-table-column align="center" label="时间范围"  width="250"> 
+        <el-table-column align="center" width="80" label="序号" type="index"></el-table-column>
+        <el-table-column align="center" label="时间段">
           <template slot-scope="scope">
-            <div  style="display:flex;align-items:center">
+            <el-slider v-model="scope.row.sliderValue" range  :max="24" :min="0" :step="1">
+            </el-slider>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="时间范围" width="300">
+          <template slot-scope="scope">
+            <div style="display:flex;align-items:center">
               <el-time-select placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
       start: '00:00',
       step: '01:00',
@@ -130,7 +132,7 @@
               <el-time-select placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
      start: '00:00',
       step: '01:00',
-      end: '23:00',
+      end: '24:00',
       minTime: scope.row.startTime
     }">
               </el-time-select>
@@ -212,6 +214,7 @@ module.exports = {
   },
   data() {
     return {
+      value: [2, 4],
       formData: {
         id: "",
         user: '123',
@@ -235,7 +238,8 @@ module.exports = {
         {
           id: 1,
           startTime: "00:00",
-          endTime: "01:00"
+          endTime: "01:00",
+          sliderValue: [2, 24]
         }
       ], //时间段自定义列表数据
       formRules: {
@@ -357,5 +361,4 @@ module.exports = {
 .back {
   margin-right: 40px;
 }
-
 </style>
