@@ -123,30 +123,42 @@
 
 
       <!-- 批量应用弹框 -->
-      <el-dialog title="批量应用" :visible.sync="batchApplicationVisible" center customClass="customWidth">
+      <el-dialog title="批量应用" :width="'1000px'" :visible.sync="batchApplicationVisible" center
+        customClass="customWidth">
         <div style="margin-bottom: 20px;display: flex; justify-content: space-between;align-items: center;">
           <div> 执行方案名称: <span style="font-weight:bold">执行方案A01</span></div>
           <el-button size="mini" type="primary" @click="releaseFn">发布</el-button>
         </div>
         <!-- 表单 -->
         <el-form ref="formInline" size="mini" :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item style="margin-right:0" label="关键字:" prop="user" :rules="[
+          <el-row>
+            <el-col :span="12">
+              <el-form-item style="margin-right:0" label="关键字:" prop="user" :rules="[
               { required: true, message: '关键字不能为空'}
             ]">
-            <el-input v-model="formInline.user" placeholder="请输入内容" :clearable="true"></el-input>
-          </el-form-item>
-          <el-form-item label="" prop="region" :rules="[
-          { required: true, message: '请选择'}
-        ]">
-            <el-select v-model="formInline.region" placeholder="">
-              <el-option label="奖品ID名称" value="shanghai"></el-option>
-              <el-option label="策略名称" value="beijing1"></el-option>
-              <el-option label="素材源名称" value="beijing2"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="default" @click="onSubmit('formInline')">搜索</el-button>
-          </el-form-item>
+                <el-input v-model="formInline.user" placeholder="请输入内容" :clearable="true"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="" prop="region" :rules="[
+              { required: true, message: '请选择'}
+            ]">
+                <el-select v-model="formInline.region" placeholder="">
+                  <el-option label="奖品ID名称" value="shanghai"></el-option>
+                  <el-option label="策略名称" value="beijing1"></el-option>
+                  <el-option label="素材源名称" value="beijing2"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item>
+                <el-button type="default" @click="onSubmit('formInline')">搜索</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+
+
         </el-form>
 
         <!-- 列表 -->
