@@ -121,6 +121,11 @@
       <el-button class="back" @click="goBack">返回</el-button>
       <el-button type="primary" @click="saveFn">保存</el-button>
     </div>
+
+    <!-- 查看奖品定向详情 -->
+    <el-dialog title="奖品定向详情" :visible.sync="orientationDetailsVisible" center>
+      <orientation-details :type="orientationDetailsType"></orientation-details>
+    </el-dialog>
   </div>
 
 </template>
@@ -151,9 +156,14 @@ module.exports = {
       default: 'page'
     },
   },
+  components: {
+    'orientation-details': httpVueLoader('./orientationDetails.vue')
+  },
   data() {
     return {
-      // applicationSchemeVisible: true, // 奖品实际应用方案弹框的显示与隐藏
+      orientationDetailsType: "", //奖品定向详情的展示类型page||dialog
+      orientationDetailsVisible: false, // 奖品定向详情弹框的显示与隐藏
+
 
       implementationSchemeVisible: false, // 执行方案弹框的显示与隐藏
       implementationSchemeListData: [{
@@ -367,13 +377,17 @@ module.exports = {
         }
       })
     },
-    // 执行方案-查看
+    // 执行方案-查看,展示奖品定向详情弹框
     planlook(row) {
       console.log("planlook")
+      this.orientationDetailsVisible = true;
+      this.orientationDetailsType = "dialog"
     },
     // 执行方案-编辑
     planEdit(row) {
       console.log("执行方案-编辑")
+      this.orientationDetailsType = "page"
+       location.href = `./prizeOrientationDetails.html?id=${row.id}`
     },
     // 执行方案列表-删除按钮
     planDel(row) {
