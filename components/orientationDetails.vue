@@ -102,6 +102,11 @@
       <div slot="header" class="clearfix" style="text-align:center">
         <span>时间段</span>
       </div>
+      <el-form-item class="time-slot-card" style="margin-right:0" label="" prop="timeSlot">
+        <el-checkbox-group v-model="formData.timeSlot">
+          <el-checkbox v-for="item in timeSlotArray" :key="item.value" :value="item.value" :label="item.label"></el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
 
     </el-card>
 
@@ -173,8 +178,20 @@ module.exports = {
         user: '123',
         remark: '',
         radio1: "",
-        radio5: ""
+        radio5: 2,
+        timeSlot: ""
       },
+      // 时间段选择
+      timeSlotArray: [
+        { label: "0点 ~ 3点", value: "0点 ~ 3点" },
+        { label: "0点 ~ 6点", value: "0点 ~ 6点" },
+        { label: "7点 ~9点", value: "7点 ~9点" },
+        { label: "10点 ~12点", value: "10点 ~12点" },
+        { label: "13点 ~15点", value: "13点 ~15点" },
+        { label: "16点 ~ 18点", value: "16点 ~ 18点" },
+        { label: "19点 ~21点", value: "19点 ~21点" },
+        { label: "22点 ~24点", value: "22点 ~24点" },
+      ],
       formRules: {
         user: [
           { required: true, message: '请输入定向名称', trigger: 'change' },
@@ -250,10 +267,6 @@ module.exports = {
 </script>
  
 <style scope>
-/* .el-card {
-  box-shadow: 0 !important;
-} */
-
 .title {
   margin-bottom: 20px;
   font-weight: 500;
@@ -266,12 +279,22 @@ module.exports = {
 
 .el-card {
   width: 600px;
-  margin-left:100px;
+  margin-left: 100px;
   box-shadow: none !important;
 }
 .el-card__header {
   background: red;
   background: #f5f7fa;
+}
+
+/* 让时间段选择靠左 */
+.time-slot-card > .el-form-item__content {
+  margin-left: 0 !important;
+}
+
+/* 缩短时间段选择下方的间距 */
+.time-slot-card > .el-form-item {
+  margin-bottom: 0 !important;
 }
 
 /* 返回按钮 */
