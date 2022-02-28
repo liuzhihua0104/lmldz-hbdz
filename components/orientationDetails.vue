@@ -93,6 +93,12 @@
         </el-form-item>
       </el-col>
     </el-row>
+
+    <!-- 时段子项 -->
+    <div class="time-slot" v-if="formData.radio5==2">
+      123456
+    </div>
+
     <!-- 节假日 -->
     <el-row>
       <el-col :span="24">
@@ -160,7 +166,8 @@ module.exports = {
         id: "",
         user: '123',
         remark: '',
-        radio1: ""
+        radio1: "",
+        radio5: ""
       },
       formRules: {
         user: [
@@ -224,9 +231,9 @@ module.exports = {
     let query = getUrlQuery()
     console.log(query)
     if (query.id) {
-    //   setTimeout(() => {
-    //     this.formData.id = query.id;
-    //   })
+      //   setTimeout(() => {
+      //     this.formData.id = query.id;
+      //   })
 
       this.getDetails()
     }
@@ -237,9 +244,9 @@ module.exports = {
 </script>
  
 <style scope>
-.inputWidth {
+/* .inputWidth {
   width: 500px;
-}
+} */
 
 .el-card {
   box-shadow: 0 !important;
