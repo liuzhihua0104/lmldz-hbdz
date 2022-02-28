@@ -1,7 +1,7 @@
  <template>
 
   <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData">
-    <div style="margin-bottom:20px;font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">
+    <div class="title">
       信息</div>
 
     <!-- 定向名称 -->
@@ -23,7 +23,7 @@
       </el-col>
     </el-row>
 
-    <div style="margin-bottom:20px;font-weight:500;font-size:20px;background:#d7d7d7;border-radius: 4px;line-height:40px;padding-left:20px">
+    <div class="title">
       配置信息</div>
 
     <!-- 区域 -->
@@ -95,9 +95,15 @@
     </el-row>
 
     <!-- 时段子项 -->
-    <div class="time-slot" v-if="formData.radio5==2">
-      123456
-    </div>
+    <!-- <div class="time-slot" v-if="formData.radio5==2">
+
+    </div> -->
+    <el-card class="box-card" v-if="formData.radio5==2">
+      <div slot="header" class="clearfix" style="text-align:center">
+        <span>时间段</span>
+      </div>
+
+    </el-card>
 
     <!-- 节假日 -->
     <el-row>
@@ -244,12 +250,28 @@ module.exports = {
 </script>
  
 <style scope>
-/* .inputWidth {
-  width: 500px;
+/* .el-card {
+  box-shadow: 0 !important;
 } */
 
+.title {
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 14px;
+  background: #e5e9f2;
+  border-radius: 4px;
+  line-height: 30px;
+  padding-left: 20px;
+}
+
 .el-card {
-  box-shadow: 0 !important;
+  width: 600px;
+  margin-left:100px;
+  box-shadow: none !important;
+}
+.el-card__header {
+  background: red;
+  background: #f5f7fa;
 }
 
 /* 返回按钮 */
