@@ -115,7 +115,7 @@
         <el-table-column align="center" width="80" label="序号" type="index"></el-table-column>
         <el-table-column align="center" label="时间段">
           <template slot-scope="scope">
-            <el-slider v-model="scope.row.sliderValue" range  :max="24" :min="0" :step="1">
+            <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="24" :min="0" :step="1">
             </el-slider>
           </template>
         </el-table-column>
@@ -125,7 +125,7 @@
               <el-time-select placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
       start: '00:00',
       step: '01:00',
-      end: '23:00'
+      end: '24:00'
     }">
               </el-time-select>
               <span style="padding:0 10px">至</span>
@@ -214,7 +214,6 @@ module.exports = {
   },
   data() {
     return {
-      value: [2, 4],
       formData: {
         id: "",
         user: '123',
@@ -238,8 +237,8 @@ module.exports = {
         {
           id: 1,
           startTime: "00:00",
-          endTime: "01:00",
-          sliderValue: [2, 24]
+          endTime: "06:00",
+          sliderValue: [0, 6]
         }
       ], //时间段自定义列表数据
       formRules: {
@@ -305,6 +304,16 @@ module.exports = {
     },
     delTimeRange(row) {
       console.log(row)
+    },
+
+    // 切换时间段
+    changeSlider(row) {
+      this.rangeListData.filter(item => {
+        if (item.id == row.id) {
+          item.startTime = dayjs().hour(row.sliderValue[0]).format('HH:00');
+          item.endTime = dayjs().hour(row.sliderValue[1]).format('HH:00');
+        }
+      })
     }
   },
   created() {
