@@ -122,10 +122,10 @@
         <el-table-column align="center" label="时间范围" width="300">
           <template slot-scope="scope">
             <div style="display:flex;align-items:center">
-              <el-time-select placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
+              <el-time-select @change="changeStartTime" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
       start: '00:00',
       step: '01:00',
-      end: '24:00'
+      end: '23:00'
     }">
               </el-time-select>
               <span style="padding:0 10px">至</span>
@@ -224,21 +224,24 @@ module.exports = {
       },
       // 时间段选择
       timeSlotArray: [
-        { label: "0点 ~ 3点", value: "0点 ~ 3点" },
-        { label: "0点 ~ 6点", value: "0点 ~ 6点" },
-        { label: "7点 ~9点", value: "7点 ~9点" },
-        { label: "10点 ~12点", value: "10点 ~12点" },
-        { label: "13点 ~15点", value: "13点 ~15点" },
-        { label: "16点 ~ 18点", value: "16点 ~ 18点" },
-        { label: "19点 ~21点", value: "19点 ~21点" },
-        { label: "22点 ~24点", value: "22点 ~24点" },
+        { label: "0点 ~ 3点", value: "0-3" },
+        { label: "3点 ~ 6点", value: "3-6" },
+        { label: "6点 ~8点", value: "6-8" },
+        { label: "8点 ~10点", value: "8-10" },
+        { label: "10点 ~12点", value: "10-12" },
+        { label: "12点 ~ 14点", value: "12-14" },
+        { label: "14点 ~16点", value: "14-16" },
+        { label: "16点 ~18点", value: "16-18" },
+        { label: "18点 ~20点", value: "18-20" },
+        { label: "20点 ~22点", value: "20-22" },
+        { label: "22点 ~24点", value: "22-24" },
       ],
       rangeListData: [
         {
           id: 1,
-          startTime: "00:00",
-          endTime: "06:00",
-          sliderValue: [0, 6]
+          startTime: "",
+          endTime: "",
+          sliderValue: ["",""]
         }
       ], //时间段自定义列表数据
       formRules: {
@@ -306,14 +309,22 @@ module.exports = {
       console.log(row)
     },
 
-    // 切换时间段
+    // 切换时间段-通过滑块
     changeSlider(row) {
       this.rangeListData.filter(item => {
         if (item.id == row.id) {
           item.startTime = dayjs().hour(row.sliderValue[0]).format('HH:00');
           item.endTime = dayjs().hour(row.sliderValue[1]).format('HH:00');
+
+          if(item.endTime=="00:00"){
+            item.endTime="24:00"
+          }
         }
       })
+    },
+    // 切换时间段-通过时间选择控件
+    changeStartTime(row){
+      console.log(row)
     }
   },
   created() {
