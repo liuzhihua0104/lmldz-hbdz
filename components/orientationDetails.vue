@@ -122,7 +122,7 @@
         <el-table-column align="center" label="时间范围" width="300">
           <template slot-scope="scope">
             <div style="display:flex;align-items:center">
-              <el-time-select @change="changeStartTime" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
+              <el-time-select @change="changeStartTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
       start: '00:00',
       step: '01:00',
       end: '23:00'
@@ -241,7 +241,7 @@ module.exports = {
           id: 1,
           startTime: "",
           endTime: "",
-          sliderValue: ["",""]
+          sliderValue: [null, null]
         }
       ], //时间段自定义列表数据
       formRules: {
@@ -316,15 +316,67 @@ module.exports = {
           item.startTime = dayjs().hour(row.sliderValue[0]).format('HH:00');
           item.endTime = dayjs().hour(row.sliderValue[1]).format('HH:00');
 
-          if(item.endTime=="00:00"){
-            item.endTime="24:00"
+          if (item.endTime == "00:00") {
+            item.endTime = "24:00"
           }
         }
       })
     },
     // 切换时间段-通过时间选择控件
-    changeStartTime(row){
-      console.log(row)
+    changeStartTime(row, name) {
+      let mapObj = new Map().set("startTime", 0).set("endTime", 1);
+      let targetIndex = mapObj.get(name);
+      if (row[name]) {
+        let valueNum = parseInt(row[name].split()[0]);
+        // this.$set(this.rangeListData[row.id],"sliderValue",[4,5])
+        row.sliderValue[targetIndex] = valueNum;
+
+        let index = this.rangeListData.findIndex(item => item.id == row.id);
+        console.log(row.sliderValue)
+
+        let sliderValue = [row.sliderValue[0], row.sliderValue[1]]
+
+
+        let obj = {
+          id: row.id,
+          startTime: row.startTime,
+          endTime: row.endTime,
+          // sliderValue: name=="startTime"?[2, 10]
+          sliderValue: [2,6]
+        }
+
+        this.$set(this.rangeListData, index, obj
+          // {
+          //   id: 1,
+          //   startTime: "",
+          //   endTime: "",
+          //   sliderValue: [2, 10]
+          // }
+        )
+
+        // console.log(index)
+
+        // this.$set(this.rangeListData, index,
+        //   row
+        // )
+
+        // this.rangeListData.filter((item, key) => {
+        //   if (item.id == row.id) {
+        //     // item.sliderValue[targetIndex] = valueNum;
+        //     this.$set(this.rangeListData, key,
+        //       row
+        //     )
+        //     // let target = item;
+
+        //     // item.sliderValue[targetIndex] = valueNum;
+        //     // console.log(rangeListData)
+
+        //     // this.$set(this.rangeListData[row.id], "sliderValue", [4, 5])
+        //   }
+        // })
+
+
+      }
     }
   },
   created() {
