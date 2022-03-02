@@ -60,33 +60,32 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-      <el-col :span="24">
-        <el-form-item v-if="formData.networking=='custom'" style="margin-right:0" label="" prop="networking_custom">
-          <el-checkbox-group v-model="formData.networking_custom">
-            <el-checkbox label="1">wifi</el-checkbox>
-            <el-checkbox label="2">移动</el-checkbox>
-            <el-checkbox label="3">联通</el-checkbox>
-            <el-checkbox label="4">电信</el-checkbox>
+
+      <el-col :span="24" v-if="formData.networking=='custom'">
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="networkingCustomData.isIndeterminate" v-model="networkingCustomData.checkAll" @change="commonChangeCheckAll($event,'networkingCustomData')">全选</el-checkbox>
+        <el-form-item style="margin-right:0" label="">
+          <el-checkbox-group @change="commonSelectOption($event,'networkingCustomData')" class="time-slot" v-model="networkingCustomData.values">
+            <el-checkbox v-for="item in networkingCustomData.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-col>
-
     </el-row>
     <!-- 扫码工具 -->
     <el-row>
       <el-col :span="24">
-        <el-form-item style="margin-right:0" label="扫码工具:" prop="scan_content">
-          <el-radio-group v-model="formData.scan_content">
-            <el-radio :label="0">不限制</el-radio>
-            <el-radio :label="1">微信</el-radio>
-            <el-radio :label="2">支付宝
-
-            </el-radio>
-            <!-- <el-radio :label="4">其他</el-radio>
-            <el-radio :label="5">自定义
-
-            </el-radio> -->
+        <el-form-item style="margin-right:0" label="扫码工具:" prop="scanContent">
+          <el-radio-group v-model="formData.scanContent">
+            <el-radio label="0">不限制</el-radio>
+            <el-radio label="custom">自定义</el-radio>
           </el-radio-group>
+        </el-form-item>
+      </el-col>
+      <el-col :span="24" v-if="formData.scanContent=='custom'">
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="scanContentCustomData.isIndeterminate" v-model="scanContentCustomData.checkAll" @change="commonChangeCheckAll($event,'scanContentCustomData')">全选</el-checkbox>
+        <el-form-item style="margin-right:0" label="">
+          <el-checkbox-group @change="commonSelectOption($event,'scanContentCustomData')" class="time-slot" v-model="scanContentCustomData.values">
+            <el-checkbox v-for="item in scanContentCustomData.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
       </el-col>
     </el-row>
@@ -101,9 +100,9 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-      <el-col :span="24">
-        <el-checkbox v-if="formData.timeType=='1'" style="margin:0 0 15px 100px" :indeterminate="timeType1Data.isIndeterminate" v-model="timeType1Data.checkAll" @change="commonChangeCheckAll($event,'timeType1Data')">全选</el-checkbox>
-        <el-form-item v-if="formData.timeType=='1'" style="margin-right:0" label="" prop="timeSlot">
+      <el-col :span="24" v-if="formData.timeType=='1'">
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="timeType1Data.isIndeterminate" v-model="timeType1Data.checkAll" @change="commonChangeCheckAll($event,'timeType1Data')">全选</el-checkbox>
+        <el-form-item style="margin-right:0" label="">
           <el-checkbox-group @change="commonSelectOption($event,'timeType1Data')" class="time-slot" v-model="timeType1Data.values">
             <el-checkbox v-for="item in timeType1Data.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
@@ -160,9 +159,27 @@
         <el-form-item style="margin-right:0" label="节假日:" prop="holidays">
           <el-radio-group v-model="formData.holidays">
             <el-radio label="0">不限制</el-radio>
-            <el-radio label="1">法定</el-radio>
-            <el-radio label="2">星期</el-radio>
+            <el-radio label="legal">法定</el-radio>
+            <el-radio label="week">星期</el-radio>
           </el-radio-group>
+        </el-form-item>
+      </el-col>
+
+      <el-col :span="24" v-if="formData.holidays=='legal'">
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="legalData.isIndeterminate" v-model="legalData.checkAll" @change="commonChangeCheckAll($event,'legalData')">全选</el-checkbox>
+        <el-form-item style="margin-right:0" label="">
+          <el-checkbox-group @change="commonSelectOption($event,'legalData')" v-model="legalData.values">
+            <el-checkbox v-for="item in legalData.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </el-col>
+
+      <el-col :span="24" v-if="formData.holidays=='week'">
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="weekData.isIndeterminate" v-model="weekData.checkAll" @change="commonChangeCheckAll($event,'weekData')">全选</el-checkbox>
+        <el-form-item style="margin-right:0" label="">
+          <el-checkbox-group @change="commonSelectOption($event,'weekData')" v-model="weekData.values">
+            <el-checkbox v-for="item in weekData.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
       </el-col>
     </el-row>
@@ -172,11 +189,19 @@
         <el-form-item style="margin-right:0" label="设备平台:" prop="devices">
           <el-radio-group v-model="formData.devices">
             <el-radio :label="0">不限制</el-radio>
-            <el-radio :label="1">IOS</el-radio>
+            <!-- <el-radio :label="1">IOS</el-radio>
             <el-radio :label="2">Android</el-radio>
-            <el-radio :label="3">HarmonyOS</el-radio>
-            <!-- <el-radio :label="5">自定义</el-radio> -->
+            <el-radio :label="3">HarmonyOS</el-radio> -->
+            <el-radio label="custom">自定义</el-radio>
           </el-radio-group>
+        </el-form-item>
+      </el-col>
+      <el-col :span="24" v-if="formData.devices=='custom'">
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="devicesCustomData.isIndeterminate" v-model="devicesCustomData.checkAll" @change="commonChangeCheckAll($event,'devicesCustomData')">全选</el-checkbox>
+        <el-form-item style="margin-right:0" label="">
+          <el-checkbox-group @change="commonSelectOption($event,'devicesCustomData')" v-model="devicesCustomData.values">
+            <el-checkbox v-for="item in devicesCustomData.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
       </el-col>
     </el-row>
@@ -221,7 +246,34 @@ let timeSlotOptions = [
   { name: "20点 ~22点", label: "20-22" },
   { name: "22点 ~24点", label: "22-24" },
 ]
-
+let networkingOptions = [
+  { name: "wifi", label: "1" },
+  { name: "移动", label: "2" },
+  { name: "联通", label: "3" },
+  { name: "电信", label: "4" }
+]
+let scanContentOptions = [
+  { name: "微信", label: "1" },
+  { name: "支付宝", label: "2" }
+]
+let legalOptions = [
+  { name: "法定节假日", label: "1" },
+  { name: "法定工作日", label: "2" }
+]
+let weekOptions = [
+  { name: "星期一", label: "3" },
+  { name: "星期二", label: "4" },
+  { name: "星期三", label: "5" },
+  { name: "星期四", label: "6" },
+  { name: "星期五", label: "7" },
+  { name: "星期六", label: "8" },
+  { name: "星期日", label: "9" }
+]
+let devicesCustomOptions = [
+  { name: "ios", label: "1" },
+  { name: "安卓", label: "2" },
+  { name: "鸿蒙", label: "3" }
+]
 module.exports = {
   props: {
     // type用来标记当前组件是当做dialog使用还是page使用
@@ -245,7 +297,7 @@ module.exports = {
         areaType: "0", // '0不限制1省市区2线级',
         areaContent: "", // '区域内容'
         networking: "0", // 联网方式 0不限1wifi2移动3联调4电信
-        scanContent: "", // 扫码工具 0不限1微信2支付宝
+        scanContent: "0", // 扫码工具 0不限1微信2支付宝
         timeType: "0", // 时段 0不限1时间段2自定义
         holidays: "0", // 节假日0不限1节假日2工作日3周一4周二5周三6周四7周五8周六9周日
         devices: "0", // 设备0不限1ios2安卓3鸿蒙
@@ -256,7 +308,7 @@ module.exports = {
 
         // 以下是前端自定义的
         networking_custom: [],
-      },    
+      },
 
       // 全选时间段数据
       timeType1Data: {
@@ -265,9 +317,45 @@ module.exports = {
         isIndeterminate: false, //是否全选（只负责样式）
         values: [] //选中的结果
       },
+      rangeListData: [], //时间段自定义列表数据
 
+      // 联网方式自定义
+      networkingCustomData: {
+        options: networkingOptions,// 选项
+        checkAll: false,// 是否全选
+        isIndeterminate: false, //是否全选（只负责样式）
+        values: [] //选中的结果
+      },
+      // 扫码工具自定义
+      scanContentCustomData: {
+        options: scanContentOptions,// 选项
+        checkAll: false,// 是否全选
+        isIndeterminate: false, //是否全选（只负责样式）
+        values: [] //选中的结果
+      },
+      // 节假日：法定checkbox
+      legalData: {
+        options: legalOptions,// 选项
+        checkAll: false,// 是否全选
+        isIndeterminate: false, //是否全选（只负责样式）
+        values: [] //选中的结果
+      },
+      // 节假日：星期checkbox
+      weekData: {
+        options: weekOptions,// 选项
+        checkAll: false,// 是否全选
+        isIndeterminate: false, //是否全选（只负责样式）
+        values: [] //选中的结果
+      },
 
-      rangeListData: [  ], //时间段自定义列表数据
+      // 自定义设备平台checkbox
+      devicesCustomData: {
+        options: devicesCustomOptions,// 选项
+        checkAll: false,// 是否全选
+        isIndeterminate: false, //是否全选（只负责样式）
+        values: [] //选中的结果
+      },
+
 
       formRules: {
         user: [
