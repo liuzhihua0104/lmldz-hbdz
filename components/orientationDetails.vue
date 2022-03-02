@@ -102,9 +102,12 @@
         </el-form-item>
       </el-col>
       <el-col :span="24">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+        <div style="margin: 15px 0;"></div>
+
         <el-form-item v-if="formData.timeType=='1'" style="margin-right:0" label="" prop="timeSlot">
-          <el-checkbox-group class="time-slot" v-model="formData.timeSlot">
-            <el-checkbox  v-for="item in timeSlotArray" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+          <el-checkbox-group @change="handleCheckedCitiesChange" class="time-slot" v-model="formData.timeSlot">
+            <el-checkbox v-for="item in timeSlotOptions" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-col>
@@ -206,6 +209,21 @@ function getUrlQuery() {
   return obj
 }
 
+
+let timeSlotOptions = [
+  { name: "0点 ~ 3点", label: "0-3" },
+  { name: "3点 ~ 6点", label: "3-6" },
+  { name: "6点 ~8点", label: "6-8" },
+  { name: "8点 ~10点", label: "8-10" },
+  { name: "10点 ~12点", label: "10-12" },
+  { name: "12点 ~ 14点", label: "12-14" },
+  { name: "14点 ~16点", label: "14-16" },
+  { name: "16点 ~18点", label: "16-18" },
+  { name: "18点 ~20点", label: "18-20" },
+  { name: "20点 ~22点", label: "20-22" },
+  { name: "22点 ~24点", label: "22-24" },
+]
+
 module.exports = {
   props: {
     // type用来标记当前组件是当做dialog使用还是page使用
@@ -240,22 +258,18 @@ module.exports = {
 
         // 以下是前端自定义的
         networking_custom: [],
-        timeSlot: [],
+        timeSlot: [], // checkbox时间段values
       },
-      // 时间段选择
-      timeSlotArray: [
-        { name: "0点 ~ 3点", label: "0-3" },
-        { name: "3点 ~ 6点", label: "3-6" },
-        { name: "6点 ~8点", label: "6-8" },
-        { name: "8点 ~10点", label: "8-10" },
-        { name: "10点 ~12点", label: "10-12" },
-        { name: "12点 ~ 14点", label: "12-14" },
-        { name: "14点 ~16点", label: "14-16" },
-        { name: "16点 ~18点", label: "16-18" },
-        { name: "18点 ~20点", label: "18-20" },
-        { name: "20点 ~22点", label: "20-22" },
-        { name: "22点 ~24点", label: "22-24" },
-      ],
+
+      checkAll: false,
+      // checkedCities: ['上海', '北京'],
+      // cities: cityOptions,
+      isIndeterminate: true,
+      
+
+      timeSlotOptions: timeSlotOptions, // 时间段checkbox选择项
+
+      
 
       rangeListData: [
         // {
@@ -280,6 +294,16 @@ module.exports = {
 
   },
   methods: {
+    handleCheckAllChange(val) {
+      console.log(val)
+      this.formData.timeSlot = val ? timeSlotOptions : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedCitiesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.timeSlotOptions.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.timeSlotOptions.length;
+    },
 
     // 返回
     goBack() {
@@ -439,8 +463,6 @@ module.exports = {
   width: 100px !important;
   margin: 0 20px 0 0;
 }
-
-
 
 /* 表格时间段 */
 .time-list {
