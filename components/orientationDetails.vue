@@ -95,7 +95,7 @@
     </el-row>
 
     <!-- 时段子项 -->
-    <el-card class="box-card" v-if="formData.radio5==2">
+    <el-card class="box-card" v-if="formData.time_type==1">
       <div slot="header" class="clearfix" style="text-align:center">
         <span>时间段</span>
       </div>
@@ -106,7 +106,7 @@
       </el-form-item>
     </el-card>
     <!-- 时段子项 -->
-    <el-card class="box-card timeList" v-if="formData.radio5==3" style="text-align:center">
+    <el-card class="box-card timeList" v-if="formData.time_type==2" style="text-align:center">
       <div slot="header" class="clearfix">
         <span>自定义</span>
       </div>
@@ -216,12 +216,25 @@ module.exports = {
   data() {
     return {
       formData: {
-        id: "",
-        user: '123',
-        remark: '',
-        radio1: "",
-        radio5: 3,
-        timeSlot: ""
+        // timeSlot: ""
+        id: "", // 
+        name: "", // 方案名称
+        pageNum: "", // 
+        pageSize: "", // 
+        createTime: "", // 
+        createUser: "", // 
+        remarks: "", // 备注
+        areaType: "0", // '0不限制1省市区2线级',
+        areaContent: "", // '区域内容'
+        networking: "0", // 联网方式 0不限1wifi2移动3联调4电信
+        scanContent: "", // 扫码工具 0不限1微信2支付宝
+        timeType: "0", // 时段 0不限1时间段2自定义
+        holidays: "0", // 节假日0不限1节假日2工作日3周一4周二5周三6周四7周五8周六9周日
+        devices: "0", // 设备0不限1ios2安卓3鸿蒙
+        sex: "0", // 0不限1男2女
+        status: "", // 状态：0关闭1开启 2删除
+        sourceId: "", // 素材源id
+        roles: "", // 状态 1商务2运营
       },
       // 时间段选择
       timeSlotArray: [
