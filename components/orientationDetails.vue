@@ -122,14 +122,15 @@
         <el-table-column align="center" label="时间范围" width="300">
           <template slot-scope="scope">
             <div style="display:flex;align-items:center">
-              <el-time-select @change="changeTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
+              <el-time-select :clearable="false" @change="changeTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
       start: '00:00',
       step: '01:00',
-      end: '23:00'
+      end: '23:00',
+      maxTime:scope.row.endTime
     }">
               </el-time-select>
               <span style="padding:0 10px">至</span>
-              <el-time-select @change="changeTime(scope.row,'endTime')" placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
+              <el-time-select :clearable="false" :disabled="!scope.row.startTime" @change="changeTime(scope.row,'endTime')" placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
      start: '00:00',
       step: '01:00',
       end: '24:00',
@@ -340,8 +341,16 @@ module.exports = {
           let sliderValue = [];
           name == "startTime" ? sliderValue = [valueNum, row.sliderValue[1]] : sliderValue = [row.sliderValue[0], valueNum]
           item.sliderValue = sliderValue;
+          // console.log(item)
+
+          // let startTime=parseInt(item.startTime.split(":")[0])
+          // let endTime=parseInt(item.endTime.split(":")[0])
+
+          // console.log(startTime,endTime)
+
         }
       })
+
 
     }
 
