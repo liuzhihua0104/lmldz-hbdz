@@ -63,10 +63,10 @@
       <el-col :span="24">
         <el-form-item v-if="formData.networking=='custom'" style="margin-right:0" label="" prop="networking_custom">
           <el-checkbox-group v-model="formData.networking_custom">
-            <el-checkbox  label="1">wifi</el-checkbox>
-            <el-checkbox  label="2">移动</el-checkbox>
-            <el-checkbox  label="3">联通</el-checkbox>
-            <el-checkbox  label="4">电信</el-checkbox>
+            <el-checkbox label="1">wifi</el-checkbox>
+            <el-checkbox label="2">移动</el-checkbox>
+            <el-checkbox label="3">联通</el-checkbox>
+            <el-checkbox label="4">电信</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-col>
@@ -93,29 +93,37 @@
     <!-- 时段 -->
     <el-row>
       <el-col :span="24">
-        <el-form-item style="margin-right:0" label="时段:" prop="time_type">
-          <el-radio-group v-model="formData.time_type">
-            <el-radio :label="0">不限制</el-radio>
-            <el-radio :label="1">时间段</el-radio>
-            <el-radio :label="2">自定义</el-radio>
+        <el-form-item style="margin-right:0" label="时段:" prop="timeType">
+          <el-radio-group v-model="formData.timeType">
+            <el-radio label="0">不限制</el-radio>
+            <el-radio label="1">时间段</el-radio>
+            <el-radio label="2">自定义</el-radio>
           </el-radio-group>
         </el-form-item>
+      </el-col>
+
+      <el-col :span="24">
+        <el-form-item v-if="formData.timeType=='1'" style="margin-right:0" label="" prop="timeSlot">
+          <el-checkbox-group class="time-slot" v-model="formData.timeSlot">
+            <el-checkbox v-for="item in timeSlotArray" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+            <!-- <el-checkbox label="2">移动</el-checkbox>
+            <el-checkbox label="3">联通</el-checkbox>
+            <el-checkbox label="4">电信</el-checkbox> -->
+          </el-checkbox-group>
+        </el-form-item>
+
       </el-col>
     </el-row>
 
     <!-- 时段子项 -->
-    <el-card class="box-card" v-if="formData.time_type==1">
+    <!-- <el-card class="box-card" v-if="formData.timeType==1">
       <div slot="header" class="clearfix" style="text-align:center">
         <span>时间段</span>
       </div>
-      <el-form-item class="time-slot-card" style="margin-right:0" label="" prop="timeSlot">
-        <el-checkbox-group v-model="formData.timeSlot">
-          <el-checkbox v-for="item in timeSlotArray" :key="item.value" :value="item.value" :label="item.label"></el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
-    </el-card>
+
+    </el-card> -->
     <!-- 时段子项 -->
-    <el-card class="box-card timeList" v-if="formData.time_type==2" style="text-align:center">
+    <el-card class="box-card timeList" v-if="formData.timeType==2" style="text-align:center">
       <div slot="header" class="clearfix">
         <span>自定义</span>
       </div>
@@ -225,7 +233,7 @@ module.exports = {
   data() {
     return {
       formData: {
-        // timeSlot: ""
+
         id: "", // 
         name: "", // 方案名称
         pageNum: "", // 
@@ -247,22 +255,24 @@ module.exports = {
         roles: "", // 状态 1商务2运营
 
         // 以下是前端自定义的
-        networking_custom: ["1", "2", "3", "4"]
+        networking_custom: [],
+        timeSlot: ["0-3"],
       },
       // 时间段选择
       timeSlotArray: [
-        { label: "0点 ~ 3点", value: "0-3" },
-        { label: "3点 ~ 6点", value: "3-6" },
-        { label: "6点 ~8点", value: "6-8" },
-        { label: "8点 ~10点", value: "8-10" },
-        { label: "10点 ~12点", value: "10-12" },
-        { label: "12点 ~ 14点", value: "12-14" },
-        { label: "14点 ~16点", value: "14-16" },
-        { label: "16点 ~18点", value: "16-18" },
-        { label: "18点 ~20点", value: "18-20" },
-        { label: "20点 ~22点", value: "20-22" },
-        { label: "22点 ~24点", value: "22-24" },
+        { name: "0点 ~ 3点", label: "0-3" },
+        { name: "3点 ~ 6点", label: "3-6" },
+        { name: "6点 ~8点", label: "6-8" },
+        { name: "8点 ~10点", label: "8-10" },
+        { name: "10点 ~12点", label: "10-12" },
+        { name: "12点 ~ 14点", label: "12-14" },
+        { name: "14点 ~16点", label: "14-16" },
+        { name: "16点 ~18点", label: "16-18" },
+        { name: "18点 ~20点", label: "18-20" },
+        { name: "20点 ~22点", label: "20-22" },
+        { name: "22点 ~24点", label: "22-24" },
       ],
+
       rangeListData: [
         // {
         //   id: 1,
@@ -434,5 +444,14 @@ module.exports = {
 }
 .back {
   margin-right: 40px;
+}
+
+/* 时间段限宽度 */
+.time-slot {
+  width:800px;
+}
+
+.time-slot>.el-checkbox{
+ width:100px;
 }
 </style>
