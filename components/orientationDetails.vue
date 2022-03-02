@@ -102,12 +102,12 @@
         </el-form-item>
       </el-col>
       <el-col :span="24">
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+        <el-checkbox :indeterminate="timeType1Data.isIndeterminate" v-model="timeType1Data.checkAll" @change="commonChangeCheckAll($event,'timeType1Data')">全选</el-checkbox>
         <div style="margin: 15px 0;"></div>
 
         <el-form-item v-if="formData.timeType=='1'" style="margin-right:0" label="" prop="timeSlot">
-          <el-checkbox-group @change="handleCheckedCitiesChange" class="time-slot" v-model="formData.timeSlot">
-            <el-checkbox v-for="item in timeSlotOptions" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+          <el-checkbox-group @change="commonSelectOption($event,'timeType1Data')" class="time-slot" v-model="timeType1Data.values">
+            <el-checkbox v-for="item in timeType1Data.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-col>
@@ -258,18 +258,25 @@ module.exports = {
 
         // 以下是前端自定义的
         networking_custom: [],
-        timeSlot: [], // checkbox时间段values
+        // timeSlot: [], // checkbox时间段values
       },
 
       checkAll: false,
       // checkedCities: ['上海', '北京'],
       // cities: cityOptions,
       isIndeterminate: true,
-      
+
 
       timeSlotOptions: timeSlotOptions, // 时间段checkbox选择项
 
-      
+      // 自定义时间段
+      timeType1Data: {
+        options: timeSlotOptions,// 选项
+        checkAll: false,// 是否全选
+        isIndeterminate: false, //是否全选（只负责样式）
+        values: [] //选中的结果
+      },
+
 
       rangeListData: [
         // {
@@ -294,15 +301,25 @@ module.exports = {
 
   },
   methods: {
-    handleCheckAllChange(val) {
-      console.log(val)
-      this.formData.timeSlot = val ? timeSlotOptions : [];
-      this.isIndeterminate = false;
+    // 公共方法-切换全选
+    commonChangeCheckAll(checkAll, keyName) {
+      if (checkAll) {
+        let values=[];
+        this[keyName].options.map(item=>{
+          values.push(item.label)
+        })
+        this[keyName].values=values;
+      } else {
+        this[keyName].values = [];
+      }
+      this[keyName].isIndeterminate = false;
     },
-    handleCheckedCitiesChange(value) {
+    // 公共方法-切换单个选项
+    commonSelectOption(value,keyName) {
+      console.log(value,keyName)
       let checkedCount = value.length;
-      this.checkAll = checkedCount === this.timeSlotOptions.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.timeSlotOptions.length;
+      this[keyName].checkAll = checkedCount === this[keyName].options.length;
+      this[keyName].isIndeterminate = checkedCount > 0 && checkedCount <this[keyName].options.length;
     },
 
     // 返回
