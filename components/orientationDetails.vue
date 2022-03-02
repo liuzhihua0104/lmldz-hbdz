@@ -102,9 +102,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="24">
-        <el-checkbox :indeterminate="timeType1Data.isIndeterminate" v-model="timeType1Data.checkAll" @change="commonChangeCheckAll($event,'timeType1Data')">全选</el-checkbox>
-        <div style="margin: 15px 0;"></div>
-
+        <el-checkbox v-if="formData.timeType=='1'" style="margin:0 0 15px 100px" :indeterminate="timeType1Data.isIndeterminate" v-model="timeType1Data.checkAll" @change="commonChangeCheckAll($event,'timeType1Data')">全选</el-checkbox>
         <el-form-item v-if="formData.timeType=='1'" style="margin-right:0" label="" prop="timeSlot">
           <el-checkbox-group @change="commonSelectOption($event,'timeType1Data')" class="time-slot" v-model="timeType1Data.values">
             <el-checkbox v-for="item in timeType1Data.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
@@ -258,18 +256,9 @@ module.exports = {
 
         // 以下是前端自定义的
         networking_custom: [],
-        // timeSlot: [], // checkbox时间段values
-      },
+      },    
 
-      checkAll: false,
-      // checkedCities: ['上海', '北京'],
-      // cities: cityOptions,
-      isIndeterminate: true,
-
-
-      timeSlotOptions: timeSlotOptions, // 时间段checkbox选择项
-
-      // 自定义时间段
+      // 全选时间段数据
       timeType1Data: {
         options: timeSlotOptions,// 选项
         checkAll: false,// 是否全选
@@ -278,14 +267,8 @@ module.exports = {
       },
 
 
-      rangeListData: [
-        // {
-        //   id: 1,
-        //   startTime: "",
-        //   endTime: "",
-        //   sliderValue: [0, 0]
-        // }
-      ], //时间段自定义列表数据
+      rangeListData: [  ], //时间段自定义列表数据
+
       formRules: {
         user: [
           { required: true, message: '请输入定向名称', trigger: 'change' },
@@ -304,22 +287,22 @@ module.exports = {
     // 公共方法-切换全选
     commonChangeCheckAll(checkAll, keyName) {
       if (checkAll) {
-        let values=[];
-        this[keyName].options.map(item=>{
+        let values = [];
+        this[keyName].options.map(item => {
           values.push(item.label)
         })
-        this[keyName].values=values;
+        this[keyName].values = values;
       } else {
         this[keyName].values = [];
       }
       this[keyName].isIndeterminate = false;
     },
     // 公共方法-切换单个选项
-    commonSelectOption(value,keyName) {
-      console.log(value,keyName)
+    commonSelectOption(value, keyName) {
+      console.log(value, keyName)
       let checkedCount = value.length;
       this[keyName].checkAll = checkedCount === this[keyName].options.length;
-      this[keyName].isIndeterminate = checkedCount > 0 && checkedCount <this[keyName].options.length;
+      this[keyName].isIndeterminate = checkedCount > 0 && checkedCount < this[keyName].options.length;
     },
 
     // 返回
