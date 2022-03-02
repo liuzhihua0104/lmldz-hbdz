@@ -29,11 +29,11 @@
     <!-- 区域 -->
     <el-row>
       <el-col :span="24">
-        <el-form-item style="margin-right:0" label="区域:" prop="area_type">
-          <el-radio-group v-model="formData.area_type">
-            <el-radio :label="0">不限制</el-radio>
-            <el-radio :label="1">省市区</el-radio>
-            <el-radio :label="2">城市线级</el-radio>
+        <el-form-item style="margin-right:0" label="区域:" prop="areaType">
+          <el-radio-group v-model="formData.areaType">
+            <el-radio label="0">不限制</el-radio>
+            <el-radio label="1">省市区</el-radio>
+            <el-radio label="2">城市线级</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-col>
@@ -43,9 +43,9 @@
       <el-col :span="24">
         <el-form-item style="margin-right:0" label="性别:" prop="sex">
           <el-radio-group v-model="formData.sex">
-            <el-radio :label="0">不限制</el-radio>
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="2">女</el-radio>
+            <el-radio label="0">不限制</el-radio>
+            <el-radio label="1">男</el-radio>
+            <el-radio label="2">女</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-col>
@@ -55,13 +55,22 @@
       <el-col :span="24">
         <el-form-item style="margin-right:0" label="联网方式:" prop="networking">
           <el-radio-group v-model="formData.networking">
-            <el-radio :label="0">不限制</el-radio>
-            <el-radio :label="1">WIFI</el-radio>
-            <!-- <el-radio :label="2">运营商数据</el-radio>
-            <el-radio :label="4">自定义</el-radio> -->
+            <el-radio label="0">不限制</el-radio>
+            <el-radio label="custom">自定义</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-col>
+      <el-col :span="24">
+        <el-form-item v-if="formData.networking=='custom'" style="margin-right:0" label="" prop="networking_custom">
+          <el-checkbox-group v-model="formData.networking_custom">
+            <el-checkbox  label="1">wifi</el-checkbox>
+            <el-checkbox  label="2">移动</el-checkbox>
+            <el-checkbox  label="3">联通</el-checkbox>
+            <el-checkbox  label="4">电信</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </el-col>
+
     </el-row>
     <!-- 扫码工具 -->
     <el-row>
@@ -223,6 +232,7 @@ module.exports = {
         pageSize: "", // 
         createTime: "", // 
         createUser: "", // 
+
         remarks: "", // 备注
         areaType: "0", // '0不限制1省市区2线级',
         areaContent: "", // '区域内容'
@@ -235,6 +245,9 @@ module.exports = {
         status: "", // 状态：0关闭1开启 2删除
         sourceId: "", // 素材源id
         roles: "", // 状态 1商务2运营
+
+        // 以下是前端自定义的
+        networking_custom: ["1", "2", "3", "4"]
       },
       // 时间段选择
       timeSlotArray: [
