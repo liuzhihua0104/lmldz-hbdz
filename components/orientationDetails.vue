@@ -344,20 +344,21 @@ module.exports = {
       })
 
     }
-  }
-},
-  created() {
-  let query = getUrlQuery()
-  console.log(query)
-  if (query.id) {
-    //   setTimeout(() => {
-    //     this.formData.id = query.id;
-    //   })
 
-    this.getDetails()
+  },
+  created() {
+    let query = getUrlQuery()
+    console.log(query)
+    if (query.id) {
+      //   setTimeout(() => {
+      //     this.formData.id = query.id;
+      //   })
+
+      this.getDetails()
+    }
+    // 获取项目列表
+    // this.getProjectList()
   }
-  // 获取项目列表
-  // this.getProjectList()
 }
 </script>
  
