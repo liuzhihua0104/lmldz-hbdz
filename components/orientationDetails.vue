@@ -101,73 +101,58 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-
       <el-col :span="24">
         <el-form-item v-if="formData.timeType=='1'" style="margin-right:0" label="" prop="timeSlot">
           <el-checkbox-group class="time-slot" v-model="formData.timeSlot">
             <el-checkbox v-for="item in timeSlotArray" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
-            <!-- <el-checkbox label="2">移动</el-checkbox>
-            <el-checkbox label="3">联通</el-checkbox>
-            <el-checkbox label="4">电信</el-checkbox> -->
           </el-checkbox-group>
         </el-form-item>
-
       </el-col>
-    </el-row>
-
-    <!-- 时段子项 -->
-    <!-- <el-card class="box-card" v-if="formData.timeType==1">
-      <div slot="header" class="clearfix" style="text-align:center">
-        <span>时间段</span>
-      </div>
-
-    </el-card> -->
-    <!-- 时段子项 -->
-    <el-card class="box-card timeList" v-if="formData.timeType==2" style="text-align:center">
-      <div slot="header" class="clearfix">
-        <span>自定义</span>
-      </div>
-
-      <el-table :data="rangeListData" class="table-wrap" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}" height="250">
-        <el-table-column align="center" width="80" label="序号" type="index"></el-table-column>
-        <el-table-column align="center" label="时间段">
-          <template slot-scope="scope">
-            <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="24" :min="0" :step="1">
-            </el-slider>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="时间范围" width="300">
-          <template slot-scope="scope">
-            <div style="display:flex;align-items:center">
-              <el-time-select :clearable="false" @change="changeTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
+      <el-col :span="24" v-if="formData.timeType=='2'">
+        <el-table :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}" height="250">
+          <el-table-column align="center" width="80" label="序号" type="index"></el-table-column>
+          <el-table-column align="center" label="时间段">
+            <template slot-scope="scope">
+              <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="24" :min="0" :step="1">
+              </el-slider>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="时间范围" width="300">
+            <template slot-scope="scope">
+              <div style="display:flex;align-items:center">
+                <el-time-select :clearable="false" @change="changeTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
       start: '00:00',
       step: '01:00',
       end: '23:00',
       maxTime:scope.row.endTime
     }">
-              </el-time-select>
-              <span style="padding:0 10px">至</span>
-              <el-time-select :clearable="false" :disabled="!scope.row.startTime" @change="changeTime(scope.row,'endTime')" placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
+                </el-time-select>
+                <span style="padding:0 10px">至</span>
+                <el-time-select :clearable="false" :disabled="!scope.row.startTime" @change="changeTime(scope.row,'endTime')" placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
      start: '00:00',
       step: '01:00',
       end: '24:00',
       minTime: scope.row.startTime
     }">
-              </el-time-select>
-            </div>
+                </el-time-select>
+              </div>
 
-          </template>
+            </template>
 
-        </el-table-column>
-        <el-table-column align="center" label="操作" width="100px" style="display:flex">
-          <template slot-scope="scope">
-            <el-button type="text" size="small" @click="delTimeRange(scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-button style="margin-top:20px" type="primary" size="mini" class="btn" @click="addTimeRange">新增</el-button>
+          </el-table-column>
+          <el-table-column align="center" label="操作" width="100px" style="display:flex">
+            <template slot-scope="scope">
+              <el-button type="text" size="small" @click="delTimeRange(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
 
-    </el-card>
+        <div style="width:800px;text-align:center;margin-left:80px">
+          <el-button style="margin-top:20px" type="primary" size="mini" class="btn" @click="addTimeRange">新增</el-button>
+        </div>
+      </el-col>
+    </el-row>
+
 
     <!-- 节假日 -->
     <el-row>
@@ -448,10 +433,16 @@ module.exports = {
 
 /* 时间段限宽度 */
 .time-slot {
-  width:800px;
+  width: 800px;
 }
 
-.time-slot>.el-checkbox{
- width:100px;
+.time-slot > .el-checkbox {
+  width: 100px;
+}
+
+/* 表格时间段 */
+.time-list {
+  width: 800px;
+  margin-left: 80px;
 }
 </style>
