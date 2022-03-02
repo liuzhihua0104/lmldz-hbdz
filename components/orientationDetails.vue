@@ -104,7 +104,7 @@
       <el-col :span="24">
         <el-form-item v-if="formData.timeType=='1'" style="margin-right:0" label="" prop="timeSlot">
           <el-checkbox-group class="time-slot" v-model="formData.timeSlot">
-            <el-checkbox v-for="item in timeSlotArray" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+            <el-checkbox  v-for="item in timeSlotArray" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-col>
@@ -153,15 +153,14 @@
       </el-col>
     </el-row>
 
-
     <!-- 节假日 -->
     <el-row>
       <el-col :span="24">
         <el-form-item style="margin-right:0" label="节假日:" prop="holidays">
           <el-radio-group v-model="formData.holidays">
-            <el-radio :label="0">不限制</el-radio>
-            <el-radio :label="1">法定</el-radio>
-            <el-radio :label="2">星期</el-radio>
+            <el-radio label="0">不限制</el-radio>
+            <el-radio label="1">法定</el-radio>
+            <el-radio label="2">星期</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-col>
@@ -241,7 +240,7 @@ module.exports = {
 
         // 以下是前端自定义的
         networking_custom: [],
-        timeSlot: ["0-3"],
+        timeSlot: [],
       },
       // 时间段选择
       timeSlotArray: [
@@ -437,8 +436,11 @@ module.exports = {
 }
 
 .time-slot > .el-checkbox {
-  width: 100px;
+  width: 100px !important;
+  margin: 0 20px 0 0;
 }
+
+
 
 /* 表格时间段 */
 .time-list {
