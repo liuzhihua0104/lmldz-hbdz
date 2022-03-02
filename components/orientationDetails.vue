@@ -303,9 +303,8 @@ module.exports = {
     },
     // 时间范围新增按钮
     addTimeRange() {
-      console.log(123456)
       let needAdd = {
-        id: 1,
+        id:   this.rangeListData.length+1,
         startTime: "",
         endTime: "",
         sliderValue: [0, 0]
@@ -314,13 +313,7 @@ module.exports = {
     },
 
     // 删除
-    delTimeRange(row) {
-      // if (this.rangeListData.length == 1) {
-      //   return this.$message({
-      //     message: '至少要有一条数据',
-      //     type: 'warning'
-      //   });
-      // }
+    delTimeRange(row) { 
       let index = this.rangeListData.findIndex(item => item.id == row.id);
       this.rangeListData.splice(index, 1)
     },
@@ -329,6 +322,7 @@ module.exports = {
     changeSlider(row) {
       this.rangeListData.filter(item => {
         if (item.id == row.id) {
+          console.log(item)
           item.startTime = dayjs().hour(row.sliderValue[0]).format('HH:00');
           item.endTime = dayjs().hour(row.sliderValue[1]).format('HH:00');
 
