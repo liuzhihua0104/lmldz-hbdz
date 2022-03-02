@@ -122,14 +122,14 @@
         <el-table-column align="center" label="时间范围" width="300">
           <template slot-scope="scope">
             <div style="display:flex;align-items:center">
-              <el-time-select @change="changeStartTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
+              <el-time-select @change="changeTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
       start: '00:00',
       step: '01:00',
       end: '23:00'
     }">
               </el-time-select>
               <span style="padding:0 10px">至</span>
-              <el-time-select placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
+              <el-time-select @change="changeTime(scope.row,'endTime')" placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
      start: '00:00',
       step: '01:00',
       end: '24:00',
@@ -237,12 +237,12 @@ module.exports = {
         { label: "22点 ~24点", value: "22-24" },
       ],
       rangeListData: [
-        {
-          id: 1,
-          startTime: "",
-          endTime: "",
-          sliderValue: [null, null]
-        }
+        // {
+        //   id: 1,
+        //   startTime: "",
+        //   endTime: "",
+        //   sliderValue: [0, 0]
+        // }
       ], //时间段自定义列表数据
       formRules: {
         user: [
@@ -304,9 +304,25 @@ module.exports = {
     // 时间范围新增按钮
     addTimeRange() {
       console.log(123456)
+      let needAdd = {
+        id: 1,
+        startTime: "",
+        endTime: "",
+        sliderValue: [0, 0]
+      }
+      this.rangeListData.push(needAdd);
     },
+
+    // 删除
     delTimeRange(row) {
-      console.log(row)
+      // if (this.rangeListData.length == 1) {
+      //   return this.$message({
+      //     message: '至少要有一条数据',
+      //     type: 'warning'
+      //   });
+      // }
+      let index = this.rangeListData.findIndex(item => item.id == row.id);
+      this.rangeListData.splice(index, 1)
     },
 
     // 切换时间段-通过滑块
@@ -323,57 +339,44 @@ module.exports = {
       })
     },
     // 切换时间段-通过时间选择控件
-    changeStartTime(row, name) {
+    changeTime(row, name) {
       let mapObj = new Map().set("startTime", 0).set("endTime", 1);
       let targetIndex = mapObj.get(name);
       if (row[name]) {
         let valueNum = parseInt(row[name].split()[0]);
-        // this.$set(this.rangeListData[row.id],"sliderValue",[4,5])
         row.sliderValue[targetIndex] = valueNum;
 
+
         let index = this.rangeListData.findIndex(item => item.id == row.id);
-        console.log(row.sliderValue)
+        console.log(_.cloneDeep)
 
-        let sliderValue = [row.sliderValue[0], row.sliderValue[1]]
-
-
-        let obj = {
-          id: row.id,
-          startTime: row.startTime,
-          endTime: row.endTime,
-          // sliderValue: name=="startTime"?[2, 10]
-          sliderValue: [2,6]
-        }
-
-        this.$set(this.rangeListData, index, obj
-          // {
-          //   id: 1,
-          //   startTime: "",
-          //   endTime: "",
-          //   sliderValue: [2, 10]
-          // }
-        )
+        let newRangeListData = _.cloneDeep(this.rangeListData);
+        this.rangeListData = newRangeListData;
+        // console.log(deep[0] === objects[0]);
 
         // console.log(index)
+        // let sliderValue = [row.sliderValue[0],row.sliderValue[1]]
+        // console.log(sliderValue)
+        // let obj = {
+        //   id: row.id,
+        //   startTime: row.startTime,
+        //   endTime: row.endTime,
+        //   sliderValue: sliderValue,
+        //   // sliderValue: [2, 20]
 
-        // this.$set(this.rangeListData, index,
-        //   row
-        // )
+        // }
+        // console.log(obj)
 
-        // this.rangeListData.filter((item, key) => {
-        //   if (item.id == row.id) {
-        //     // item.sliderValue[targetIndex] = valueNum;
-        //     this.$set(this.rangeListData, key,
-        //       row
-        //     )
-        //     // let target = item;
+        // this.$set(this.rangeListData, index, obj)
 
-        //     // item.sliderValue[targetIndex] = valueNum;
-        //     // console.log(rangeListData)
 
-        //     // this.$set(this.rangeListData[row.id], "sliderValue", [4, 5])
-        //   }
+        // this.$nextTick(() => {
+        //   this.$set(this.rangeListData, index, obj
+        //   )
         // })
+
+
+        // this.rangeListData.splice(index,1,obj)
 
 
       }
