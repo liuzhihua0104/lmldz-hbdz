@@ -304,7 +304,7 @@ module.exports = {
     // 时间范围新增按钮
     addTimeRange() {
       let needAdd = {
-        id:   this.rangeListData.length+1,
+        id: this.rangeListData.length + 1,
         startTime: "",
         endTime: "",
         sliderValue: [0, 0]
@@ -313,7 +313,7 @@ module.exports = {
     },
 
     // 删除
-    delTimeRange(row) { 
+    delTimeRange(row) {
       let index = this.rangeListData.findIndex(item => item.id == row.id);
       this.rangeListData.splice(index, 1)
     },
@@ -334,61 +334,30 @@ module.exports = {
     },
     // 切换时间段-通过时间选择控件
     changeTime(row, name) {
-      let mapObj = new Map().set("startTime", 0).set("endTime", 1);
-      let targetIndex = mapObj.get(name);
-      if (row[name]) {
-        let valueNum = parseInt(row[name].split()[0]);
-        row.sliderValue[targetIndex] = valueNum;
+      this.rangeListData.filter(item => {
+        if (item.id == row.id) {
+          let valueNum = parseInt(row[name].split()[0]);
+          let sliderValue = [];
+          name == "startTime" ? sliderValue = [valueNum, row.sliderValue[1]] : sliderValue = [row.sliderValue[0], valueNum]
+          item.sliderValue = sliderValue;
+        }
+      })
 
-
-        let index = this.rangeListData.findIndex(item => item.id == row.id);
-        console.log(_.cloneDeep)
-
-        let newRangeListData = _.cloneDeep(this.rangeListData);
-        this.rangeListData = newRangeListData;
-        // console.log(deep[0] === objects[0]);
-
-        // console.log(index)
-        // let sliderValue = [row.sliderValue[0],row.sliderValue[1]]
-        // console.log(sliderValue)
-        // let obj = {
-        //   id: row.id,
-        //   startTime: row.startTime,
-        //   endTime: row.endTime,
-        //   sliderValue: sliderValue,
-        //   // sliderValue: [2, 20]
-
-        // }
-        // console.log(obj)
-
-        // this.$set(this.rangeListData, index, obj)
-
-
-        // this.$nextTick(() => {
-        //   this.$set(this.rangeListData, index, obj
-        //   )
-        // })
-
-
-        // this.rangeListData.splice(index,1,obj)
-
-
-      }
     }
-  },
+  }
+},
   created() {
-    let query = getUrlQuery()
-    console.log(query)
-    if (query.id) {
-      //   setTimeout(() => {
-      //     this.formData.id = query.id;
-      //   })
+  let query = getUrlQuery()
+  console.log(query)
+  if (query.id) {
+    //   setTimeout(() => {
+    //     this.formData.id = query.id;
+    //   })
 
-      this.getDetails()
-    }
-    // 获取项目列表
-    // this.getProjectList()
-  },
+    this.getDetails()
+  }
+  // 获取项目列表
+  // this.getProjectList()
 }
 </script>
  
