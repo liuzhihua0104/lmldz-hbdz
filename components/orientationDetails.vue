@@ -79,18 +79,10 @@
             <el-radio label="0">不限制</el-radio>
             <el-radio label="1">微信</el-radio>
             <el-radio label="2">支付宝</el-radio>
-            <!-- <el-radio label="custom">自定义</el-radio> -->
           </el-radio-group>
         </el-form-item>
       </el-col>
-      <!-- <el-col :span="24" v-if="formData.scanContent=='custom'">
-        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="scanContentCustomData.isIndeterminate" v-model="scanContentCustomData.checkAll" @change="commonChangeCheckAll($event,'scanContentCustomData')">全选</el-checkbox>
-        <el-form-item style="margin-right:0" label="">
-          <el-checkbox-group @change="commonSelectOption($event,'scanContentCustomData')" class="time-slot" v-model="scanContentCustomData.values">
-            <el-checkbox v-for="item in scanContentCustomData.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-      </el-col> -->
+   
     </el-row>
     <!-- 时段 -->
     <el-row>
@@ -195,9 +187,6 @@
             <el-radio label="1">ios</el-radio>
             <el-radio label="2">Android</el-radio>
             <el-radio label="3">HarmonyOS</el-radio>
-            <!-- <el-radio :label="1">IOS</el-radio>
-            <el-radio :label="2">Android</el-radio>
-            <el-radio :label="3">HarmonyOS</el-radio> -->
             <el-radio label="custom">自定义</el-radio>
           </el-radio-group>
         </el-form-item>
@@ -258,10 +247,7 @@ let networkingOptions = [
   { name: "联通", label: "3" },
   { name: "电信", label: "4" }
 ]
-// let scanContentOptions = [
-//   { name: "微信", label: "1" },
-//   { name: "支付宝", label: "2" }
-// ]
+
 let legalOptions = [
   { name: "法定节假日", label: "1" },
   { name: "法定工作日", label: "2" }
@@ -332,13 +318,7 @@ module.exports = {
         isIndeterminate: false, //是否全选（只负责样式）
         values: [] //选中的结果
       },
-      // 扫码工具自定义
-      // scanContentCustomData: {
-      //   options: scanContentOptions,// 选项
-      //   checkAll: false,// 是否全选
-      //   isIndeterminate: false, //是否全选（只负责样式）
-      //   values: [] //选中的结果
-      // },
+    
       // 节假日：法定checkbox
       legalData: {
         options: legalOptions,// 选项
@@ -479,14 +459,7 @@ module.exports = {
           let sliderValue = [];
           name == "startTime" ? sliderValue = [valueNum, row.sliderValue[1]] : sliderValue = [row.sliderValue[0], valueNum]
           item.sliderValue = sliderValue;
-          // console.log(item)
-
-          // let startTime=parseInt(item.startTime.split(":")[0])
-          // let endTime=parseInt(item.endTime.split(":")[0])
-
-          // console.log(startTime,endTime)
-
-        }
+       }
       })
 
 
