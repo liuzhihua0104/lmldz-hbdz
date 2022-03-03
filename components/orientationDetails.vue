@@ -38,7 +38,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="24" style="padding-left:100px" v-if="formData.areaType==1">
-        <el-cascader :props="props" style="width:600px"></el-cascader>
+        <el-cascader :clearable="true" v-model=model :props="props" style="width:600px"></el-cascader>
       </el-col>
 
     </el-row>
@@ -281,6 +281,8 @@ module.exports = {
     },
   },
   data() {
+    let self = this  // 加上这一句就OK了
+
     return {
       formData: {
 
@@ -361,21 +363,34 @@ module.exports = {
 
       // 省市区
       props: {
+        multiple: true,
         lazy: true,
         lazyLoad(node, resolve) {
-          const { level } = node;
-          setTimeout(() => {
-            const nodes = Array.from({ length: level + 1 })
-              .map(item => ({
-                value: ++id,
-                label: `选项${id}`,
-                leaf: level >= 2
-              }));
-            // 通过调用resolve将子节点数据返回，通知组件数据加载完成
-            resolve(nodes);
-          }, 1000);
+          // node分别为根节点时和子节点时返回的数据是不一样的
+          // console.log(node)
+
+          let areaData = [
+            {
+              code: 1,
+              value: 1,
+              label: "北京1",
+            }, {
+              code: 2,
+              value: 2,
+              label: "北京2",
+            }
+          ]
+
+          if (node.root) {
+            resolve(areaData)  //加载第一级的数据
+          } else {
+            self.getLeaf(node, resolve);
+          }
         }
-      }
+      },
+
+      model: [1]
+
 
     }
   },
@@ -383,6 +398,62 @@ module.exports = {
 
   },
   methods: {
+    // 根据父级code获取子级数据
+    getLeaf(node, resolve) {
+      let { code } = node.data;
+      let { level } = node; //第几级
+
+      setTimeout(() => {
+        const nodes1 = [
+          {
+            code: 3,
+            value: 3,
+            label: "北京1-1",
+            leaf: level >= 2
+          }, {
+            code: 4,
+            value: 4,
+            label: "北京1-1",
+            // leaf: level >= 2
+          }, {
+            code: 5,
+            value: 5,
+            label: "北京1-1",
+            // leaf: level >= 2
+          },
+        ]
+
+        const nodes2 = [
+          {
+            code: 6,
+            value: 6,
+            label: "北京2-1",
+            // leaf: level >= 2
+          }, {
+            code: 7,
+            value: 7,
+            label: "北京2-1",
+            leaf: false
+          }, {
+            code: 8,
+            value: 8,
+            label: "北京2-1",
+            // leaf: level >= 2
+          },
+        ]
+
+        let nodes = [];
+
+        code == 1 ? nodes = nodes1 : nodes = nodes2;
+
+        // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+        resolve && resolve(nodes)
+
+      }, 1000);
+
+
+
+    },
     // 公共方法-切换全选
     commonChangeCheckAll(checkAll, keyName) {
       if (checkAll) {
@@ -398,7 +469,6 @@ module.exports = {
     },
     // 公共方法-切换单个选项
     commonSelectOption(value, keyName) {
-      console.log(value, keyName)
       let checkedCount = value.length;
       this[keyName].checkAll = checkedCount === this[keyName].options.length;
       this[keyName].isIndeterminate = checkedCount > 0 && checkedCount < this[keyName].options.length;
@@ -466,7 +536,6 @@ module.exports = {
     changeSlider(row) {
       this.rangeListData.filter(item => {
         if (item.id == row.id) {
-          console.log(item)
           item.startTime = dayjs().hour(row.sliderValue[0]).format('HH:00');
           item.endTime = dayjs().hour(row.sliderValue[1]).format('HH:00');
 
@@ -492,8 +561,12 @@ module.exports = {
 
   },
   created() {
+
+
+
+
     let query = getUrlQuery()
-    console.log(query)
+    // console.log(query)
     if (query.id) {
       //   setTimeout(() => {
       //     this.formData.id = query.id;
