@@ -22,6 +22,9 @@
         </el-form-item>
       </el-col>
     </el-row>
+<!-- 
+    <el-cascader v-model="requestId" filterable clearable @expand-change="handleItemChange" @change="selectApi($event,requestId)" :options="interfaceOptions" :props="props">
+    </el-cascader> -->
 
     <div class="title">
       配置信息</div>
@@ -39,6 +42,7 @@
       </el-col>
       <el-col :span="24" style="padding-left:100px" v-if="formData.areaType==1">
         <el-cascader @change="changeCascader" :clearable="true" v-model=model :props="props" style="width:600px"></el-cascader>
+
       </el-col>
 
     </el-row>
@@ -210,6 +214,7 @@
         <el-button type="primary" @click="saveFn('formData')">保存</el-button>
       </div>
     </el-form-item>
+
   </el-form>
 </template>
  
@@ -389,7 +394,39 @@ module.exports = {
         }
       },
 
-      model: [3,4]
+      requestId: [],
+
+
+      interfaceOptions: [
+        {
+          "_id": "5a62a7ae7438954940e7d924",
+          "dis": "",
+          "name": "统计分析",
+          children: []
+        },
+        {
+          "_id": "5a62a7b77438954940e7d927",
+          "dis": "",
+          "name": "材料字典"
+        },
+        {
+          "_id": "5a7badaf97d72d552404225e",
+          "dis": "",
+          "name": "业务数据"
+        },
+        {
+          "_id": "5ab84e008d4f7a1430ea0cb5",
+          "dis": "需要授权验证才可调用的接口，例如：三方集成等",
+          "name": "授权验证"
+        }
+      ],
+      props: {
+        multiple: true,
+        // props定义的值根据接口返回的数据定的
+        label: 'name',
+        value: '_id',
+        // children: 'interface'
+      },
 
 
     }
@@ -398,66 +435,32 @@ module.exports = {
 
   },
   methods: {
-    // 切换选中数据
-    changeCascader(event) {
-      // console.log(event)
-      // console.log(this.model)
-    },
-    // 根据父级code获取子级数据
-    getLeaf(node, resolve) {
-      let { code } = node.data;
-      let { level } = node; //第几级
+    // 点击展开节点
+    handleItemChange(val) {
+      console.log(val)
 
       setTimeout(() => {
-        const nodes1 = [
-          {
-            code: 3,
-            value: 3,
-            label: "北京1-1",
-            leaf: true  // 是否有叶子节点
-          }, {
-            code: 4,
-            value: 4,
-            label: "北京1-1",
-            // leaf: level >= 2
-          }, {
-            code: 5,
-            value: 5,
-            label: "北京1-1",
-            // leaf: level >= 2
-          },
-        ]
-
-        const nodes2 = [
-          {
-            code: 6,
-            value: 6,
-            label: "北京2-1",
-            // leaf: level >= 2
-          }, {
-            code: 7,
-            value: 7,
-            label: "北京2-1",
-            leaf: false
-          }, {
-            code: 8,
-            value: 8,
-            label: "北京2-1",
-            // leaf: level >= 2
-          },
-        ]
-
-        let nodes = [];
-
-        code == 1 ? nodes = nodes1 : nodes = nodes2;
-
-        // 通过调用resolve将子节点数据返回，通知组件数据加载完成
-        resolve && resolve(nodes)
-
-      }, 1000);
-
-
-
+        if (val == "5a62a7ae7438954940e7d924") {
+          this.interfaceOptions[0].children = [
+            {
+              "_id": "5a6346f00f5ef15a64dcccb8",
+              "finish": "2",
+              "sort": "0",
+              "name": "供应商供货明细",
+              "project": "5a62a7ae7438954940e7d924",
+              "group": "5a62aa727438954940e7d931",
+              "url": "/inspection/services/analyze/supply-details/query",
+              "remark": "",
+              "method": "POST"
+            }
+          ]
+        }
+      }, 1000)
+    },
+    // 切换选中
+    selectApi(val) {
+      console.log(val)
+      console.log(this.requestId)
     },
     // 公共方法-切换全选
     commonChangeCheckAll(checkAll, keyName) {
@@ -485,16 +488,24 @@ module.exports = {
     },
     // 保存成功后返回其他页面
     saveFn(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log("校验通过")
-          //   this.getStrategyAddEdit()
-          this.goBack();
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+
+      service({
+        url: '/prize/orientation/create',
+        method: 'post',
+        data: {},
+      }).then(({ data }) => { })
+
+      // /prize/orientation/create
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
+      //     console.log("校验通过")
+      //     //   this.getStrategyAddEdit()
+      //     this.goBack();
+      //   } else {
+      //     console.log('error submit!!')
+      //     return false
+      //   }
+      // })
     },
     // 新增/编辑保存表单
     getStrategyAddEdit() {
@@ -562,6 +573,11 @@ module.exports = {
       })
 
 
+    },
+
+    // 获取执行方案列表
+    getPlanList() {
+
     }
 
   },
@@ -580,7 +596,7 @@ module.exports = {
       this.getDetails()
     }
     // 获取项目列表
-    // this.getProjectList()
+    this.getPlanList()
   }
 }
 </script>
