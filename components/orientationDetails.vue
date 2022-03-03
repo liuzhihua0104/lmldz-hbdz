@@ -38,7 +38,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="24" style="padding-left:100px" v-if="formData.areaType==1">
-        <el-cascader :clearable="true" v-model=model :props="props" style="width:600px"></el-cascader>
+        <el-cascader @change="changeCascader" :clearable="true" v-model=model :props="props" style="width:600px"></el-cascader>
       </el-col>
 
     </el-row>
@@ -389,7 +389,7 @@ module.exports = {
         }
       },
 
-      model: [1]
+      model: [3,4]
 
 
     }
@@ -398,6 +398,11 @@ module.exports = {
 
   },
   methods: {
+    // 切换选中数据
+    changeCascader(event) {
+      // console.log(event)
+      // console.log(this.model)
+    },
     // 根据父级code获取子级数据
     getLeaf(node, resolve) {
       let { code } = node.data;
@@ -409,7 +414,7 @@ module.exports = {
             code: 3,
             value: 3,
             label: "北京1-1",
-            leaf: level >= 2
+            leaf: true  // 是否有叶子节点
           }, {
             code: 4,
             value: 4,
