@@ -37,6 +37,10 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
+      <el-col :span="24" style="padding-left:100px" v-if="formData.areaType==1">
+        <el-cascader :props="props" style="width:600px"></el-cascader>
+      </el-col>
+
     </el-row>
     <!-- 性别 -->
     <el-row>
@@ -82,7 +86,7 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-   
+
     </el-row>
     <!-- 时段 -->
     <el-row>
@@ -266,6 +270,8 @@ let devicesCustomOptions = [
   { name: "Android", label: "2" },
   { name: "HarmonyOS", label: "3" }
 ]
+
+let id = 0;
 module.exports = {
   props: {
     // type用来标记当前组件是当做dialog使用还是page使用
@@ -318,7 +324,7 @@ module.exports = {
         isIndeterminate: false, //是否全选（只负责样式）
         values: [] //选中的结果
       },
-    
+
       // 节假日：法定checkbox
       legalData: {
         options: legalOptions,// 选项
@@ -352,6 +358,25 @@ module.exports = {
         ],
 
       },
+
+      // 省市区
+      props: {
+        lazy: true,
+        lazyLoad(node, resolve) {
+          const { level } = node;
+          setTimeout(() => {
+            const nodes = Array.from({ length: level + 1 })
+              .map(item => ({
+                value: ++id,
+                label: `选项${id}`,
+                leaf: level >= 2
+              }));
+            // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+            resolve(nodes);
+          }, 1000);
+        }
+      }
+
     }
   },
   watch: {
@@ -459,7 +484,7 @@ module.exports = {
           let sliderValue = [];
           name == "startTime" ? sliderValue = [valueNum, row.sliderValue[1]] : sliderValue = [row.sliderValue[0], valueNum]
           item.sliderValue = sliderValue;
-       }
+        }
       })
 
 
