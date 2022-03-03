@@ -1,6 +1,7 @@
 //axios拦截器
 const service = axios.create({
   baseURL: 'http://rap2api.taobao.org/app/mock/289298',
+  // baseURL: 'http://192.168.1.104:8080/',
   timeout: 30000,
 });
 

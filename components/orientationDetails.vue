@@ -22,7 +22,7 @@
         </el-form-item>
       </el-col>
     </el-row>
-<!-- 
+    <!-- 
     <el-cascader v-model="requestId" filterable clearable @expand-change="handleItemChange" @change="selectApi($event,requestId)" :options="interfaceOptions" :props="props">
     </el-cascader> -->
 
@@ -41,8 +41,18 @@
         </el-form-item>
       </el-col>
       <el-col :span="24" style="padding-left:100px" v-if="formData.areaType==1">
-        <el-cascader @change="changeCascader" :clearable="true" v-model=model :props="props" style="width:600px"></el-cascader>
 
+        <el-form-item style="margin-right:0" label="节假日:" prop="holidays">
+          <el-radio-group v-model="formData.holidays">
+            <el-radio label="0">不限制</el-radio>
+            <el-radio label="legal">法定</el-radio>
+            <el-radio label="week">星期</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item style="margin-right:0" label="" prop="areaData">
+          <el-cascader style="width:700px" v-model="areaData" placeholder="请输入关键词" :options="options" :props="{ multiple: true }" filterable></el-cascader>
+
+        </el-form-item>
       </el-col>
 
     </el-row>
@@ -276,7 +286,204 @@ let devicesCustomOptions = [
   { name: "HarmonyOS", label: "3" }
 ]
 
-let id = 0;
+
+let options = [{
+  value: 'zhinan',
+  label: '指南',
+  children: [{
+    value: 'shejiyuanze',
+    label: '设计原则',
+    children: [{
+      value: 'yizhi',
+      label: '一致'
+    }, {
+      value: 'fankui',
+      label: '反馈'
+    }, {
+      value: 'xiaolv',
+      label: '效率'
+    }, {
+      value: 'kekong',
+      label: '可控'
+    }]
+  }, {
+    value: 'daohang',
+    label: '导航',
+    children: [{
+      value: 'cexiangdaohang',
+      label: '侧向导航'
+    }, {
+      value: 'dingbudaohang',
+      label: '顶部导航'
+    }]
+  }]
+}, {
+  value: 'zujian',
+  label: '组件',
+  children: [{
+    value: 'basic',
+    label: 'Basic',
+    children: [{
+      value: 'layout',
+      label: 'Layout 布局'
+    }, {
+      value: 'color',
+      label: 'Color 色彩'
+    }, {
+      value: 'typography',
+      label: 'Typography 字体'
+    }, {
+      value: 'icon',
+      label: 'Icon 图标'
+    }, {
+      value: 'button',
+      label: 'Button 按钮'
+    }]
+  }, {
+    value: 'form',
+    label: 'Form',
+    children: [{
+      value: 'radio',
+      label: 'Radio 单选框'
+    }, {
+      value: 'checkbox',
+      label: 'Checkbox 多选框'
+    }, {
+      value: 'input',
+      label: 'Input 输入框'
+    }, {
+      value: 'input-number',
+      label: 'InputNumber 计数器'
+    }, {
+      value: 'select',
+      label: 'Select 选择器'
+    }, {
+      value: 'cascader',
+      label: 'Cascader 级联选择器'
+    }, {
+      value: 'switch',
+      label: 'Switch 开关'
+    }, {
+      value: 'slider',
+      label: 'Slider 滑块'
+    }, {
+      value: 'time-picker',
+      label: 'TimePicker 时间选择器'
+    }, {
+      value: 'date-picker',
+      label: 'DatePicker 日期选择器'
+    }, {
+      value: 'datetime-picker',
+      label: 'DateTimePicker 日期时间选择器'
+    }, {
+      value: 'upload',
+      label: 'Upload 上传'
+    }, {
+      value: 'rate',
+      label: 'Rate 评分'
+    }, {
+      value: 'form',
+      label: 'Form 表单'
+    }]
+  }, {
+    value: 'data',
+    label: 'Data',
+    children: [{
+      value: 'table',
+      label: 'Table 表格'
+    }, {
+      value: 'tag',
+      label: 'Tag 标签'
+    }, {
+      value: 'progress',
+      label: 'Progress 进度条'
+    }, {
+      value: 'tree',
+      label: 'Tree 树形控件'
+    }, {
+      value: 'pagination',
+      label: 'Pagination 分页'
+    }, {
+      value: 'badge',
+      label: 'Badge 标记'
+    }]
+  }, {
+    value: 'notice',
+    label: 'Notice',
+    children: [{
+      value: 'alert',
+      label: 'Alert 警告'
+    }, {
+      value: 'loading',
+      label: 'Loading 加载'
+    }, {
+      value: 'message',
+      label: 'Message 消息提示'
+    }, {
+      value: 'message-box',
+      label: 'MessageBox 弹框'
+    }, {
+      value: 'notification',
+      label: 'Notification 通知'
+    }]
+  }, {
+    value: 'navigation',
+    label: 'Navigation',
+    children: [{
+      value: 'menu',
+      label: 'NavMenu 导航菜单'
+    }, {
+      value: 'tabs',
+      label: 'Tabs 标签页'
+    }, {
+      value: 'breadcrumb',
+      label: 'Breadcrumb 面包屑'
+    }, {
+      value: 'dropdown',
+      label: 'Dropdown 下拉菜单'
+    }, {
+      value: 'steps',
+      label: 'Steps 步骤条'
+    }]
+  }, {
+    value: 'others',
+    label: 'Others',
+    children: [{
+      value: 'dialog',
+      label: 'Dialog 对话框'
+    }, {
+      value: 'tooltip',
+      label: 'Tooltip 文字提示'
+    }, {
+      value: 'popover',
+      label: 'Popover 弹出框'
+    }, {
+      value: 'card',
+      label: 'Card 卡片'
+    }, {
+      value: 'carousel',
+      label: 'Carousel 走马灯'
+    }, {
+      value: 'collapse',
+      label: 'Collapse 折叠面板'
+    }]
+  }]
+}, {
+  value: 'ziyuan',
+  label: '资源',
+  children: [{
+    value: 'axure',
+    label: 'Axure Components'
+  }, {
+    value: 'sketch',
+    label: 'Sketch Templates'
+  }, {
+    value: 'jiaohu',
+    label: '组件交互文档'
+  }]
+}]
+
+
 module.exports = {
   props: {
     // type用来标记当前组件是当做dialog使用还是page使用
@@ -366,67 +573,9 @@ module.exports = {
 
       },
 
-      // 省市区
-      props: {
-        multiple: true,
-        lazy: true,
-        lazyLoad(node, resolve) {
-          // node分别为根节点时和子节点时返回的数据是不一样的
-          // console.log(node)
+      options: options,
+      areaData: ["ziyuan"]
 
-          let areaData = [
-            {
-              code: 1,
-              value: 1,
-              label: "北京1",
-            }, {
-              code: 2,
-              value: 2,
-              label: "北京2",
-            }
-          ]
-
-          if (node.root) {
-            resolve(areaData)  //加载第一级的数据
-          } else {
-            self.getLeaf(node, resolve);
-          }
-        }
-      },
-
-      requestId: [],
-
-
-      interfaceOptions: [
-        {
-          "_id": "5a62a7ae7438954940e7d924",
-          "dis": "",
-          "name": "统计分析",
-          children: []
-        },
-        {
-          "_id": "5a62a7b77438954940e7d927",
-          "dis": "",
-          "name": "材料字典"
-        },
-        {
-          "_id": "5a7badaf97d72d552404225e",
-          "dis": "",
-          "name": "业务数据"
-        },
-        {
-          "_id": "5ab84e008d4f7a1430ea0cb5",
-          "dis": "需要授权验证才可调用的接口，例如：三方集成等",
-          "name": "授权验证"
-        }
-      ],
-      props: {
-        multiple: true,
-        // props定义的值根据接口返回的数据定的
-        label: 'name',
-        value: '_id',
-        // children: 'interface'
-      },
 
 
     }
@@ -435,33 +584,7 @@ module.exports = {
 
   },
   methods: {
-    // 点击展开节点
-    handleItemChange(val) {
-      console.log(val)
 
-      setTimeout(() => {
-        if (val == "5a62a7ae7438954940e7d924") {
-          this.interfaceOptions[0].children = [
-            {
-              "_id": "5a6346f00f5ef15a64dcccb8",
-              "finish": "2",
-              "sort": "0",
-              "name": "供应商供货明细",
-              "project": "5a62a7ae7438954940e7d924",
-              "group": "5a62aa727438954940e7d931",
-              "url": "/inspection/services/analyze/supply-details/query",
-              "remark": "",
-              "method": "POST"
-            }
-          ]
-        }
-      }, 1000)
-    },
-    // 切换选中
-    selectApi(val) {
-      console.log(val)
-      console.log(this.requestId)
-    },
     // 公共方法-切换全选
     commonChangeCheckAll(checkAll, keyName) {
       if (checkAll) {
@@ -484,7 +607,7 @@ module.exports = {
 
     // 返回
     goBack() {
-      window.history.go(-1)
+      window.history.go(-1);
     },
     // 保存成功后返回其他页面
     saveFn(formName) {
