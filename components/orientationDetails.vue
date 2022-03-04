@@ -494,7 +494,8 @@ module.exports = {
 
         remarks: "", // 备注
         areaType: "0", // '0不限制1省市区2线级',
-        areaContent: "", // '区域内容'
+        // areaContent: "", // '区域内容,库里存的'
+        // areaJson:[], //编辑时回显省市区用的
         networking: "0", // 联网方式 0不限1wifi2移动3联调4电信
         scanContent: "0", // 扫码工具 0不限1微信2支付宝
         timeType: "0", // 时段 0不限1时间段2自定义
@@ -504,9 +505,6 @@ module.exports = {
         status: "", // 状态：0关闭1开启 2删除
         sourceId: "", // 素材源id
         roles: "", // 状态 1商务2运营
-
-        // 以下是前端自定义的
-        networking_custom: [],
 
         // 全选时间段数据
         timeType1Data_options: timeSlotOptions,// 选项
@@ -535,7 +533,7 @@ module.exports = {
         devicesCustomData_values: [], //选中的结果
       },
 
- 
+
 
       rangeListData: [], //时间段自定义列表数据
 
@@ -630,8 +628,6 @@ module.exports = {
     // 公共方法-切换单个选项
     commonSelectOption(value, keyName) {
       let checkedCount = value.length;
-      // let target=this.formData
-      let key = `${keyName}_checkAll`
       this.formData[`${keyName}_checkAll`] = checkedCount === this.formData[`${keyName}_options`].length;
       this.formData[`${keyName}_isIndeterminate`] = checkedCount > 0 && checkedCount < this.formData[`${keyName}_options`].length;
     },
@@ -642,8 +638,76 @@ module.exports = {
     },
     // 保存成功后返回其他页面
     saveFn(formName) {
+      let paramsForm = {
+        name: this.formData.name, // 方案名称
+        remarks: this.formData.remarks, // 备注
+        areaType: this.formData.areaType, // 区域
+        sex: this.formData.sex, // 性别
+        scanContent: this.formData.scanContent, // 扫码工具
+      }
+
+
+      // 处理区域-省市区
+      if (this.formData.areaType == 1) {
+
+      } else if (this.formData.areaType == 2) {
+
+      }
+
+
+      // 处理联网方式
+      if (this.formData.networking == "custom") {
+        paramsForm.networking = this.formData.networkingCustomData_values.join()
+      } else {
+        paramsForm.networking = this.formData.networking
+      }
+
+
+      // 处理时段
+      if (this.formData.timeType == "0") {
+        paramsForm.timeType = this.formData.timeType // 不限制
+      } else if (this.formData.timeType == "1") {
+        paramsForm.timeType = this.formData.timeType1Data_values.join() // 时间段
+      } else if (this.formData.timeType == "2") {
+        // paramsForm.timeType = timeType1Data_values.join() // 自定义
+      }
+
+
+      // 处理节假日
+      if (this.formData.holidays == "0") {
+        paramsForm.holidays = this.formData.holidays // 不限制
+      } else if (this.formData.holidays == "legal") {
+        paramsForm.holidays = this.formData.legalData_values.join() // 法定
+      } else if (this.formData.holidays == "week") {
+        paramsForm.holidays = this.formData.weekData_values.join() // 星期
+      }
+
+
+      // 处理设备平台
+      if (this.formData.devices == "custom") {
+        paramsForm.devices = this.formData.devicesCustomData_values.join() // 自定义
+      } else {
+        paramsForm.devices = this.formData.devices;
+      }
+
+      console.log(paramsForm)
+      return
       this.$refs[formName].validate((valid) => {
         if (valid) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           console.log("校验通过")
           //   this.getStrategyAddEdit()
           // service({
@@ -651,7 +715,7 @@ module.exports = {
           //   method: 'post',
           //   data: {},
           // }).then(({ data }) => { })
-          this.goBack();
+          // this.goBack();
         } else {
           console.log('error submit!!')
           return false
