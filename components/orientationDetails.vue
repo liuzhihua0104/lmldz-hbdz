@@ -70,12 +70,11 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-
       <el-col :span="24" v-if="formData.networking=='custom'">
-        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="networkingCustomData.isIndeterminate" v-model="networkingCustomData.checkAll" @change="commonChangeCheckAll($event,'networkingCustomData')">全选</el-checkbox>
-        <el-form-item style="margin-right:0" label="">
-          <el-checkbox-group @change="commonSelectOption($event,'networkingCustomData')" class="time-slot" v-model="networkingCustomData.values">
-            <el-checkbox v-for="item in networkingCustomData.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.networkingCustomData_isIndeterminate" v-model="formData.networkingCustomData_checkAll" @change="commonChangeCheckAll($event,'networkingCustomData')">全选</el-checkbox>
+        <el-form-item style="margin-right:0" label="" prop="timeTypeCus">
+          <el-checkbox-group @change="commonSelectOption($event,'networkingCustomData')" class="time-slot" v-model="formData.networkingCustomData_values">
+            <el-checkbox v-for="item in formData.networkingCustomData_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-col>
@@ -105,10 +104,10 @@
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.timeType=='1'">
-        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="timeType1Data.isIndeterminate" v-model="timeType1Data.checkAll" @change="commonChangeCheckAll($event,'timeType1Data')">全选</el-checkbox>
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.timeType1Data_isIndeterminate" v-model="timeType1Data_checkAll" @change="commonChangeCheckAll($event,'timeType1Data')">全选</el-checkbox>
         <el-form-item style="margin-right:0" label="">
-          <el-checkbox-group @change="commonSelectOption($event,'timeType1Data')" class="time-slot" v-model="timeType1Data.values">
-            <el-checkbox v-for="item in timeType1Data.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+          <el-checkbox-group @change="commonSelectOption($event,'timeType1Data')" class="time-slot" v-model="formData.timeType1Data_values">
+            <el-checkbox v-for="item in formData.timeType1Data_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-col>
@@ -170,19 +169,19 @@
       </el-col>
 
       <el-col :span="24" v-if="formData.holidays=='legal'">
-        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="legalData.isIndeterminate" v-model="legalData.checkAll" @change="commonChangeCheckAll($event,'legalData')">全选</el-checkbox>
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.legalData_isIndeterminate" v-model="formData.legalData_checkAll" @change="commonChangeCheckAll($event,'legalData')">全选</el-checkbox>
         <el-form-item style="margin-right:0" label="">
-          <el-checkbox-group @change="commonSelectOption($event,'legalData')" v-model="legalData.values">
-            <el-checkbox v-for="item in legalData.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+          <el-checkbox-group @change="commonSelectOption($event,'legalData')" v-model="formData.legalData_values">
+            <el-checkbox v-for="item in formData.legalData_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-col>
 
       <el-col :span="24" v-if="formData.holidays=='week'">
-        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="weekData.isIndeterminate" v-model="weekData.checkAll" @change="commonChangeCheckAll($event,'weekData')">全选</el-checkbox>
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.weekData_isIndeterminate" v-model="formData.weekData_checkAll" @change="commonChangeCheckAll($event,'weekData')">全选</el-checkbox>
         <el-form-item style="margin-right:0" label="">
-          <el-checkbox-group @change="commonSelectOption($event,'weekData')" v-model="weekData.values">
-            <el-checkbox v-for="item in weekData.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+          <el-checkbox-group @change="commonSelectOption($event,'weekData')" v-model="formData.weekData_values">
+            <el-checkbox v-for="item in formData.weekData_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-col>
@@ -201,10 +200,10 @@
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.devices=='custom'">
-        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="devicesCustomData.isIndeterminate" v-model="devicesCustomData.checkAll" @change="commonChangeCheckAll($event,'devicesCustomData')">全选</el-checkbox>
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.devicesCustomData_isIndeterminate" v-model="formData.devicesCustomData_checkAll" @change="commonChangeCheckAll($event,'devicesCustomData')">全选</el-checkbox>
         <el-form-item style="margin-right:0" label="">
-          <el-checkbox-group @change="commonSelectOption($event,'devicesCustomData')" v-model="devicesCustomData.values">
-            <el-checkbox v-for="item in devicesCustomData.options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
+          <el-checkbox-group @change="commonSelectOption($event,'devicesCustomData')" v-model="formData.devicesCustomData_values">
+            <el-checkbox v-for="item in formData.devicesCustomData_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-col>
@@ -511,47 +510,74 @@ module.exports = {
 
         // 以下是前端自定义的
         networking_custom: [],
+
+        // 全选时间段数据
+        timeType1Data_options: timeSlotOptions,// 选项
+        timeType1Data_checkAll: false,// 是否全选
+        timeType1Data_isIndeterminate: false, //是否全选（只负责样式）
+        timeType1Data_values: [], //选中的结果
+        // 联网方式自定义
+        networkingCustomData_options: networkingOptions,// 选项
+        networkingCustomData_checkAll: false,// 是否全选
+        networkingCustomData_isIndeterminate: false, //是否全选（只负责样式）
+        networkingCustomData_values: [], //选中的结果
+        //  节假日：法定checkbox
+        legalData_options: legalOptions,// 选项
+        legalData_checkAll: false,// 是否全选
+        legalData_isIndeterminate: false, //是否全选（只负责样式）
+        legalData_values: [], //选中的结果
+        //  节假日：星期checkbox
+        weekData_options: weekOptions,// 选项
+        weekData_checkAll: false,// 是否全选
+        weekData_isIndeterminate: false, //是否全选（只负责样式）
+        weekData_values: [], //选中的结果
+        // 设备平台自定义
+        devicesCustomData_options: devicesCustomOptions,// 选项
+        devicesCustomData_checkAll: false,// 是否全选
+        devicesCustomData_isIndeterminate: false, //是否全选（只负责样式）
+        devicesCustomData_values: [], //选中的结果
       },
 
       // 全选时间段数据
-      timeType1Data: {
-        options: timeSlotOptions,// 选项
-        checkAll: false,// 是否全选
-        isIndeterminate: false, //是否全选（只负责样式）
-        values: [] //选中的结果
-      },
+      // timeType1Data: {
+      //   options: timeSlotOptions,// 选项
+      //   checkAll: false,// 是否全选
+      //   isIndeterminate: false, //是否全选（只负责样式）
+      //   values: [] //选中的结果
+      // },
+
       rangeListData: [], //时间段自定义列表数据
 
-      // 联网方式自定义
-      networkingCustomData: {
-        options: networkingOptions,// 选项
-        checkAll: false,// 是否全选
-        isIndeterminate: false, //是否全选（只负责样式）
-        values: [] //选中的结果
-      },
+      // // 联网方式自定义
+      // networkingCustomData: {
+      //   options: networkingOptions,// 选项
+      //   checkAll: false,// 是否全选
+      //   isIndeterminate: false, //是否全选（只负责样式）
+      //   values: [] //选中的结果
+      // },
 
       // 节假日：法定checkbox
-      legalData: {
-        options: legalOptions,// 选项
-        checkAll: false,// 是否全选
-        isIndeterminate: false, //是否全选（只负责样式）
-        values: [] //选中的结果
-      },
+      // legalData: {
+      //   options: legalOptions,// 选项
+      //   checkAll: false,// 是否全选
+      //   isIndeterminate: false, //是否全选（只负责样式）
+      //   values: [] //选中的结果
+      // },
       // 节假日：星期checkbox
-      weekData: {
-        options: weekOptions,// 选项
-        checkAll: false,// 是否全选
-        isIndeterminate: false, //是否全选（只负责样式）
-        values: [] //选中的结果
-      },
+      // weekData: {
+      //   options: weekOptions,// 选项
+      //   checkAll: false,// 是否全选
+      //   isIndeterminate: false, //是否全选（只负责样式）
+      //   values: [] //选中的结果
+      // },
 
-      // 自定义设备平台checkbox
-      devicesCustomData: {
-        options: devicesCustomOptions,// 选项
-        checkAll: false,// 是否全选
-        isIndeterminate: false, //是否全选（只负责样式）
-        values: [] //选中的结果
-      },
+      // // 自定义设备平台checkbox
+      // devicesCustomData: {
+      //   options: devicesCustomOptions,// 选项
+      //   checkAll: false,// 是否全选
+      //   isIndeterminate: false, //是否全选（只负责样式）
+      //   values: [] //选中的结果
+      // },
 
 
       formRules: {
@@ -582,6 +608,21 @@ module.exports = {
         devices: [
           { required: true, message: '请选择', trigger: 'change' },
         ],
+        timeType1Data_values: [
+          { required: true, message: '请选择', trigger: '' },
+        ],
+        networkingCustomData_values: [
+          { required: true, message: '请选择', trigger: 'change' },
+        ],
+        legalData_values: [
+          { required: true, message: '请选择', trigger: 'change' },
+        ],
+        weekData_values: [
+          { required: true, message: '请选择', trigger: 'change' },
+        ],
+        devicesCustomData_values: [
+          { required: true, message: '请选择', trigger: 'change' },
+        ],
 
       },
 
@@ -598,13 +639,13 @@ module.exports = {
   watch: {
 
   },
-  mounted() {
-    // this.handleChange('test'); // 初始化
-  },
-  methods: {
-    handleChange(value) {
 
-      console.log(this.$refs.test)
+  methods: {
+
+    getData() {
+      return this.timeType1Data.values
+    },
+    handleChange(value) {
       let checkedNodeList = this.$refs[value].getCheckedNodes();
       checkedNodeList = checkedNodeList.filter(item => !(item.parent && item.parent.checked)); // 核心
       // this[value] = checkedNodeList;
@@ -617,20 +658,22 @@ module.exports = {
     commonChangeCheckAll(checkAll, keyName) {
       if (checkAll) {
         let values = [];
-        this[keyName].options.map(item => {
+        this.formData[`${keyName}_options`].map(item => {
           values.push(item.label)
         })
-        this[keyName].values = values;
+        this.formData[`${keyName}_values`] = values;
       } else {
-        this[keyName].values = [];
+        this.formData[`${keyName}_values`] = [];
       }
-      this[keyName].isIndeterminate = false;
+      this.formData[`${keyName}_isIndeterminate`] = false;
     },
     // 公共方法-切换单个选项
     commonSelectOption(value, keyName) {
       let checkedCount = value.length;
-      this[keyName].checkAll = checkedCount === this[keyName].options.length;
-      this[keyName].isIndeterminate = checkedCount > 0 && checkedCount < this[keyName].options.length;
+      // let target=this.formData
+      let key = `${keyName}_checkAll`
+      this.formData[`${keyName}_checkAll`] = checkedCount === this.formData[`${keyName}_options`].length;
+      this.formData[`${keyName}_isIndeterminate`] = checkedCount > 0 && checkedCount < this.formData[`${keyName}_options`].length;
     },
 
     // 返回
@@ -639,21 +682,15 @@ module.exports = {
     },
     // 保存成功后返回其他页面
     saveFn(formName) {
-
-      // service({
-      //   url: '/prize/orientation/create',
-      //   method: 'post',
-      //   data: {},
-      // }).then(({ data }) => { })
-
-      // console.log(this.checkedNodeList)
-      // console.log(this.test)
-
-      // /prize/orientation / create
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log("校验通过")
           //   this.getStrategyAddEdit()
+          // service({
+          //   url: '/prize/orientation/create',
+          //   method: 'post',
+          //   data: {},
+          // }).then(({ data }) => { })
           this.goBack();
         } else {
           console.log('error submit!!')
@@ -744,18 +781,16 @@ module.exports = {
               code: code
             },
           }).then(({ data }) => {
-            console.log(123456)
             console.log(data)
             resolve(data)
           })
-
         })
       }
 
       Promise.all([p(1), p(2), p(3), p(4), p(5)]).then((result) => {
-        console.log(result)       // [ '3秒后醒来', '2秒后醒来' ]
+        console.log(result)
       }).catch((error) => {
-        // console.log(error)
+
       })
     },
 
