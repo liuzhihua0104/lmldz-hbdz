@@ -104,7 +104,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.timeType=='1'">
-        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.timeType1Data_isIndeterminate" v-model="timeType1Data_checkAll" @change="commonChangeCheckAll($event,'timeType1Data')">全选</el-checkbox>
+        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.timeType1Data_isIndeterminate" v-model="formData.timeType1Data_checkAll" @change="commonChangeCheckAll($event,'timeType1Data')">全选</el-checkbox>
         <el-form-item style="margin-right:0" label="">
           <el-checkbox-group @change="commonSelectOption($event,'timeType1Data')" class="time-slot" v-model="formData.timeType1Data_values">
             <el-checkbox v-for="item in formData.timeType1Data_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
@@ -609,7 +609,7 @@ module.exports = {
           { required: true, message: '请选择', trigger: 'change' },
         ],
         timeType1Data_values: [
-          { required: true, message: '请选择', trigger: '' },
+          { required: true, message: '请选择', trigger: 'change' },
         ],
         networkingCustomData_values: [
           { required: true, message: '请选择', trigger: 'change' },
