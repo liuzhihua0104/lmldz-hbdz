@@ -8,7 +8,7 @@
     <el-row>
       <el-col :span="24">
         <el-form-item style="margin-right:0" label="定向名称:" prop="name">
-          <el-input :clearable="true" class="inputWidth" v-model="formData.name" placeholder="请输入内容"></el-input>
+          <el-input :clearable="true" class="inputWidth" maxLength="30" v-model="formData.name" placeholder="请输入内容"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -22,9 +22,6 @@
         </el-form-item>
       </el-col>
     </el-row>
-    <!-- 
-    <el-cascader v-model="requestId" filterable clearable @expand-change="handleItemChange" @change="selectApi($event,requestId)" :options="interfaceOptions" :props="props">
-    </el-cascader> -->
 
     <div class="title">
       配置信息</div>
@@ -72,7 +69,7 @@
       </el-col>
       <el-col :span="24" v-if="formData.networking=='custom'">
         <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.networkingCustomData_isIndeterminate" v-model="formData.networkingCustomData_checkAll" @change="commonChangeCheckAll($event,'networkingCustomData')">全选</el-checkbox>
-        <el-form-item style="margin-right:0" label="" prop="timeTypeCus">
+        <el-form-item style="margin-right:0" label="" prop="networkingCustomData_values">
           <el-checkbox-group @change="commonSelectOption($event,'networkingCustomData')" class="time-slot" v-model="formData.networkingCustomData_values">
             <el-checkbox v-for="item in formData.networkingCustomData_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
@@ -105,7 +102,7 @@
       </el-col>
       <el-col :span="24" v-if="formData.timeType=='1'">
         <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.timeType1Data_isIndeterminate" v-model="formData.timeType1Data_checkAll" @change="commonChangeCheckAll($event,'timeType1Data')">全选</el-checkbox>
-        <el-form-item style="margin-right:0" label="">
+        <el-form-item style="margin-right:0" label="" prop="timeType1Data_isIndeterminate">
           <el-checkbox-group @change="commonSelectOption($event,'timeType1Data')" class="time-slot" v-model="formData.timeType1Data_values">
             <el-checkbox v-for="item in formData.timeType1Data_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
@@ -170,7 +167,7 @@
 
       <el-col :span="24" v-if="formData.holidays=='legal'">
         <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.legalData_isIndeterminate" v-model="formData.legalData_checkAll" @change="commonChangeCheckAll($event,'legalData')">全选</el-checkbox>
-        <el-form-item style="margin-right:0" label="">
+        <el-form-item style="margin-right:0" label="" prop="legalData_values">
           <el-checkbox-group @change="commonSelectOption($event,'legalData')" v-model="formData.legalData_values">
             <el-checkbox v-for="item in formData.legalData_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
@@ -179,7 +176,7 @@
 
       <el-col :span="24" v-if="formData.holidays=='week'">
         <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.weekData_isIndeterminate" v-model="formData.weekData_checkAll" @change="commonChangeCheckAll($event,'weekData')">全选</el-checkbox>
-        <el-form-item style="margin-right:0" label="">
+        <el-form-item style="margin-right:0" label="" prop="weekData_values">
           <el-checkbox-group @change="commonSelectOption($event,'weekData')" v-model="formData.weekData_values">
             <el-checkbox v-for="item in formData.weekData_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
@@ -201,7 +198,7 @@
       </el-col>
       <el-col :span="24" v-if="formData.devices=='custom'">
         <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.devicesCustomData_isIndeterminate" v-model="formData.devicesCustomData_checkAll" @change="commonChangeCheckAll($event,'devicesCustomData')">全选</el-checkbox>
-        <el-form-item style="margin-right:0" label="">
+        <el-form-item style="margin-right:0" label="" prop="devicesCustomData_values">
           <el-checkbox-group @change="commonSelectOption($event,'devicesCustomData')" v-model="formData.devicesCustomData_values">
             <el-checkbox v-for="item in formData.devicesCustomData_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
           </el-checkbox-group>
@@ -538,46 +535,9 @@ module.exports = {
         devicesCustomData_values: [], //选中的结果
       },
 
-      // 全选时间段数据
-      // timeType1Data: {
-      //   options: timeSlotOptions,// 选项
-      //   checkAll: false,// 是否全选
-      //   isIndeterminate: false, //是否全选（只负责样式）
-      //   values: [] //选中的结果
-      // },
+ 
 
       rangeListData: [], //时间段自定义列表数据
-
-      // // 联网方式自定义
-      // networkingCustomData: {
-      //   options: networkingOptions,// 选项
-      //   checkAll: false,// 是否全选
-      //   isIndeterminate: false, //是否全选（只负责样式）
-      //   values: [] //选中的结果
-      // },
-
-      // 节假日：法定checkbox
-      // legalData: {
-      //   options: legalOptions,// 选项
-      //   checkAll: false,// 是否全选
-      //   isIndeterminate: false, //是否全选（只负责样式）
-      //   values: [] //选中的结果
-      // },
-      // 节假日：星期checkbox
-      // weekData: {
-      //   options: weekOptions,// 选项
-      //   checkAll: false,// 是否全选
-      //   isIndeterminate: false, //是否全选（只负责样式）
-      //   values: [] //选中的结果
-      // },
-
-      // // 自定义设备平台checkbox
-      // devicesCustomData: {
-      //   options: devicesCustomOptions,// 选项
-      //   checkAll: false,// 是否全选
-      //   isIndeterminate: false, //是否全选（只负责样式）
-      //   values: [] //选中的结果
-      // },
 
 
       formRules: {
@@ -609,19 +569,19 @@ module.exports = {
           { required: true, message: '请选择', trigger: 'change' },
         ],
         timeType1Data_values: [
-          { required: true, message: '请选择', trigger: 'change' },
+          { required: true, message: '请选择时间段', trigger: 'change' },
         ],
         networkingCustomData_values: [
-          { required: true, message: '请选择', trigger: 'change' },
+          { required: true, message: '请选择联网方式', trigger: 'change' },
         ],
         legalData_values: [
-          { required: true, message: '请选择', trigger: 'change' },
+          { required: true, message: '请选择法定日', trigger: 'change' },
         ],
         weekData_values: [
-          { required: true, message: '请选择', trigger: 'change' },
+          { required: true, message: '请选择星期', trigger: 'change' },
         ],
         devicesCustomData_values: [
-          { required: true, message: '请选择', trigger: 'change' },
+          { required: true, message: '请选择设备', trigger: 'change' },
         ],
 
       },
