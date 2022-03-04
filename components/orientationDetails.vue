@@ -39,7 +39,7 @@
       </el-col>
       <el-col :span="24" v-if="formData.areaType==1">
         <el-form-item style="margin-right:0" label="" prop="checkedNodeList">
-          <el-cascader ref="test" style="width:700px" @change="handleChange('test')" v-model="test" placeholder="请输入关键词" :options="options" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader ref="areaJson" style="width:700px" @change="handleChange('areaJson')" v-model="areaJson" placeholder="请输入关键词" :options="options" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
 
@@ -235,17 +235,17 @@ function getUrlQuery() {
 
 
 let timeSlotOptions = [
-  { name: "0点 ~ 3点", label: "0-3" },
-  { name: "3点 ~ 6点", label: "3-6" },
-  { name: "6点 ~8点", label: "6-8" },
-  { name: "8点 ~10点", label: "8-10" },
-  { name: "10点 ~12点", label: "10-12" },
-  { name: "12点 ~ 14点", label: "12-14" },
-  { name: "14点 ~16点", label: "14-16" },
-  { name: "16点 ~18点", label: "16-18" },
-  { name: "18点 ~20点", label: "18-20" },
-  { name: "20点 ~22点", label: "20-22" },
-  { name: "22点 ~24点", label: "22-24" },
+  { name: "0点 ~ 3点", label: "00:00:01-03:00:00" },
+  { name: "3点 ~ 6点", label: "03:00:01-06:00:00" },
+  { name: "6点 ~8点", label: "06:00:01-08:00:00" },
+  { name: "8点 ~10点", label: "08:00:01-10:00:00" },
+  { name: "10点 ~12点", label: "10:00:01-12:00:00" },
+  { name: "12点 ~ 14点", label: "12:00:01-14:00:00" },
+  { name: "14点 ~16点", label: "14:00:01-16:00:00" },
+  { name: "16点 ~18点", label: "16:00:01-18:00:00" },
+  { name: "18点 ~20点", label: "18:00:01-20:00:00" },
+  { name: "20点 ~22点", label: "20:00:01-22:00:00" },
+  { name: "22点 ~24点", label: "22:00:01-24:00:00" },
 ]
 let networkingOptions = [
   { name: "wifi", label: "1" },
@@ -585,8 +585,8 @@ module.exports = {
       },
 
       options: options,
-      // test: [['zhinan', 'daohang', 'cexiangdaohang'],['zhinan', 'daohang', 'dingbudaohang']]
-      test: [],
+      // areaJson: [['zhinan', 'daohang', 'cexiangdaohang'],['zhinan', 'daohang', 'dingbudaohang']]
+      areaJson: [],
 
       checkedNodeList: [] //子节点全选后，只留下父节点，后端需要的
 
@@ -599,16 +599,14 @@ module.exports = {
   },
 
   methods: {
-
-    getData() {
-      return this.timeType1Data.values
-    },
+    // 切换选中的省市区
     handleChange(value) {
       let checkedNodeList = this.$refs[value].getCheckedNodes();
       checkedNodeList = checkedNodeList.filter(item => !(item.parent && item.parent.checked)); // 核心
       // this[value] = checkedNodeList;
 
       // 后台只要父级别
+      this.checkedNodeList = checkedNodeList
       console.log(checkedNodeList)
     },
 
@@ -644,11 +642,13 @@ module.exports = {
         areaType: this.formData.areaType, // 区域
         sex: this.formData.sex, // 性别
         scanContent: this.formData.scanContent, // 扫码工具
+        timeType: this.formData.timeType, // 时段
       }
 
 
       // 处理区域-省市区
       if (this.formData.areaType == 1) {
+        paramsForm.areaJson = this.areaJson;
 
       } else if (this.formData.areaType == 2) {
 
@@ -664,11 +664,10 @@ module.exports = {
 
 
       // 处理时段
-      if (this.formData.timeType == "0") {
-        paramsForm.timeType = this.formData.timeType // 不限制
-      } else if (this.formData.timeType == "1") {
-        paramsForm.timeType = this.formData.timeType1Data_values.join() // 时间段
+      if (this.formData.timeType == "1") {
+        paramsForm.timeContent = this.formData.timeType1Data_values.join() // 时间段
       } else if (this.formData.timeType == "2") {
+
         // paramsForm.timeType = timeType1Data_values.join() // 自定义
       }
 
