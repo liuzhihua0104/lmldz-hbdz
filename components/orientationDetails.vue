@@ -849,6 +849,28 @@ module.exports = {
         timeType: data.timeType, // 时段
       }
 
+      // 判断联网方式是否是自定义多选
+      if (data.networking != 0 && data.networking != 1) {
+        form.networking = "custom";
+        form.networkingCustomData_values = data.networking.split("");
+      }
+
+      // 判断时段是否是自定义时间段||自定义
+      if (data.timeType == 1) {
+        form.timeType1Data_values = data.timeContent.split(",");
+        console.log(form)
+
+        this.formData = { ...this.formData, ...form };
+      } else if (data.timeType == 2) {
+        // let timeContentArr = data.timeCountent.split();
+        // console.log(timeContentArr)
+      }
+
+
+
+
+
+
 
     },
 
@@ -858,7 +880,7 @@ module.exports = {
   },
   created() {
 
-    this.getArea(); //
+    // this.getArea(); //
 
     let query = getUrlQuery()
     // console.log(query)
