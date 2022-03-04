@@ -38,8 +38,8 @@
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.areaType==1">
-        <el-form-item style="margin-right:0" label="" prop="checkedNodeList">
-          <el-cascader ref="areaJson" style="width:700px" @change="handleChange('areaJson')" v-model="areaJson" placeholder="请输入关键词" :options="options" :props="{ multiple: true }" filterable></el-cascader>
+        <el-form-item style="margin-right:0" label="" prop="areaJson">
+          <el-cascader clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="options" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
 
@@ -495,8 +495,9 @@ module.exports = {
 
         remarks: "", // 备注
         areaType: "0", // '0不限制1省市区2线级',
-        // areaContent: "", // '区域内容,库里存的'
-        // areaJson:[], //编辑时回显省市区用的
+        areaContent: "", // '区域内容,库里存的'
+        // areaJson: [['zhinan', 'daohang', 'cexiangdaohang'],['zhinan', 'daohang', 'dingbudaohang']]
+        areaJson: [], // 回显省市区
         networking: "0", // 联网方式 0不限1wifi2移动3联调4电信
         scanContent: "0", // 扫码工具 0不限1微信2支付宝
         timeType: "0", // 时段 0不限1时间段2自定义
@@ -505,7 +506,7 @@ module.exports = {
         sex: "0", // 0不限1男2女
         status: "", // 状态：0关闭1开启 2删除
         sourceId: "", // 素材源id
-        roles: "", // 状态 1商务2运营
+        // roles: "", // 状态 1商务2运营
 
         // 全选时间段数据
         timeType1Data_options: timeSlotOptions,// 选项
@@ -549,6 +550,9 @@ module.exports = {
         areaType: [
           { required: true, message: '请选择', trigger: 'change' },
         ],
+        areaJson: [
+          { required: true, message: '请选择', trigger: 'change' },
+        ],
         sex: [
           { required: true, message: '请选择', trigger: 'change' },
         ],
@@ -586,8 +590,7 @@ module.exports = {
       },
 
       options: options,
-      // areaJson: [['zhinan', 'daohang', 'cexiangdaohang'],['zhinan', 'daohang', 'dingbudaohang']]
-      areaJson: [],
+
 
       checkedNodeList: [] //子节点全选后，只留下父节点，后端需要的
 
@@ -649,7 +652,7 @@ module.exports = {
 
       // 处理区域-省市区
       if (this.formData.areaType == 1) {
-        paramsForm.areaJson = this.areaJson;
+        paramsForm.areaJson = this.formData.areaJson;
 
       } else if (this.formData.areaType == 2) {
 
@@ -736,21 +739,7 @@ module.exports = {
       //   }).then(({ data }) => { })
     },
 
-    // 编辑获取表单详情
-    getDetails() {
-      //   service({
-      //     url: '/user/strategy/inversion/detail',
-      //     method: 'get',
-      //     data: {
-      //       id: this.formData.id,
-      //     },
-      //   }).then(({ data }) => {
-      //     Object.keys(this.formData).forEach((key) => {
-      //       console.log(key, data[key])
-      //       this.formData[key] = data[key]
-      //     })
-      //   })
-    },
+
     // 时间范围新增按钮
     addTimeRange() {
       let needAdd = {
@@ -821,6 +810,46 @@ module.exports = {
       }).catch((error) => {
 
       })
+    },
+
+    // 编辑获取表单详情
+    getDetails() {
+      //   service({
+      //     url: '/user/strategy/inversion/detail',
+      //     method: 'get',
+      //     data: {
+      //       id: this.formData.id,
+      //     },
+      //   }).then(({ data }) => {
+      //     Object.keys(this.formData).forEach((key) => {
+      //       console.log(key, data[key])
+      //       this.formData[key] = data[key]
+      //     })
+      //   })
+
+      let data = {
+        "name": "",
+        "remarks": "",
+        "areaType": "0",
+        "sex": "0",
+        "scanContent": "2",
+        "timeType": "1",
+        "networking": "2",
+        "timeContent": "0-3,3-6,6-8,8-10,10-12,12-14,14-16,16-18,18-20,20-22,22-24",
+        "holidays": "1,2",
+        "devices": "1,2,3"
+      }
+
+      let form = {
+        name: data.name, // 方案名称
+        remarks: data.remarks, // 备注
+        areaType: data.areaType, // 区域
+        sex: data.sex, // 性别
+        scanContent: data.scanContent, // 扫码工具
+        timeType: data.timeType, // 时段
+      }
+
+
     },
 
   },
