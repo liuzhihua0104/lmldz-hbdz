@@ -17,3 +17,21 @@ CREATE TABLE `t_orientation` (
     `roles` int(11) DEFAULT NULL COMMENT '状态 1商务2运营',
     PRIMARY KEY (`id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='奖品定向方案表';
+
+
+
+
+  [
+    {
+        "id": 1,
+        "startTime": "03:00",
+        "endTime": "20:00",
+        "sliderValue": [3,20]
+    },
+    {
+        "id": 2,
+        "startTime": "04:00",
+        "endTime": "16:00",
+        "sliderValue": [4,16]
+    }
+]

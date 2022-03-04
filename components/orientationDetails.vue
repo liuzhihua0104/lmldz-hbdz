@@ -235,18 +235,19 @@ function getUrlQuery() {
 
 
 let timeSlotOptions = [
-  { name: "0点 ~ 3点", label: "00:00:01-03:00:00" },
-  { name: "3点 ~ 6点", label: "03:00:01-06:00:00" },
-  { name: "6点 ~8点", label: "06:00:01-08:00:00" },
-  { name: "8点 ~10点", label: "08:00:01-10:00:00" },
-  { name: "10点 ~12点", label: "10:00:01-12:00:00" },
-  { name: "12点 ~ 14点", label: "12:00:01-14:00:00" },
-  { name: "14点 ~16点", label: "14:00:01-16:00:00" },
-  { name: "16点 ~18点", label: "16:00:01-18:00:00" },
-  { name: "18点 ~20点", label: "18:00:01-20:00:00" },
-  { name: "20点 ~22点", label: "20:00:01-22:00:00" },
-  { name: "22点 ~24点", label: "22:00:01-24:00:00" },
+  { name: "0点 ~ 3点", label: "0-3" },
+  { name: "3点 ~ 6点", label: "3-6" },
+  { name: "6点 ~8点", label: "6-8" },
+  { name: "8点 ~10点", label: "8-10" },
+  { name: "10点 ~12点", label: "10-12" },
+  { name: "12点 ~ 14点", label: "12-14" },
+  { name: "14点 ~16点", label: "14-16" },
+  { name: "16点 ~18点", label: "16-18" },
+  { name: "18点 ~20点", label: "18-20" },
+  { name: "20点 ~22点", label: "20-22" },
+  { name: "22点 ~24点", label: "22-24" },
 ]
+
 let networkingOptions = [
   { name: "wifi", label: "1" },
   { name: "移动", label: "2" },
@@ -668,7 +669,11 @@ module.exports = {
         paramsForm.timeContent = this.formData.timeType1Data_values.join() // 时间段
       } else if (this.formData.timeType == "2") {
 
-        // paramsForm.timeType = timeType1Data_values.join() // 自定义
+        let timeContent = [];
+        this.rangeListData.map(item => {
+          timeContent.push(`${item.sliderValue[0]}-${item.sliderValue[1]}`)
+        })
+        paramsForm.timeContent = timeContent.join()
       }
 
 
@@ -690,6 +695,7 @@ module.exports = {
       }
 
       console.log(paramsForm)
+      console.log(this.rangeListData)
       return
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -749,9 +755,9 @@ module.exports = {
     addTimeRange() {
       let needAdd = {
         id: this.rangeListData.length + 1,
-        startTime: "",
-        endTime: "",
-        sliderValue: [0, 0]
+        startTime: "00:00",
+        endTime: "24:00",
+        sliderValue: [0, 24]
       }
       this.rangeListData.push(needAdd);
     },
@@ -817,6 +823,9 @@ module.exports = {
       })
     },
 
+  },
+  mounted() {
+    window.vue = this;
   },
   created() {
 
