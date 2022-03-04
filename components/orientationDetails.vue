@@ -40,18 +40,9 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
-      <el-col :span="24" style="padding-left:100px" v-if="formData.areaType==1">
-
-        <el-form-item style="margin-right:0" label="节假日:" prop="holidays">
-          <el-radio-group v-model="formData.holidays">
-            <el-radio label="0">不限制</el-radio>
-            <el-radio label="legal">法定</el-radio>
-            <el-radio label="week">星期</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item style="margin-right:0" label="" prop="areaData">
-          <el-cascader style="width:700px" v-model="areaData" placeholder="请输入关键词" :options="options" :props="{ multiple: true }" filterable></el-cascader>
-
+      <el-col :span="24" v-if="formData.areaType==1">
+        <el-form-item style="margin-right:0" label="" prop="areaValues">
+          <el-cascader style="width:700px" @change="changeArea" v-model="areaValues" placeholder="请输入关键词" :options="options" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
 
@@ -574,7 +565,7 @@ module.exports = {
       },
 
       options: options,
-      areaData: ["ziyuan"]
+      areaValues: [['zhinan', 'daohang', 'cexiangdaohang'],['zhinan', 'daohang', 'dingbudaohang']]
 
 
 
@@ -701,12 +692,34 @@ module.exports = {
     // 获取执行方案列表
     getPlanList() {
 
+    },
+
+    // 获取区域信息
+    getArea() {
+      console.log("123456")
+      service({
+        url: '/prize/area/list',
+        method: 'post',
+        data: {
+          level: "area",
+        },
+      }).then(({ data }) => {
+        // Object.keys(this.formData).forEach((key) => {
+        //   console.log(key, data[key])
+        //   this.formData[key] = data[key]
+        // })
+      })
+    },
+
+    changeArea(val) {
+      console.log(val)
+    console.log(this.areaValues)
     }
 
   },
   created() {
 
-
+    this.getArea(); //
 
 
     let query = getUrlQuery()
