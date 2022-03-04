@@ -41,8 +41,8 @@
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.areaType==1">
-        <el-form-item style="margin-right:0" label="" prop="areaValues">
-          <el-cascader style="width:700px" @change="changeArea" v-model="areaValues" placeholder="请输入关键词" :options="options" :props="{ multiple: true }" filterable></el-cascader>
+        <el-form-item style="margin-right:0" label="" prop="checkedNodeList">
+          <el-cascader ref="test" style="width:700px" @change="handleChange('test')" v-model="test" placeholder="请输入关键词" :options="options" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
 
@@ -565,7 +565,10 @@ module.exports = {
       },
 
       options: options,
-      areaValues: [['zhinan', 'daohang', 'cexiangdaohang'],['zhinan', 'daohang', 'dingbudaohang']]
+      // test: [['zhinan', 'daohang', 'cexiangdaohang'],['zhinan', 'daohang', 'dingbudaohang']]
+      test: [],
+
+      checkedNodeList: [] //子节点全选后，只留下父节点，后端需要的
 
 
 
@@ -574,7 +577,20 @@ module.exports = {
   watch: {
 
   },
+  mounted() {
+    // this.handleChange('test'); // 初始化
+  },
   methods: {
+    handleChange(value) {
+
+      console.log(this.$refs.test)
+      let checkedNodeList = this.$refs[value].getCheckedNodes();
+      checkedNodeList = checkedNodeList.filter(item => !(item.parent && item.parent.checked)); // 核心
+      // this[value] = checkedNodeList;
+
+      // 后台只要父级别
+      console.log(checkedNodeList)
+    },
 
     // 公共方法-切换全选
     commonChangeCheckAll(checkAll, keyName) {
@@ -696,7 +712,6 @@ module.exports = {
 
     // 获取区域信息
     getArea() {
-      console.log("123456")
       service({
         url: '/prize/area/list',
         method: 'post',
@@ -710,11 +725,6 @@ module.exports = {
         // })
       })
     },
-
-    changeArea(val) {
-      console.log(val)
-    console.log(this.areaValues)
-    }
 
   },
   created() {
