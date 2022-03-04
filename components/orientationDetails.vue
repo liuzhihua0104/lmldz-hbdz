@@ -555,10 +555,31 @@ module.exports = {
 
 
       formRules: {
-        user: [
+        name: [
           { required: true, message: '请输入定向名称', trigger: 'change' },
         ],
-        radio1: [
+        remarks: [
+          { required: true, message: '请输入备注', trigger: 'change' },
+        ],
+        areaType: [
+          { required: true, message: '请选择', trigger: 'change' },
+        ],
+        sex: [
+          { required: true, message: '请选择', trigger: 'change' },
+        ],
+        networking: [
+          { required: true, message: '请选择', trigger: 'change' },
+        ],
+        scanContent: [
+          { required: true, message: '请选择', trigger: 'change' },
+        ],
+        timeType: [
+          { required: true, message: '请选择', trigger: 'change' },
+        ],
+        holidays: [
+          { required: true, message: '请选择', trigger: 'change' },
+        ],
+        devices: [
           { required: true, message: '请选择', trigger: 'change' },
         ],
 
@@ -619,23 +640,26 @@ module.exports = {
     // 保存成功后返回其他页面
     saveFn(formName) {
 
-      service({
-        url: '/prize/orientation/create',
-        method: 'post',
-        data: {},
-      }).then(({ data }) => { })
+      // service({
+      //   url: '/prize/orientation/create',
+      //   method: 'post',
+      //   data: {},
+      // }).then(({ data }) => { })
 
-      // /prize/orientation/create
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      //     console.log("校验通过")
-      //     //   this.getStrategyAddEdit()
-      //     this.goBack();
-      //   } else {
-      //     console.log('error submit!!')
-      //     return false
-      //   }
-      // })
+      // console.log(this.checkedNodeList)
+      // console.log(this.test)
+
+      // /prize/orientation / create
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log("校验通过")
+          //   this.getStrategyAddEdit()
+          this.goBack();
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     // 新增/编辑保存表单
     getStrategyAddEdit() {
@@ -701,8 +725,6 @@ module.exports = {
           item.sliderValue = sliderValue;
         }
       })
-
-
     },
 
     // 获取执行方案列表
@@ -712,17 +734,28 @@ module.exports = {
 
     // 获取区域信息
     getArea() {
-      service({
-        url: '/prize/area/list',
-        method: 'post',
-        data: {
-          level: "area",
-        },
-      }).then(({ data }) => {
-        // Object.keys(this.formData).forEach((key) => {
-        //   console.log(key, data[key])
-        //   this.formData[key] = data[key]
-        // })
+      let p = (code) => {
+        return new Promise((resolve, reject) => {
+          service({
+            url: '/prize/area/list',
+            method: 'post',
+            data: {
+              level: "area",
+              code: code
+            },
+          }).then(({ data }) => {
+            console.log(123456)
+            console.log(data)
+            resolve(data)
+          })
+
+        })
+      }
+
+      Promise.all([p(1), p(2), p(3), p(4), p(5)]).then((result) => {
+        console.log(result)       // [ '3秒后醒来', '2秒后醒来' ]
+      }).catch((error) => {
+        // console.log(error)
       })
     },
 
@@ -730,7 +763,6 @@ module.exports = {
   created() {
 
     this.getArea(); //
-
 
     let query = getUrlQuery()
     // console.log(query)
