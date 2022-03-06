@@ -750,14 +750,17 @@ module.exports = {
       // 去除后端代码中多余的“一线、二线。。。”
       data.map(item => {
         let newChildren = [];
-        if (item.children) {
+        if (item.children && item.children.length) {
           item.children.map(ele => {
             if (![10, 11, 12, 13, 14, 15].includes(ele.value)) {
               newChildren.push(ele)
             }
           })
+          item.children = newChildren;
+
+        } else {
+          delete item.children
         }
-        item.children = newChildren;
       })
       this.areaOptions = data;
 
