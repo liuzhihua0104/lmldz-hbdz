@@ -218,6 +218,7 @@
 
 
 <script>
+// 处理地址栏参数
 function getUrlQuery() {
   let search = location.search
   let obj = {}
@@ -234,6 +235,25 @@ function getUrlQuery() {
   return obj
 }
 
+// 递归
+function parseJson(arr) {
+  arr = arr.slice()
+  function toParse(arr) {
+    arr.forEach(function (item) {
+      item.title = item.nodeName;
+      item.value = item.nodeCode;
+      item.key = item.nodeCode;
+      if (item.children && Array.isArray(item.children)) {
+        toParse(item["children"])
+      }
+      delete item.nodeName
+      delete item.nodeCode
+      delete item.nodeCode
+    })
+    return arr
+  }
+  return toParse(arr)
+}
 
 let timeSlotOptions = [
   { name: "0点 ~ 3点", label: "0-3" },
@@ -799,8 +819,8 @@ module.exports = {
       //     level: "area"
       //   },
       // }).then(({ data }) => {
-        let data=areaData.data;
-        console.log(data)
+      let data = areaData.data;
+      console.log(data)
 
       // })
 
