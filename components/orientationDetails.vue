@@ -39,7 +39,7 @@
       </el-col>
       <el-col :span="24" v-if="formData.areaType==1">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader :key="cascaderIdx" clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.areaType==2">
@@ -418,14 +418,20 @@ module.exports = {
       lineOptions: [], //线级城市级
 
 
-      checkedNodeList: [] //子节点全选后，只留下父节点，后端需要的
+      checkedNodeList: [], //子节点全选后，只留下父节点，后端需要的
+      cascaderIdx: 0 //防止级联组件报错
 
 
 
     }
   },
   watch: {
-
+    config: {
+      handler() {
+        this.cascaderIdx++
+      },
+      deep: true
+    }
   },
 
   methods: {

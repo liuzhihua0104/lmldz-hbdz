@@ -62,7 +62,7 @@
     <template>
       <el-form :inline="true" :model="filter" size="small">
         <el-form-item style="margin-right:0" label="关键字:">
-          <el-input v-model="filter.planName" placeholder="执行方案名称" :clearable="true"></el-input>
+          <el-input v-model="filter.name" placeholder="执行方案名称" :clearable="true"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSearch">查询</el-button>
@@ -71,7 +71,7 @@
       </el-form>
 
       <el-table :data="tableData" class="table-wrap">
-        <el-table-column label="执行方案名称" prop="planName"></el-table-column>
+        <el-table-column label="执行方案名称" prop="name"></el-table-column>
         <el-table-column label="奖品定向关联数(个)">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="showApplicationList(scope.row)">10</el-button>
@@ -79,7 +79,14 @@
           </template>
         </el-table-column>
         <el-table-column label="地域" prop="planNumber"></el-table-column>
-        <el-table-column label="性别" prop="planNumber"></el-table-column>
+        <el-table-column label="性别">
+
+          <template slot-scope="scope">
+            {{scope.row.sex==0&& "不限"}}
+            {{scope.row.sex==1&& "男"}}
+            {{scope.row.sex==2&& "女"}}
+          </template>
+        </el-table-column>
         <el-table-column label="年龄" prop="planNumber"></el-table-column>
         <el-table-column label="联网" prop="planNumber"></el-table-column>
         <el-table-column label="工具" prop="planNumber"></el-table-column>
@@ -190,7 +197,7 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button style="margin-right:20px" @click="copyPlanVisible = false">取 消</el-button>
-          <el-button type="primary" @click="submitCopyForm('copyFormInline')" >确 定</el-button>
+          <el-button type="primary" @click="submitCopyForm('copyFormInline')">确 定</el-button>
         </span>
       </el-dialog>
     </template>
@@ -206,9 +213,9 @@
       data() {
         return {
           filter: {
-            planName: '',
-            startTime: '',
-            endTime: '',
+            name: '',
+            // startTime: '',
+            // endTime: '',
             pageNum: 1,
             pageSize: 10,
           },
@@ -242,8 +249,8 @@
         },
         fetchList() {
           service({
-            url: '/user/strategy/inversion/list',
-            method: 'get',
+            url: '/prize/orientation/sList',
+            method: 'post',
             data: this.filter,
           }).then(({ data }) => {
             this.tableData = data.list
