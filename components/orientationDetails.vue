@@ -244,12 +244,18 @@ function getUrlQuery() {
 function parseJson(arr) {
   arr = arr.slice()
   function toParse(arr) {
+    // console.log(arr)
     arr.forEach(function (item) {
       item.value = item.code;
       item.label = item.name;
-      if (item.children && Array.isArray(item.children)) {
+
+
+      if (item.children && item.children.length > 0 && Array.isArray(item.children)) {
         toParse(item["children"])
+      } else {
+        delete item.children
       }
+
       delete item.level
       delete item.pcode
       delete item.pname
