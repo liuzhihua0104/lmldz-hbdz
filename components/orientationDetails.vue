@@ -475,7 +475,7 @@ module.exports = {
 
       // 处理区域-省市区
       if (["1", "2"].includes(this.formData.areaType)) {
-        paramsForm.areaJson = this.formData.areaJson;
+        paramsForm.areaJson = JSON.stringify(this.formData.areaJson);
 
         // 编辑的情况
         if (this.checkedNodeList.length) {
@@ -530,19 +530,20 @@ module.exports = {
 
       sessionStorage.setItem("paramsForm", JSON.stringify(paramsForm))
 
-      return doSaveParams;
+      return paramsForm;
 
     },
     // 保存成功后返回其他页面
     saveFn(formName) {
+      let self = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
           service({
             url: '/prize/orientation/create',
             method: 'post',
-            data: this.doSaveParams,
+            data: self.doSaveParams(),
           }).then(({ data }) => {
-            this.goBack();
+            self.goBack();
           })
 
         } else {
@@ -583,7 +584,7 @@ module.exports = {
         sex: data.sex, // 性别
         scanContent: data.scanContent, // 扫码工具
         timeType: data.timeType, // 时段
-        areaJson: data.areaJson, //回显省市县||限级
+        areaJson: JSON.parse(data.areaJson), //回显省市县||限级
         areaContent: data.areaContent, //区域内容,库里存的'
       }
 
@@ -711,6 +712,7 @@ module.exports = {
         }
       })
     },
+
     // 切换时间段-通过时间选择控件
     changeTime(row, name) {
       this.rangeListData.filter(item => {
