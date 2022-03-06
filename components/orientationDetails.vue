@@ -618,11 +618,7 @@ module.exports = {
             endTime: endTime == "00:00" ? "24:00" : endTime,
           })
         })
-
         this.rangeListData = rangeListData; //自定义时间列表数据
-
-
-
 
       }
 
@@ -646,13 +642,50 @@ module.exports = {
       // 判断节假日
       if (data.holidays == 0) {
         form.holidays = "0" //不限制
-      } else if ([1, 2].includes(data.holidays.split(""))) {
+      } else if (_.intersection(["1", "2"], data.holidays.split(",")).length) {
         form.holidays = "legal";
-        form.legalData_values = data.holidays.split(""); //法定
-      } else if ([3, 4, 5, 6, 7, 8, 9].includes(data.holidays.split(""))) {
+        //法定
+        let values = data.holidays.split(",");
+        form.legalData_values = values;
+        // 是否全选
+        let optLength = this.formData.legalData_options.length;
+        form.legalData_checkAll = values.length == optLength
+        // 全选按钮样式
+        form.legalData_isIndeterminate = !(values.length == optLength)
+
+
+      } else if (_.intersection(["3", "4", "5", "6", "7", "8", "9"], data.holidays.split(",")).length) {
         form.holidays = "week";
-        form.weekData_values = data.holidays.split(""); //星期
+        // form.weekData_values = data.holidays.split(""); //星期
+        //法定
+        let values = data.holidays.split(",");
+        form.weekData_values = values;
+        // 是否全选
+        let optLength = this.formData.weekData_options.length;
+        form.weekData_checkAll = values.length == optLength
+        // 全选按钮样式
+        form.weekData_isIndeterminate = !(values.length == optLength)
       }
+
+
+      // 处理设备平台
+      if (data.devices == 0) {
+        form.devices = "0" //不限
+      } else if (["1", "2", "3"].includes(data.devices)) {
+        form.devices = data.devices;
+      } else {
+        form.devices = "custom" //自定义
+        let values = data.devices.split(",");
+        form.devicesCustomData_values = values;
+        // 是否全选
+        let optLength = this.formData.devicesCustomData_options.length;
+        form.devicesCustomData_checkAll = values.length == optLength
+        // 全选按钮样式
+        form.devicesCustomData_isIndeterminate = !(values.length == optLength)
+
+      }
+
+
 
 
 
