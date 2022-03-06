@@ -39,7 +39,7 @@
       </el-col>
       <el-col :span="24" v-if="formData.areaType==1">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader :key="cascaderIdx" clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader class="area-cascader" :key="cascaderIdx" :clearable="true" ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.areaType==2">
