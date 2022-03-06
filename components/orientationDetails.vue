@@ -250,10 +250,10 @@ function parseJson(arr) {
       if (item.children && Array.isArray(item.children)) {
         toParse(item["children"])
       }
-      // delete item.level
-      // delete item.pcode
-      // delete item.pname
-      // delete item.tier
+      delete item.level
+      delete item.pcode
+      delete item.pname
+      delete item.tier
       delete item.code
       delete item.name
     })
@@ -320,26 +320,18 @@ module.exports = {
       formData: {
 
         id: "", // 
-        name: "", // 方案名称
-        pageNum: "", // 
-        pageSize: "", // 
-        createTime: "", // 
-        createUser: "", // 
-
+        name: "", // 方案名称  
         remarks: "", // 备注
         areaType: "0", // '0不限制1省市区2线级',
         areaContent: "", // '区域内容,库里存的'
-        // areaJson: [['zhinan', 'daohang', 'cexiangdaohang'],['zhinan', 'daohang', 'dingbudaohang']]
-        areaJson: [], // 回显省市区
+        areaJson: [], // 回显省市区,是个二维数组
         networking: "0", // 联网方式 0不限1wifi2移动3联调4电信
         scanContent: "0", // 扫码工具 0不限1微信2支付宝
         timeType: "0", // 时段 0不限1时间段2自定义
         holidays: "0", // 节假日0不限1节假日2工作日3周一4周二5周三6周四7周五8周六9周日
         devices: "0", // 设备0不限1ios2安卓3鸿蒙
         sex: "0", // 0不限1男2女
-        status: "", // 状态：0关闭1开启 2删除
-        sourceId: "", // 素材源id
-        // roles: "", // 状态 1商务2运营
+
 
         // 全选时间段数据
         timeType1Data_options: timeSlotOptions,// 选项
@@ -441,11 +433,8 @@ module.exports = {
     handleChange(value) {
       let checkedNodeList = this.$refs[value].getCheckedNodes();
       checkedNodeList = checkedNodeList.filter(item => !(item.parent && item.parent.checked)); // 核心
-      // this[value] = checkedNodeList;
-
       // 后台只要父级别
       this.checkedNodeList = checkedNodeList
-      console.log(checkedNodeList)
     },
 
     // 公共方法-切换全选
@@ -483,20 +472,19 @@ module.exports = {
         timeType: this.formData.timeType, // 时段
       }
 
-
       // 处理区域-省市区
-      if (this.formData.areaType == 1) {
+      if (["1", "2"].includes(this.formData.areaType)) {
         paramsForm.areaJson = this.formData.areaJson;
-
-      } else if (this.formData.areaType == 2) {
-
+        let areaContentArr = [];
+        this.checkedNodeList.map(item => {
+          areaContentArr.push(item.data.value)
+        })
+        paramsForm.areaContent = areaContentArr.join();
       }
-
 
       // 处理联网方式  
       if (this.formData.networking == "custom") {
         paramsForm.networking = this.formData.networkingCustomData_values.join()
-        console.log(paramsForm.networking)
       } else {
         paramsForm.networking = this.formData.networking
       }
@@ -506,7 +494,6 @@ module.exports = {
       if (this.formData.timeType == "1") {
         paramsForm.timeContent = this.formData.timeType1Data_values.join() // 时间段
       } else if (this.formData.timeType == "2") {
-
         let timeContent = [];
         this.rangeListData.map(item => {
           timeContent.push(`${item.sliderValue[0]}-${item.sliderValue[1]}`)
@@ -531,8 +518,6 @@ module.exports = {
       } else {
         paramsForm.devices = this.formData.devices;
       }
-
-      console.log(paramsForm)
 
       sessionStorage.setItem("paramsForm", JSON.stringify(paramsForm))
       return
@@ -592,8 +577,8 @@ module.exports = {
         scanContent: data.scanContent, // 扫码工具
         timeType: data.timeType, // 时段
         areaJson: data.areaJson, //回显省市县||限级
+        areaContent: data.areaContent, //区域内容,库里存的'
       }
-
 
       // 判断时段是否是自定义时间段||自定义
       if (data.timeType == 1) {
@@ -685,15 +670,12 @@ module.exports = {
 
       }
 
-
-
-
-
-
-
       this.formData = { ...this.formData, ...form };
-      console.log(this.formData)
 
+      // 手动获取选中的节点
+      this.$nextTick(() => {
+        this.handleChange("areaLevel")
+      })
 
 
 
@@ -765,9 +747,19 @@ module.exports = {
       //   },
       // }).then(({ data }) => {
       let data = parseJson(areaData.data);
+      // 去除后端代码中多余的“一线、二线。。。”
+      data.map(item => {
+        let newChildren = [];
+        if (item.children) {
+          item.children.map(ele => {
+            if (![10, 11, 12, 13, 14, 15].includes(ele.value)) {
+              newChildren.push(ele)
+            }
+          })
+        }
+        item.children = newChildren;
+      })
       this.areaOptions = data;
-
-      // console.log(data)
 
       // })
     },
