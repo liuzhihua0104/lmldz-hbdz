@@ -457,12 +457,9 @@ module.exports = {
       this.formData[`${keyName}_isIndeterminate`] = checkedCount > 0 && checkedCount < this.formData[`${keyName}_options`].length;
     },
 
-    // 返回
-    goBack() {
-      window.history.go(-1);
-    },
-    // 保存成功后返回其他页面
-    saveFn(formName) {
+
+    // 处理保存参数
+    doSaveParams() {
       let paramsForm = {
         name: this.formData.name, // 方案名称
         remarks: this.formData.remarks, // 备注
@@ -472,14 +469,26 @@ module.exports = {
         timeType: this.formData.timeType, // 时段
       }
 
+      if (this.formData.id) {
+        paramsForm.id = this.formData.id;
+      }
+
       // 处理区域-省市区
       if (["1", "2"].includes(this.formData.areaType)) {
         paramsForm.areaJson = this.formData.areaJson;
-        let areaContentArr = [];
-        this.checkedNodeList.map(item => {
-          areaContentArr.push(item.data.value)
-        })
-        paramsForm.areaContent = areaContentArr.join();
+
+        // 编辑的情况
+        if (this.checkedNodeList.length) {
+          let areaContentArr = [];
+          this.checkedNodeList.map(item => {
+            areaContentArr.push(item.data.value)
+          })
+          paramsForm.areaContent = areaContentArr.join();
+        } else {
+          // 编辑模式下未动选中的省市县
+          paramsForm.areaContent = this.formData.areaContent
+        }
+
       }
 
       // 处理联网方式  
@@ -520,36 +529,34 @@ module.exports = {
       }
 
       sessionStorage.setItem("paramsForm", JSON.stringify(paramsForm))
-      return
+
+      return doSaveParams;
+
+    },
+    // 保存成功后返回其他页面
+    saveFn(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          service({
+            url: '/prize/orientation/create',
+            method: 'post',
+            data: this.doSaveParams,
+          }).then(({ data }) => {
+            this.goBack();
+          })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-          console.log("校验通过")
-          //   this.getStrategyAddEdit()
-          // service({
-          //   url: '/prize/orientation/create',
-          //   method: 'post',
-          //   data: {},
-          // }).then(({ data }) => { })
-          // this.goBack();
         } else {
-          console.log('error submit!!')
           return false
         }
       })
+    },
+    // 返回
+    goBack() {
+      if (this.type == "page") {
+        window.history.go(-1);
+      } else if (this.type == "dialog") {
+        this.$emit("formSaveOk")
+      }
     },
 
     // 编辑获取表单详情
@@ -672,23 +679,7 @@ module.exports = {
 
       this.formData = { ...this.formData, ...form };
 
-      // 手动获取选中的节点
-      this.$nextTick(() => {
-        this.handleChange("areaLevel")
-      })
-
-
-
     },
-    // 新增/编辑保存表单
-    getStrategyAddEdit() {
-      //   service({
-      //     url: '/user/strategy/inversion/create',
-      //     method: 'post',
-      //     data: this.formData,
-      //   }).then(({ data }) => { })
-    },
-
 
     // 时间范围新增按钮
     addTimeRange() {
@@ -730,11 +721,6 @@ module.exports = {
           item.sliderValue = sliderValue;
         }
       })
-    },
-
-    // 获取执行方案列表
-    getPlanList() {
-
     },
 
     // 获取区域信息
@@ -781,7 +767,6 @@ module.exports = {
     },
     // 切换areaType
     changeAreaType() {
-      // console.log(this.formData.areaType)
       this.formData.areaContent = "";
       this.formData.areaJson = [];
     },
@@ -793,21 +778,13 @@ module.exports = {
     window.vue = this;
   },
   created() {
-
     this.getArea(); //获取省市县城市
     this.getLine(); //获取线级城市
-
-    let query = getUrlQuery()
-    // console.log(query)
+    let query = getUrlQuery();
     if (query.id) {
-      //   setTimeout(() => {
-      //     this.formData.id = query.id;
-      //   })
-
+      this.formData.id = query.id;
       this.getDetails()
     }
-    // 获取项目列表
-    this.getPlanList()
   }
 }
 </script>
