@@ -605,7 +605,22 @@ module.exports = {
         // 全选按钮样式
         form.timeType1Data_isIndeterminate = !(values.length == optLength);
       } else if (data.timeType == 2) {
-        from.timeType1Data_values = data.timeCountent.split(",")
+        let values = data.timeContent.split(",");
+        let rangeListData = [];
+        values.map((item, index) => {
+          let arr = item.split("-");
+          let endTime = dayjs().hour(Number(arr[1])).format('HH:00');
+
+          rangeListData.push({
+            id: index + 1,
+            sliderValue: [Number(arr[0]), Number(arr[1])],
+            startTime: dayjs().hour(Number(arr[0])).format('HH:00'),
+            endTime: endTime == "00:00" ? "24:00" : endTime,
+          })
+        })
+
+        this.rangeListData = rangeListData; //自定义时间列表数据
+
 
 
 
