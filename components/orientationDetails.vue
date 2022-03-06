@@ -597,14 +597,17 @@ module.exports = {
 
       // 判断时段是否是自定义时间段||自定义
       if (data.timeType == 1) {
-        form.timeType1Data_values = data.timeContent.split(",");
+        let values = data.timeContent.split(",");
+        form.timeType1Data_values = values;
+        // 是否全选
+        let optLength = this.formData.timeType1Data_options.length;
+        form.timeType1Data_checkAll = values.length == optLength
+        // 全选按钮样式
+        form.timeType1Data_isIndeterminate = !(values.length == optLength);
       } else if (data.timeType == 2) {
         from.timeType1Data_values = data.timeCountent.split(",")
-      } else if (data.timeType == 3) {
-        let timeCountent = data.timeCountent.split("")
-        console.log(timeCountent)
 
-        let rangeListData = [] //时间段自定义列表数据
+
 
       }
 
@@ -620,8 +623,9 @@ module.exports = {
         form.networkingCustomData_values = values;
         // 是否全选
         let optLength = this.formData.networkingCustomData_options.length;
-     
         form.networkingCustomData_checkAll = values.length == optLength
+        // 全选按钮样式
+        form.networkingCustomData_isIndeterminate = !(values.length == optLength)
       }
 
       // 判断节假日
