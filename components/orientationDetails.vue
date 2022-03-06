@@ -30,7 +30,7 @@
     <el-row>
       <el-col :span="24">
         <el-form-item style="margin-right:0" label="区域:" prop="areaType">
-          <el-radio-group v-model="formData.areaType">
+          <el-radio-group v-model="formData.areaType" @change="changeAreaType">
             <el-radio label="0">不限制</el-radio>
             <el-radio label="1">省市区</el-radio>
             <el-radio label="2">城市线级</el-radio>
@@ -39,7 +39,12 @@
       </el-col>
       <el-col :span="24" v-if="formData.areaType==1">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="options" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
+        </el-form-item>
+      </el-col>
+      <el-col :span="24" v-if="formData.areaType==2">
+        <el-form-item style="margin-right:0" label="" prop="areaJson">
+          <el-cascader clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="lineOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
 
@@ -235,20 +240,22 @@ function getUrlQuery() {
   return obj
 }
 
-// 递归
+// 递归处理城市数据
 function parseJson(arr) {
   arr = arr.slice()
   function toParse(arr) {
     arr.forEach(function (item) {
-      item.title = item.nodeName;
-      item.value = item.nodeCode;
-      item.key = item.nodeCode;
+      item.value = item.code;
+      item.label = item.name;
       if (item.children && Array.isArray(item.children)) {
         toParse(item["children"])
       }
-      delete item.nodeName
-      delete item.nodeCode
-      delete item.nodeCode
+      // delete item.level
+      // delete item.pcode
+      // delete item.pname
+      // delete item.tier
+      delete item.code
+      delete item.name
     })
     return arr
   }
@@ -296,203 +303,6 @@ let devicesCustomOptions = [
 ]
 
 
-let options = [{
-  value: 'zhinan',
-  label: '指南',
-  children: [{
-    value: 'shejiyuanze',
-    label: '设计原则',
-    children: [{
-      value: 'yizhi',
-      label: '一致'
-    }, {
-      value: 'fankui',
-      label: '反馈'
-    }, {
-      value: 'xiaolv',
-      label: '效率'
-    }, {
-      value: 'kekong',
-      label: '可控'
-    }]
-  }, {
-    value: 'daohang',
-    label: '导航',
-    children: [{
-      value: 'cexiangdaohang',
-      label: '侧向导航'
-    }, {
-      value: 'dingbudaohang',
-      label: '顶部导航'
-    }]
-  }]
-}, {
-  value: 'zujian',
-  label: '组件',
-  children: [{
-    value: 'basic',
-    label: 'Basic',
-    children: [{
-      value: 'layout',
-      label: 'Layout 布局'
-    }, {
-      value: 'color',
-      label: 'Color 色彩'
-    }, {
-      value: 'typography',
-      label: 'Typography 字体'
-    }, {
-      value: 'icon',
-      label: 'Icon 图标'
-    }, {
-      value: 'button',
-      label: 'Button 按钮'
-    }]
-  }, {
-    value: 'form',
-    label: 'Form',
-    children: [{
-      value: 'radio',
-      label: 'Radio 单选框'
-    }, {
-      value: 'checkbox',
-      label: 'Checkbox 多选框'
-    }, {
-      value: 'input',
-      label: 'Input 输入框'
-    }, {
-      value: 'input-number',
-      label: 'InputNumber 计数器'
-    }, {
-      value: 'select',
-      label: 'Select 选择器'
-    }, {
-      value: 'cascader',
-      label: 'Cascader 级联选择器'
-    }, {
-      value: 'switch',
-      label: 'Switch 开关'
-    }, {
-      value: 'slider',
-      label: 'Slider 滑块'
-    }, {
-      value: 'time-picker',
-      label: 'TimePicker 时间选择器'
-    }, {
-      value: 'date-picker',
-      label: 'DatePicker 日期选择器'
-    }, {
-      value: 'datetime-picker',
-      label: 'DateTimePicker 日期时间选择器'
-    }, {
-      value: 'upload',
-      label: 'Upload 上传'
-    }, {
-      value: 'rate',
-      label: 'Rate 评分'
-    }, {
-      value: 'form',
-      label: 'Form 表单'
-    }]
-  }, {
-    value: 'data',
-    label: 'Data',
-    children: [{
-      value: 'table',
-      label: 'Table 表格'
-    }, {
-      value: 'tag',
-      label: 'Tag 标签'
-    }, {
-      value: 'progress',
-      label: 'Progress 进度条'
-    }, {
-      value: 'tree',
-      label: 'Tree 树形控件'
-    }, {
-      value: 'pagination',
-      label: 'Pagination 分页'
-    }, {
-      value: 'badge',
-      label: 'Badge 标记'
-    }]
-  }, {
-    value: 'notice',
-    label: 'Notice',
-    children: [{
-      value: 'alert',
-      label: 'Alert 警告'
-    }, {
-      value: 'loading',
-      label: 'Loading 加载'
-    }, {
-      value: 'message',
-      label: 'Message 消息提示'
-    }, {
-      value: 'message-box',
-      label: 'MessageBox 弹框'
-    }, {
-      value: 'notification',
-      label: 'Notification 通知'
-    }]
-  }, {
-    value: 'navigation',
-    label: 'Navigation',
-    children: [{
-      value: 'menu',
-      label: 'NavMenu 导航菜单'
-    }, {
-      value: 'tabs',
-      label: 'Tabs 标签页'
-    }, {
-      value: 'breadcrumb',
-      label: 'Breadcrumb 面包屑'
-    }, {
-      value: 'dropdown',
-      label: 'Dropdown 下拉菜单'
-    }, {
-      value: 'steps',
-      label: 'Steps 步骤条'
-    }]
-  }, {
-    value: 'others',
-    label: 'Others',
-    children: [{
-      value: 'dialog',
-      label: 'Dialog 对话框'
-    }, {
-      value: 'tooltip',
-      label: 'Tooltip 文字提示'
-    }, {
-      value: 'popover',
-      label: 'Popover 弹出框'
-    }, {
-      value: 'card',
-      label: 'Card 卡片'
-    }, {
-      value: 'carousel',
-      label: 'Carousel 走马灯'
-    }, {
-      value: 'collapse',
-      label: 'Collapse 折叠面板'
-    }]
-  }]
-}, {
-  value: 'ziyuan',
-  label: '资源',
-  children: [{
-    value: 'axure',
-    label: 'Axure Components'
-  }, {
-    value: 'sketch',
-    label: 'Sketch Templates'
-  }, {
-    value: 'jiaohu',
-    label: '组件交互文档'
-  }]
-}]
-
-
 module.exports = {
   props: {
     // type用来标记当前组件是当做dialog使用还是page使用
@@ -536,7 +346,7 @@ module.exports = {
         timeType1Data_checkAll: false,// 是否全选
         timeType1Data_isIndeterminate: false, //是否全选（只负责样式）
         timeType1Data_values: [], //选中的结果
-        // 联网方式自定义
+        // 联网方式自定义rose
         networkingCustomData_options: networkingOptions,// 选项
         networkingCustomData_checkAll: false,// 是否全选
         networkingCustomData_isIndeterminate: false, //是否全选（只负责样式）
@@ -612,7 +422,8 @@ module.exports = {
 
       },
 
-      options: options,
+      areaOptions: [], //省市县
+      lineOptions: [], //线级城市级
 
 
       checkedNodeList: [] //子节点全选后，只留下父节点，后端需要的
@@ -682,9 +493,10 @@ module.exports = {
       }
 
 
-      // 处理联网方式
+      // 处理联网方式  
       if (this.formData.networking == "custom") {
         paramsForm.networking = this.formData.networkingCustomData_values.join()
+        console.log(paramsForm.networking)
       } else {
         paramsForm.networking = this.formData.networking
       }
@@ -721,7 +533,8 @@ module.exports = {
       }
 
       console.log(paramsForm)
-      console.log(this.rangeListData)
+
+      sessionStorage.setItem("paramsForm", JSON.stringify(paramsForm))
       return
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -752,6 +565,86 @@ module.exports = {
           return false
         }
       })
+    },
+
+    // 编辑获取表单详情
+    getDetails() {
+      //   service({
+      //     url: '/user/strategy/inversion/detail',
+      //     method: 'get',
+      //     data: {
+      //       id: this.formData.id,
+      //     },
+      //   }).then(({ data }) => {
+      //     Object.keys(this.formData).forEach((key) => {
+      //       console.log(key, data[key])
+      //       this.formData[key] = data[key]
+      //     })
+      //   })
+
+      let data = JSON.parse(sessionStorage.getItem("paramsForm"));
+
+      let form = {
+        name: data.name, // 方案名称
+        remarks: data.remarks, // 备注
+        areaType: data.areaType, // 区域
+        sex: data.sex, // 性别
+        scanContent: data.scanContent, // 扫码工具
+        timeType: data.timeType, // 时段
+        areaJson: data.areaJson, //回显省市县||限级
+      }
+
+
+      // 判断时段是否是自定义时间段||自定义
+      if (data.timeType == 1) {
+        form.timeType1Data_values = data.timeContent.split(",");
+      } else if (data.timeType == 2) {
+        from.timeType1Data_values = data.timeCountent.split(",")
+      } else if (data.timeType == 3) {
+        let timeCountent = data.timeCountent.split("")
+        console.log(timeCountent)
+
+        let rangeListData = [] //时间段自定义列表数据
+
+      }
+
+
+      // 判断联网方式     
+      if (data.networking == 0) {
+        form.networking = "0" //不限制
+      } else if (data.networking == 1) {
+        form.networking = "1" //wifi
+      } else {
+        form.networking = "custom" // 自定义
+        let values = data.networking.split(",");
+        form.networkingCustomData_values = values;
+        // 是否全选
+        let optLength = this.formData.networkingCustomData_options.length;
+     
+        form.networkingCustomData_checkAll = values.length == optLength
+      }
+
+      // 判断节假日
+      if (data.holidays == 0) {
+        form.holidays = "0" //不限制
+      } else if ([1, 2].includes(data.holidays.split(""))) {
+        form.holidays = "legal";
+        form.legalData_values = data.holidays.split(""); //法定
+      } else if ([3, 4, 5, 6, 7, 8, 9].includes(data.holidays.split(""))) {
+        form.holidays = "week";
+        form.weekData_values = data.holidays.split(""); //星期
+      }
+
+
+
+
+
+      this.formData = { ...this.formData, ...form };
+      console.log(this.formData)
+
+
+
+
     },
     // 新增/编辑保存表单
     getStrategyAddEdit() {
@@ -819,75 +712,37 @@ module.exports = {
       //     level: "area"
       //   },
       // }).then(({ data }) => {
-      let data = areaData.data;
-      console.log(data)
+      let data = parseJson(areaData.data);
+      this.areaOptions = data;
+
+      // console.log(data)
 
       // })
+    },
+    // 获取区域信息
+    getLine() {
+      // service({
+      //   url: '/prize/area/list',
+      //   method: 'post',
+      //   data: {
+      //     level: "line"
+      //   },
+      // }).then(({ data }) => {
+      let data = parseJson(lineData.data);
+      this.lineOptions = data;
 
+      // console.log(data)
 
+      // })
+    },
+    // 切换areaType
+    changeAreaType() {
+      // console.log(this.formData.areaType)
+      this.formData.areaContent = "";
+      this.formData.areaJson = [];
     },
 
-    // 编辑获取表单详情
-    getDetails() {
-      //   service({
-      //     url: '/user/strategy/inversion/detail',
-      //     method: 'get',
-      //     data: {
-      //       id: this.formData.id,
-      //     },
-      //   }).then(({ data }) => {
-      //     Object.keys(this.formData).forEach((key) => {
-      //       console.log(key, data[key])
-      //       this.formData[key] = data[key]
-      //     })
-      //   })
 
-      let data = {
-        "name": "",
-        "remarks": "",
-        "areaType": "0",
-        "sex": "0",
-        "scanContent": "2",
-        "timeType": "1",
-        "networking": "2",
-        "timeContent": "0-3,3-6,6-8,8-10,10-12,12-14,14-16,16-18,18-20,20-22,22-24",
-        "holidays": "1,2",
-        "devices": "1,2,3"
-      }
-
-      let form = {
-        name: data.name, // 方案名称
-        remarks: data.remarks, // 备注
-        areaType: data.areaType, // 区域
-        sex: data.sex, // 性别
-        scanContent: data.scanContent, // 扫码工具
-        timeType: data.timeType, // 时段
-      }
-
-      // 判断联网方式是否是自定义多选
-      if (data.networking != 0 && data.networking != 1) {
-        form.networking = "custom";
-        form.networkingCustomData_values = data.networking.split("");
-      }
-
-      // 判断时段是否是自定义时间段||自定义
-      if (data.timeType == 1) {
-        form.timeType1Data_values = data.timeContent.split(",");
-        console.log(form)
-
-        this.formData = { ...this.formData, ...form };
-      } else if (data.timeType == 2) {
-        // let timeContentArr = data.timeCountent.split();
-        // console.log(timeContentArr)
-      }
-
-
-
-
-
-
-
-    },
 
   },
   mounted() {
@@ -895,7 +750,8 @@ module.exports = {
   },
   created() {
 
-    this.getArea(); //
+    this.getArea(); //获取省市县城市
+    this.getLine(); //获取线级城市
 
     let query = getUrlQuery()
     // console.log(query)
