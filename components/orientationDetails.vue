@@ -215,8 +215,9 @@
   </el-form>
 </template>
  
-<script>
 
+
+<script>
 function getUrlQuery() {
   let search = location.search
   let obj = {}
@@ -482,6 +483,8 @@ module.exports = {
   },
   data() {
     let self = this  // 加上这一句就OK了
+
+
 
     return {
       formData: {
@@ -789,27 +792,19 @@ module.exports = {
 
     // 获取区域信息
     getArea() {
-      let p = (code) => {
-        return new Promise((resolve, reject) => {
-          service({
-            url: '/prize/area/list',
-            method: 'post',
-            data: {
-              level: "area",
-              code: code
-            },
-          }).then(({ data }) => {
-            console.log(data)
-            resolve(data)
-          })
-        })
-      }
+      // service({
+      //   url: '/prize/area/list',
+      //   method: 'post',
+      //   data: {
+      //     level: "area"
+      //   },
+      // }).then(({ data }) => {
+        let data=areaData.data;
+        console.log(data)
 
-      Promise.all([p(1), p(2), p(3), p(4), p(5)]).then((result) => {
-        console.log(result)
-      }).catch((error) => {
+      // })
 
-      })
+
     },
 
     // 编辑获取表单详情
@@ -880,7 +875,7 @@ module.exports = {
   },
   created() {
 
-    // this.getArea(); //
+    this.getArea(); //
 
     let query = getUrlQuery()
     // console.log(query)
