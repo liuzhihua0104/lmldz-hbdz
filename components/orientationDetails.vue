@@ -44,7 +44,7 @@
       </el-col>
       <el-col :span="24" v-if="formData.areaType==2">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader  :collapse-tags="true"  clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="lineOptions" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader :collapse-tags="true" clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="lineOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
 
@@ -211,7 +211,7 @@
       </el-col>
     </el-row>
     <el-form-item>
-      <div class="btns" v-if="type=='page'">
+      <div class="btns" v-if="!isLook">
         <el-button class="back" @click="goBack">返回</el-button>
         <el-button type="primary" @click="saveFn('formData')">保存</el-button>
       </div>
@@ -316,12 +316,17 @@ module.exports = {
       type: String,
       default: 'page'
     },
+    isLook: {
+      type: Boolean,
+      default: false
+    },
+    id: {
+      type: Number,
+      default: 0
+    },
   },
   data() {
     let self = this  // 加上这一句就OK了
-
-
-
     return {
       formData: {
 
@@ -552,7 +557,7 @@ module.exports = {
 
 
       let self = this;
-     console.log(self.doSaveParams())
+      console.log(self.doSaveParams())
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -802,13 +807,14 @@ module.exports = {
     window.vue = this;
   },
   created() {
-    this.getArea(); //获取省市县城市
-    this.getLine(); //获取线级城市
-    let query = getUrlQuery();
-    if (query.id) {
-      this.formData.id = query.id;
+    // this.getArea(); //获取省市县城市
+    // this.getLine(); //获取线级城市
+    if (this.id) {
+      this.formData.id = this.id;
+      console.log(this.id)
       this.getDetails()
     }
+   
   }
 }
 </script>
