@@ -487,8 +487,7 @@ module.exports = {
 
       // 处理区域-省市区
       if (["1", "2"].includes(this.formData.areaType)) {
-        // paramsForm.areaJson = JSON.stringify(this.formData.areaJson);
-        paramsForm.areaJson =this.formData.areaJson;
+        paramsForm.areaJson = JSON.stringify(this.formData.areaJson);
 
         // 编辑的情况
         if (this.checkedNodeList.length) {
@@ -546,9 +545,15 @@ module.exports = {
       return paramsForm;
 
     },
+
+
     // 保存成功后返回其他页面
     saveFn(formName) {
+
+
       let self = this;
+     console.log(self.doSaveParams())
+
       this.$refs[formName].validate((valid) => {
         if (valid) {
           service({
@@ -598,8 +603,7 @@ module.exports = {
         sex: data.sex, // 性别
         scanContent: data.scanContent, // 扫码工具
         timeType: data.timeType, // 时段
-        // areaJson: JSON.parse(data.areaJson), //回显省市县||限级
-        areaJson: data.areaJson, //回显省市县||限级
+        areaJson: JSON.parse(data.areaJson), //回显省市县||限级    
         areaContent: data.areaContent, //区域内容,库里存的'
       }
 

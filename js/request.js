@@ -5,10 +5,8 @@ const service = axios.create({
   // baseURL: 'http://n9rznm.natappfree.cc/',
   baseURL: 'http://192.168.1.104:8080/',
   timeout: 30000,
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  },
-  // async:false
+  
+ 
 });
 
 service.interceptors.request.use(
