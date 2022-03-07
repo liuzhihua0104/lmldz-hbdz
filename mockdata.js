@@ -26,7 +26,8 @@ let doPlanList = {
                 "prizeId": null,
                 "prizeName": null,
                 "strategyPrize": null,
-                "strategyName": null
+                "strategyName": null,
+                "prizeCount":0
             }
         ]
     }
