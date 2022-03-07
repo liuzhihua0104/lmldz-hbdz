@@ -2,7 +2,8 @@
 const service = axios.create({
   // baseURL: 'http://rap2api.taobao.org/app/mock/289298',
   // baseURL: 'http://192.168.1.104:8080/',
-  baseURL: 'http://n9rznm.natappfree.cc/',
+  // baseURL: 'http://n9rznm.natappfree.cc/',
+  baseURL: 'http://192.168.1.104:8080/',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'

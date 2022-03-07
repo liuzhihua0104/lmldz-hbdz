@@ -39,12 +39,12 @@
       </el-col>
       <el-col :span="24" v-if="formData.areaType==1">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader class="area-cascader" :key="cascaderIdx" :clearable="true" ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader :collapse-tags="true" class="area-cascader" :key="cascaderIdx" :clearable="true" ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.areaType==2">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="lineOptions" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader  :collapse-tags="true"  clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="lineOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
 
@@ -487,7 +487,8 @@ module.exports = {
 
       // 处理区域-省市区
       if (["1", "2"].includes(this.formData.areaType)) {
-        paramsForm.areaJson = JSON.stringify(this.formData.areaJson);
+        // paramsForm.areaJson = JSON.stringify(this.formData.areaJson);
+        paramsForm.areaJson =this.formData.areaJson;
 
         // 编辑的情况
         if (this.checkedNodeList.length) {
@@ -588,6 +589,7 @@ module.exports = {
       //   })
 
       let data = JSON.parse(sessionStorage.getItem("paramsForm"));
+      console.log(data)
 
       let form = {
         name: data.name, // 方案名称
@@ -596,7 +598,8 @@ module.exports = {
         sex: data.sex, // 性别
         scanContent: data.scanContent, // 扫码工具
         timeType: data.timeType, // 时段
-        areaJson: JSON.parse(data.areaJson), //回显省市县||限级
+        // areaJson: JSON.parse(data.areaJson), //回显省市县||限级
+        areaJson: data.areaJson, //回显省市县||限级
         areaContent: data.areaContent, //区域内容,库里存的'
       }
 
