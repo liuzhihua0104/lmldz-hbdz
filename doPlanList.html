@@ -158,19 +158,46 @@
 
       <!-- 奖品列表弹框 -->
       <el-dialog title="奖品列表" :visible.sync="applicationListVisible" center>
-        <div style="margin-bottom: 20px">执行方案名称: 执行方案A01</div>
+        <div style="margin-bottom: 20px">执行方案名称: {{rows.name}}</div>
+        <!-- 表单 -->
+        <el-form ref="prizeForm" size="mini" :inline="true" :model="prizeForm" class="demo-form-inline">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item style="margin-right:0" label="关键字:" prop="name" :rules="[
+          { required: true, message: '关键字不能为空'}
+        ]">
+                <el-input v-model="prizeForm.name" placeholder="请输入内容" :clearable="true"></el-input>
+              </el-form-item>
+            </el-col>
+            <!-- <el-col :span="6">
+              <el-form-item label="" prop="region" :rules="[
+          { required: true, message: '请选择'}
+        ]">
+                <el-select v-model="prizeForm.region" placeholder="">
+                  <el-option label="奖品名称" value="prizeName"></el-option>
+                  <el-option label="策略名称" value="strategyName"></el-option>
+                  <el-option label="素材源名称" value="sourceName"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col> -->
+            <el-col :span="4">
+              <el-form-item>
+                <el-button type="default" @click="onSubmit('prizeForm')">搜索</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+
         <el-table :data="prizeList" class="table-wrap" :border="true" size="mini">
           <el-table-column label="序号" type="index" width="100"></el-table-column>
-          <el-table-column label="奖品ID名称">
-            <template slot-scope="scope">
-              10
-            </template>
-          </el-table-column>
-          <el-table-column label="策略名称" prop="planNumber"></el-table-column>
+          <el-table-column label="奖品ID" prop="prizeId"></el-table-column>
+          <el-table-column label="奖品名称" prop="prizeName"></el-table-column>
+          <el-table-column label="策略名称" prop="strategyName"></el-table-column>
+          <el-table-column label="素材源名称" prop="sourceName"></el-table-column>
         </el-table>
-        <el-pagination class="tac" background layout="prev, pager, next" :total="page.total"
+        <!-- <el-pagination class="tac" background layout="prev, pager, next" :total="page.total"
           :current-page.sync="filter.pageNum" :page-size.sync="filter.pageSize" @current-change="fetchList">
-        </el-pagination>
+        </el-pagination> -->
         <span slot="footer" class="dialog-footer">
           <el-button type="default" @click="applicationListVisible = false">关 闭</el-button>
         </span>
@@ -188,10 +215,10 @@
         <el-form ref="formInline" size="mini" :inline="true" :model="formInline" class="demo-form-inline">
           <el-row>
             <el-col :span="12">
-              <el-form-item style="margin-right:0" label="关键字:" prop="user" :rules="[
+              <el-form-item style="margin-right:0" label="关键字:" prop="key" :rules="[
               { required: true, message: '关键字不能为空'}
             ]">
-                <el-input v-model="formInline.user" placeholder="请输入内容" :clearable="true"></el-input>
+                <el-input v-model="formInline.key" placeholder="请输入内容" :clearable="true"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -270,9 +297,14 @@
           page: {
             total: 0,
           },
-          tableData: [],
-          prizeList: [],
-          rows: {},
+          tableData: [], // 执行方案列表
+          rows: {}, // 当前数据
+          // 奖品列表弹框
+          prizeForm: {
+            name: ""
+          },
+          prizeList: [],// 奖品列表
+
           applicationListVisible: false, // 控制奖品列表弹框弹框的展示与隐藏
           copyPlanVisible: false, //复制执行方案的弹框
 
@@ -306,6 +338,23 @@
           this.page.total = data.total
 
           // })
+        },
+
+        // 获取执行方案下奖品列表
+
+        // 点击列表数字，弹出“奖品列表弹框
+        showApplicationList(rows) {
+          this.rows = rows;
+          this.prizeList = [];
+          this.applicationListVisible = true;
+
+          // {
+          //   "orientationId": "f653fddbf0f24eacb0e90b116fdbf209",
+          //     "sourceId": ""
+          // }
+
+
+
         },
 
         onAdd(rows) {
@@ -383,14 +432,7 @@
             this.fetchList()
           })
         },
-        // 获取执行方案下奖品列表
 
-        // 点击列表数字，弹出“奖品列表弹框
-        showApplicationList(rows) {
-          console.log(rows)
-          this.applicationListVisible = true;
-
-        },
         // 点击批量应用，弹出“批量应用”弹框
         applicationFn(rows) {
           console.log(rows)

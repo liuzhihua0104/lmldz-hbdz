@@ -27,11 +27,14 @@ let doPlanList = {
                 "prizeName": null,
                 "strategyPrize": null,
                 "strategyName": null,
-                "prizeCount":0
+                "prizeCount":5
             }
         ]
     }
 }
+
+
+
 
 
 // 素材源列表
@@ -161,3 +164,4 @@ let sList = {
         }
     ]
 }
+
