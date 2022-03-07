@@ -27,13 +27,20 @@ let doPlanList = {
                 "prizeName": null,
                 "strategyPrize": null,
                 "strategyName": null,
-                "prizeCount":5
+                "prizeCount": 5
             }
         ]
     }
 }
 
-
+// 执行方案下奖品列表
+let doPlanPrizeList = {
+    "code": 200,
+    "msg": null,
+    "data": {
+        "list": []
+    }
+}
 
 
 

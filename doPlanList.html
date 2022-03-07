@@ -145,6 +145,7 @@
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="applicationFn(scope.row)">应用</el-button>
+            <el-button type="text" size="small" @click="lookFn(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
             <el-button type="text" size="small" @click="onDel(scope.row)" v-if="scope.row==0">删除</el-button>
             <el-button type="text" size="small" @click="copyPlan(scope.row)">复制</el-button>
@@ -163,10 +164,10 @@
         <el-form ref="prizeForm" size="mini" :inline="true" :model="prizeForm" class="demo-form-inline">
           <el-row>
             <el-col :span="12">
-              <el-form-item style="margin-right:0" label="关键字:" prop="name" :rules="[
+              <el-form-item style="margin-right:0" label="关键字:" prop="prizeName" :rules="[
           { required: true, message: '关键字不能为空'}
         ]">
-                <el-input v-model="prizeForm.name" placeholder="请输入内容" :clearable="true"></el-input>
+                <el-input v-model="prizeForm.prizeName" placeholder="请输入内容" :clearable="true"></el-input>
               </el-form-item>
             </el-col>
             <!-- <el-col :span="6">
@@ -182,7 +183,7 @@
             </el-col> -->
             <el-col :span="4">
               <el-form-item>
-                <el-button type="default" @click="onSubmit('prizeForm')">搜索</el-button>
+                <el-button type="default" @click="searchPrize">搜索</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -301,7 +302,7 @@
           rows: {}, // 当前数据
           // 奖品列表弹框
           prizeForm: {
-            name: ""
+            prizeName: ""
           },
           prizeList: [],// 奖品列表
 
@@ -340,22 +341,36 @@
           // })
         },
 
-        // 获取执行方案下奖品列表
-
         // 点击列表数字，弹出“奖品列表弹框
         showApplicationList(rows) {
           this.rows = rows;
           this.prizeList = [];
           this.applicationListVisible = true;
 
-          // {
-          //   "orientationId": "f653fddbf0f24eacb0e90b116fdbf209",
-          //     "sourceId": ""
-          // }
+          let params = {
+            orientationId: this.rows.id,
+            sourceId: "",
+            prizeName: this.prizeForm.prizeName
+          }
 
-
+          // service({
+          //   url: '/prize/orientation/pList',
+          //   method: 'post',
+          //   data: params,
+          // }).then(({ data }) => {
+          let data = doPlanPrizeList.data;
+          this.prizeList = data.list
+          // })
 
         },
+
+        // 搜索奖品列表
+        searchPrize() {
+          this.showApplicationList(this.rows)
+        },
+
+
+        
 
         onAdd(rows) {
           location.href = `./prizeOrientationDetails.html`
