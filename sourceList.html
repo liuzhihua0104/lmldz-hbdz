@@ -197,8 +197,6 @@
         return {
           filter: {
             sourceName: '',
-            // startTime: '',
-            // endTime: '',
             pageNum: 1,
             pageSize: 10,
           },
@@ -227,7 +225,7 @@
         // 查看
         onLook(rows) {
           this.rows = rows;
-          sessionStorage.setItem("sourceRow",JSON.stringify(rows))
+          sessionStorage.setItem("sourceRow", JSON.stringify(rows))
           location.href = `./sourceDetail.html?id=${this.rows.id}&islook=1`
         },
         onAdd(rows) {
@@ -235,7 +233,7 @@
         },
         onEdit(rows) {
           this.rows = rows;
-          sessionStorage.setItem("sourceRow",JSON.stringify(rows))
+          sessionStorage.setItem("sourceRow", JSON.stringify(rows))
           location.href = `./sourceDetail.html?id=${rows.id}&islook=0`
         },
         fetchList() {
@@ -245,9 +243,8 @@
           //   data: this.filter,
           // }).then(({ data }) => {
           let data = sList.data;
-          this.tableData = data;
-          //   this.tableData = data.list
-          //   this.page.total = data.total
+          this.tableData = data.list
+          this.page.total = data.total
           // })
         },
         //搜索

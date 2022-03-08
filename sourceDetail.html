@@ -443,6 +443,7 @@
 
           this.$nextTick(() => {
             this.getSourceOrientationList() //素材源定向列表
+            this.getSourcePrizeList() //素材源奖品列表
           })
         },
         // 添加素材源定向，跳转到定向详情，要携带资源id
@@ -460,6 +461,24 @@
           console.log(params)
           service({
             url: '/prize/orientation/mList',
+            method: 'post',
+            data: params,
+          }).then(({ data }) => {
+            // let data = doPlanApplyList.data;
+            // this.applyList = data.list
+          })
+        },
+
+        // 获取素材源奖品列表
+        getSourcePrizeList() {
+          let params = {
+            orientationId: "",
+            sourceId: this.formData.id,
+            prizeName: ""
+          }
+          console.log(params)
+          service({
+            url: '/prize/orientation/pList',
             method: 'post',
             data: params,
           }).then(({ data }) => {
