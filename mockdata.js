@@ -67,11 +67,19 @@ let doPlanPrizeList = {
         "list": []
     }
 }
+// 执行方案下应用奖品列表
+let doPlanApplyList = {
+    "code": 200,
+    "msg": null,
+    "data": {
+        "list": []
+    }
+}
 
 
 
 // 素材源列表
-let sList ={
+let sList = {
     "code": 200,
     "msg": null,
     "data": [
