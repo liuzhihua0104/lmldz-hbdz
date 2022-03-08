@@ -84,6 +84,13 @@
           id: query.id,
           isshowtoptitle: query.isshowtoptitle //是否展示title
         }
+      }else{
+        this.orientationDetailProps = {
+          type: query.type || "page",
+          islook: query.islook, //是否查看
+          id: "",
+          isshowtoptitle: query.isshowtoptitle //是否展示title
+        }
       }
       // 获取项目列表
       // this.getProjectList()
