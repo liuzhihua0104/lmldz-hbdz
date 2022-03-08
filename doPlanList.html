@@ -392,6 +392,7 @@
         // 查看
         lookFn(rows) {
           this.rows = rows;
+          sessionStorage.setItem("rows",JSON.stringify(rows));
           this.orientationDetailVisible = true;
 
         },

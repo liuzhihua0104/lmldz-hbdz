@@ -310,7 +310,7 @@ let devicesCustomOptions = [
 
 
 module.exports = {
-  props: ["type", "isLook", "id", "rows","isShowTopTitle"],
+  props: ["type", "isLook", "id", "isShowTopTitle"],
 
   data() {
     let self = this  // 加上这一句就OK了
@@ -532,8 +532,7 @@ module.exports = {
         paramsForm.devices = this.formData.devices;
       }
 
-      sessionStorage.setItem("paramsForm", JSON.stringify(paramsForm))
-
+      console.log(paramsForm)
       return paramsForm;
 
     },
@@ -583,7 +582,7 @@ module.exports = {
       //     })
       //   })
 
-      let data = JSON.parse(sessionStorage.getItem("paramsForm"));
+      let data = JSON.parse(sessionStorage.getItem("rows"));
       console.log(data)
 
       let form = {
