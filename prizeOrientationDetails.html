@@ -19,6 +19,7 @@
 </head>
 
 <body>
+  <script src="./mockdata.js"></script>
   <div id="app">
     <orientation-details  :type="orientationDetailProps.type" :isLook="orientationDetailProps.isLook" :id="orientationDetailProps.id" :showTopTitle="orientationDetailProps.showTopTitle" ></orientation-details>
   </div>
@@ -34,9 +35,6 @@
 <script src="./js/request.js"></script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.12-pre/lodash.min.js"></script>
 
-<!-- mock -->
-<script src="./components/areaData.js"></script>
-<script src="./components/lineData.js"></script>
 <script>
 
   function getUrlQuery() {

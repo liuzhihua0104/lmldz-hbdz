@@ -311,7 +311,7 @@ let devicesCustomOptions = [
 
 module.exports = {
   props: ["type", "isLook", "id", "isShowTopTitle"],
- 
+
   data() {
     let self = this  // 加上这一句就OK了
     return {
@@ -743,7 +743,7 @@ module.exports = {
       //     level: "area"
       //   },
       // }).then(({ data }) => {
-      let data = parseJson(areaData.data);
+      let data = parseJson(areaList.data);
       // 去除后端代码中多余的“一线、二线。。。”
       data.map(item => {
         let newChildren = [];
@@ -772,10 +772,10 @@ module.exports = {
       //     level: "line"
       //   },
       // }).then(({ data }) => {
-      let data = parseJson(lineData.data);
+      let data = parseJson(lineList.data);
       this.lineOptions = data;
 
-      //   // console.log(data)
+      console.log(data)
 
       // })
     },
@@ -789,8 +789,8 @@ module.exports = {
 
   },
   created() {
-    // this.getArea(); //获取省市县城市
-    // this.getLine(); //获取线级城市
+    this.getArea(); //获取省市县城市
+    this.getLine(); //获取线级城市
     console.log(this.id)
     if (this.id) {
       this.formData.id = this.id;
