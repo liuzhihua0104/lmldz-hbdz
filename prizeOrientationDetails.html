@@ -20,7 +20,7 @@
 
 <body>
   <div id="app">
-    <orientation-details></orientation-details>
+    <orientation-details ...orientationDetailProps></orientation-details>
   </div>
 </body>
 
@@ -62,7 +62,13 @@
     },
     data() {
       return {
-        id: ""
+        id: "",
+        orientationDetailProps: {
+          type: "page",
+          isLook: false, //是否查看
+          id: "",
+          showTopTitle: false //是否展示title
+        }
       }
     },
     watch: {
@@ -72,10 +78,13 @@
     },
     created() {
       let query = getUrlQuery()
-      console.log(query)
       if (query.id) {
-        this.id = query.id
-        // this.getDetails()
+        this.orientationDetailProps = {
+          type: "page",
+          isLook: query.isLook, //是否查看
+          id: query.id,
+          showTopTitle: query.showTopTitle //是否展示title
+        }
       }
       // 获取项目列表
       // this.getProjectList()

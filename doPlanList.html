@@ -53,6 +53,10 @@
     .el-dialog {
       width: 600px !important;
     }
+
+    .dialogWidth>.el-dialog {
+      width: 1000px !important;
+    }
   </style>
 </head>
 
@@ -157,8 +161,9 @@
       </el-pagination>
 
 
-      <el-dialog title="奖品实际应用方案" :visible.sync="applicationSchemeVisible" center width="55%">
-        <orientation-details :id="rows.id" type="dialog" :isLook="isLook"></orientation-details>
+      <el-dialog v-if="applicationSchemeVisible" title="奖品实际应用方案" class="dialogWidth" :visible.sync="applicationSchemeVisible" center width="55%">
+        <orientation-details :type="orientationDetailProps.type" :isLook="orientationDetailProps.isLook" :id="orientationDetailProps.id" :showTopTitle="orientationDetailProps.showTopTitle">
+        </orientation-details>
       </el-dialog>
 
       <!-- 奖品列表弹框 -->
@@ -312,7 +317,12 @@
           prizeList: [],// 奖品列表
 
           applicationSchemeVisible: false, // 奖品实际应用方案弹框的显示与隐藏
-          isLook: false, //是否查看
+          orientationDetailProps: {
+            type: "dialog",
+            isLook: true, //是否查看
+            id: "", // 当前数据id
+            showTopTitle: false //是否展示title
+          },
 
           applicationListVisible: false, // 控制奖品列表弹框弹框的展示与隐藏
           copyPlanVisible: false, //复制执行方案的弹框
@@ -382,15 +392,19 @@
 
         // 查看
         lookFn(rows) {
-          this.rows=rows;
-          this.isLook = false;
+          this.rows = rows;
           this.applicationSchemeVisible = true;
-
-          // location.href = `./prizeOrientationDetails.html?id=${rows.id}&isLook=true`
+          this.orientationDetailProps = {
+            type: "dialog",
+            isLook: true, //是否查看
+            id: rows.id, // 当前数据id
+            showTopTitle: false //是否展示title
+          }
         },
         onEdit(rows) {
-          this.rows=rows;
+          this.rows = rows;
           location.href = `./prizeOrientationDetails.html?id=${rows.id}&isLook=false`
+
         },
 
 

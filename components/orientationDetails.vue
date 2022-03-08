@@ -1,6 +1,9 @@
  <template>
 
   <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData">
+
+    <div class="top-title" v-if="showTopTitle">奖品定向详情</div>
+
     <div class="title">
       信息</div>
 
@@ -318,12 +321,16 @@ module.exports = {
     },
     isLook: {
       type: Boolean,
-      default: false
+      default: true
     },
     id: {
       type: Number,
       default: 0
     },
+    showTopTitle: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     let self = this  // 加上这一句就OK了
@@ -807,14 +814,13 @@ module.exports = {
     window.vue = this;
   },
   created() {
-    // this.getArea(); //获取省市县城市
-    // this.getLine(); //获取线级城市
+    this.getArea(); //获取省市县城市
+    this.getLine(); //获取线级城市
     if (this.id) {
       this.formData.id = this.id;
-      console.log(this.id)
       this.getDetails()
     }
-   
+
   }
 }
 </script>
@@ -872,5 +878,12 @@ module.exports = {
 .time-list {
   width: 800px;
   margin-left: 80px;
+}
+
+/* 顶部标题 */
+.top-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 60px;
 }
 </style>
