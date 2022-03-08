@@ -114,8 +114,12 @@
             {{scope.row.scanContent==2? "支付宝":""}}
           </template>
         </el-table-column>
-        <el-table-column label="时段" prop="planNumber">
-
+        <el-table-column label="时段">
+          <template slot-scope="scope">
+            {{scope.row.timeType==0? "不限":""}}
+            {{scope.row.timeType==1? "时间段":""}}
+            {{scope.row.timeType==2? "自定义":""}}
+          </template>
         </el-table-column>
         <el-table-column label="节假日">
           <template slot-scope="scope">
@@ -152,20 +156,25 @@
             <el-button type="text" size="small" @click="lookFn(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
             <el-button type="text" size="small" @click="onDel(scope.row)" v-if="scope.row.status==0">删除</el-button>
-            <el-button type="text" size="small" @click="copyPlan(scope.row)">复制</el-button>
+            <!-- <el-button type="text" size="small" @click="copyPlan(scope.row)">复制</el-button> -->
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination class="tac" background layout="prev, pager, next" :total="page.total"
+      <el-pagination :destroy-on-close="true" class="tac" background layout="prev, pager, next" :total="page.total"
         :current-page.sync="filter.pageNum" :page-size.sync="filter.pageSize" @current-change="fetchList">
       </el-pagination>
 
 
+
       <el-dialog title="定向详情" class="dialogWidth" :visible.sync="orientationDetailVisible" center>
-        <orientation-details :type="orientationDetailProps.type" :islook="orientationDetailProps.islook" :id="rows.id"
-          :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle">
-        </orientation-details>
+        <template v-if="orientationDetailVisible">
+          <orientation-details :type="orientationDetailProps.type" :islook="orientationDetailProps.islook" :id="rows.id"
+            :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle">
+          </orientation-details>
+        </template>
       </el-dialog>
+
+
 
       <!-- 奖品列表弹框 -->
       <el-dialog title="奖品列表" :visible.sync="prizeVisible" center>
@@ -279,6 +288,7 @@
   <script src="./libs/element-ui/2.15.3/index.min.js"></script>
   <script src="./libs/axios/0.21.1/axios.min.js"></script>
   <script src="./js/request.js"></script>
+  <script src="https://cdn.bootcss.com/lodash.js/4.17.12-pre/lodash.min.js"></script>
 
 
   <script>
@@ -314,7 +324,7 @@
           // 定向详情传参
           orientationDetailProps: {
             type: "dialog",
-            look: 1, //是否查看
+            islook: 1, //是否查看
             isshowtoptitle: 0 //是否展示title
           },
 
@@ -428,18 +438,18 @@
           console.log("点击了发布")
         },
 
-
-
         // 查看
         lookFn(rows) {
           this.rows = rows;
+          console.log(rows)
           sessionStorage.setItem("rows", JSON.stringify(rows));
           this.orientationDetailVisible = true;
-
         },
         // 编辑
         onEdit(rows) {
           this.rows = rows;
+          console.log(rows)
+          sessionStorage.setItem("rows", JSON.stringify(rows));
           location.href = `./prizeOrientationDetails.html?id=${rows.id}&islook=0&isshowtoptitle=1&type=page`
         },
 

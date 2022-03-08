@@ -1,5 +1,5 @@
  <template>
-  <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData">
+  <el-form :disabled="islook==1" label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData">
     <div class="top-title" v-if="isshowtoptitle==1">奖品定向详情</div>
     <div class="title">
       信息</div>
@@ -39,12 +39,12 @@
       </el-col>
       <el-col :span="24" v-if="formData.areaType==1">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader :collapse-tags="true" class="area-cascader" :key="cascaderIdx" :clearable="true" ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader  class="area-cascader" :key="cascaderIdx" :clearable="true" ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.areaType==2">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader :collapse-tags="true" clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="lineOptions" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader  clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="lineOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
 
@@ -686,6 +686,11 @@ module.exports = {
       }
 
       this.formData = { ...this.formData, ...form };
+     
+
+      // this.$nextTick(()=>{
+      //   console.log(this.formData)
+      // })
 
     },
 
@@ -773,8 +778,6 @@ module.exports = {
       let data = parseJson(lineList.data);
       this.lineOptions = data;
 
-      console.log(data)
-
       // })
     },
     // 切换areaType
@@ -790,14 +793,9 @@ module.exports = {
     this.getArea(); //获取省市县城市
     this.getLine(); //获取线级城市
     console.log(this.id)
-    console.log(this.isLook)
+    console.log(this.islook)
     if (this.id) {
       this.formData.id = this.id;
-      // console.log("id-" + this.id)
-      // console.log("isLook-" + this.isLook)
-      // console.log("isshowtoptitle-" + this.isshowtoptitle)
-      // console.log("type-" + this.type)
-
       this.getDetails()
     }
   }
