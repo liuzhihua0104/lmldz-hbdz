@@ -80,10 +80,10 @@
       let query = getUrlQuery()
       if (query.id) {
         this.orientationDetailProps = {
-          type: "page",
-          isLook: query.isLook, //是否查看
+          type: query.type || "page",
+          isLook: query.isLook || true, //是否查看
           id: query.id,
-          showTopTitle: query.showTopTitle //是否展示title
+          showTopTitle: query.showTopTitle || true //是否展示title
         }
       }
       // 获取项目列表
