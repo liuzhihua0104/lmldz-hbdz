@@ -1,5 +1,4 @@
  <template>
-
   <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData">
     <div class="top-title" v-if="showTopTitle">奖品定向详情</div>
     <div class="title">
@@ -809,12 +808,12 @@ module.exports = {
 
   },
   mounted() {
-    window.vue = this;
+  
   },
   created() {
-    // console.log(this.id)
-    // this.getArea(); //获取省市县城市
-    // this.getLine(); //获取线级城市
+    console.log(this.id)
+    this.getArea(); //获取省市县城市
+    this.getLine(); //获取线级城市
     if (this.id) {
       this.formData.id = this.id;
       console.log(this.id)

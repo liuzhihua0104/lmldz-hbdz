@@ -161,10 +161,15 @@
       </el-pagination>
 
 
-      <el-dialog  title="奖品实际应用方案" class="dialogWidth" :visible.sync="applicationSchemeVisible" center width="55%">
+      <el-dialog  title="奖品实际应用方案" class="dialogWidth" :visible.sync="orientationDetailVisible" center>
         <orientation-details :type="orientationDetailProps.type" :isLook="orientationDetailProps.isLook" :id="orientationDetailProps.id" :showTopTitle="orientationDetailProps.showTopTitle">
         </orientation-details>
-      </el-dialog>
+      </el-dialog> 
+
+
+
+
+
 
       <!-- 奖品列表弹框 -->
       <el-dialog title="奖品列表" :visible.sync="applicationListVisible" center>
@@ -316,7 +321,7 @@
           },
           prizeList: [],// 奖品列表
 
-          applicationSchemeVisible: false, // 奖品实际应用方案弹框的显示与隐藏
+          orientationDetailVisible: false, // 奖品实际应用方案弹框的显示与隐藏
           orientationDetailProps: {
             type: "dialog",
             isLook: true, //是否查看
@@ -340,7 +345,7 @@
         }
       },
       components: {
-        'orientation-details': httpVueLoader('./components/orientationDetails.vue')
+        'orientation-details': httpVueLoader('./components/orientationDetails.vue'),
       },
       computed: {},
       mounted() {
@@ -399,7 +404,7 @@
             id: rows.id, // 当前数据id
             showTopTitle: false //是否展示title
           }
-          this.applicationSchemeVisible = true;   
+          this.orientationDetailVisible = true;   
 
         },
         onEdit(rows) {
