@@ -105,35 +105,36 @@
         <!-- 表单 -->
         <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData"
           size="mini">
-          <div class="title">信息</div>
+          <div class="title">基本信息</div>
           <!-- 主要信息-展示用 -->
           <el-row>
             <el-col :span="12">
-              <el-form-item style="margin-right:0" label="奖品ID:" prop="user">
-                <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+              <el-form-item style="margin-right:0" label="素材源名称:" prop="name">
+                <el-input disabled class="inputWidth" v-model="formData.name" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <!-- <el-col :span="12">
-              <el-form-item style="margin-right:0" label="策略名称:" prop="user">
-                <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+              <el-form-item style="margin-right:0" label="策略名称:" prop="name">
+                <el-input disabled class="inputWidth" v-model="formData.name" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item style="margin-right:0" label="奖品名称:" prop="user">
-                <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+              <el-form-item style="margin-right:0" label="奖品名称:" prop="name">
+                <el-input disabled class="inputWidth" v-model="formData.name" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item style="margin-right:0" label="素材源名称:" prop="user">
-                <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+              <el-form-item style="margin-right:0" label="素材源名称:" prop="name">
+                <el-input disabled class="inputWidth" v-model="formData.name" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col> -->
           </el-row>
 
-          <div class="title">实际应用方案</div>
+          <div class="title">详细信息</div>
 
-          <el-button v-if="type=='page'" @click="showPlan" style="margin-bottom:10px" type="primary" plain size="small">
-            添加方案</el-button>
+          <el-button v-if="islook!=1" @click="addOrientationDetail" style="margin-bottom:10px" type="primary" plain
+            size="small">
+            添加素材源定向</el-button>
 
           <!-- 执行方案列表表格 -->
           <el-table :data="planListData" height="250" border style="width: 100%" size="mini"
@@ -152,8 +153,8 @@
             <el-table-column v-if="type=='page'" align="center" label="操作" width="150">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="planlook(scope.row)">查看</el-button>
-                <el-button type="text" size="small" @click="planEdit(scope.row)">编辑</el-button>
-                <el-button type="text" size="small" @click="planDel(scope.row)">删除</el-button>
+                <el-button type="text" v-if="islook!=1" size="small" @click="planEdit(scope.row)">编辑</el-button>
+                <el-button type="text" v-if="islook!=1" size="small" @click="planDel(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -178,8 +179,8 @@
             <el-table-column v-if="type=='page'" align="center" label="操作" width="150">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="conditionlook(scope.row)">查看</el-button>
-                <el-button type="text" size="small" @click="conditionEdit(scope.row)">编辑</el-button>
-                <el-button type="text" size="small" @click="conditionDel(scope.row)">删除</el-button>
+                <el-button type="text" v-if="islook!=1" size="small" @click="conditionEdit(scope.row)">编辑</el-button>
+                <el-button type="text" v-if="islook!=1" size="small" @click="conditionDel(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -204,10 +205,10 @@
           </div>
           <!-- 表单 -->
           <el-form ref="formInline" size="mini" :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item style="margin-right:0" label="执行方案名称:" prop="user" :rules="[
+            <el-form-item style="margin-right:0" label="执行方案名称:" prop="name" :rules="[
                   { required: true, message: '执行方案名称不能为空'}
                 ]">
-              <el-input v-model="formInline.user" placeholder="请输入执行方案名称" :clearable="true"></el-input>
+              <el-input v-model="formInline.name" placeholder="请输入执行方案名称" :clearable="true"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="default" @click="planListSearch('formInline')">搜索</el-button>
@@ -280,6 +281,12 @@
       },
       data() {
         return {
+
+          formData: {
+            name: '',
+          },
+          islook: "", //标记是否查看1查看，0编辑
+
           orientationDetailsType: "", //奖品定向详情的展示类型page||dialog
           orientationDetailsVisible: false, // 奖品定向详情弹框的显示与隐藏
 
@@ -343,15 +350,12 @@
 
           // 执行方案列表弹框搜索表单
           formInline: {
-            user: '123',
+            name: '123',
             region: 'shanghai'
           },
 
-          formData: {
-            user: '123',
-          },
           formRules: {
-            user: [
+            name: [
               { required: false, message: '请输入定向名称', trigger: 'change' },
             ]
           },
@@ -429,7 +433,19 @@
       watch: {
 
       },
+      mounted() {
+        window.vue = this;
+      },
       methods: {
+
+        // 编辑获取表单详情
+        getDetails() {
+          this.formData = JSON.parse(sessionStorage.getItem("sourceRow"))
+        },
+        // 添加素材源定向，跳转到定向详情，要携带资源id
+        addOrientationDetail(rows) {
+          location.href = `./prizeOrientationDetails.html?islook=0&isshowtoptitle=1&type=page&sourceId=${this.formData.id}`
+        },
         // testFn() {
         //   console.log("触发function")
         //   this.formData.radio1 = 2
@@ -562,27 +578,12 @@
         },
 
 
-        // // 编辑获取表单详情
-        // getDetails() {
-        //   service({
-        //     url: '/user/strategy/inversion/detail',
-        //     method: 'get',
-        //     data: {
-        //       id: this.formData.id,
-        //     },
-        //   }).then(({ data }) => {
-        //     Object.keys(this.formData).forEach((key) => {
-        //       console.log(key, data[key])
-        //       this.formData[key] = data[key]
-        //     })
-        //   })
-        // },
       },
       created() {
         let query = getUrlQuery()
         if (query.id) {
-          this.formData.id = query.id
-          this.getDetails()
+          this.getDetails();
+          this.islook = query.islook;
         }
         // 获取项目列表
         // this.getProjectList()

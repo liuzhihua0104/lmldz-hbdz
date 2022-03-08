@@ -225,25 +225,30 @@
       computed: {},
       methods: {
         // 查看
-        onLook(row) {
-
+        onLook(rows) {
+          this.rows = rows;
+          sessionStorage.setItem("sourceRow",JSON.stringify(rows))
+          location.href = `./sourceDetail.html?id=${this.rows.id}&islook=1`
         },
         onAdd(rows) {
           location.href = `./prizeOrientationDetails.html`
         },
         onEdit(rows) {
-          location.href = `./prizeOrientationDetails.html?id=${rows.id}`
+          this.rows = rows;
+          sessionStorage.setItem("sourceRow",JSON.stringify(rows))
+          location.href = `./sourceDetail.html?id=${rows.id}&islook=0`
         },
         fetchList() {
-          service({
-            url: '/prize/orientation/sList',
-            method: 'post',
-            data: this.filter,
-          }).then(({ data }) => {
-            this.tableData = data.list
-            this.page.total = data.total
-          })
-
+          // service({
+          //   url: '/prize/orientation/sList',
+          //   method: 'post',
+          //   data: this.filter,
+          // }).then(({ data }) => {
+          let data = sList.data;
+          this.tableData = data;
+          //   this.tableData = data.list
+          //   this.page.total = data.total
+          // })
         },
         //搜索
         onSearch() {

@@ -39,12 +39,12 @@
       </el-col>
       <el-col :span="24" v-if="formData.areaType==1">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader  class="area-cascader" :key="cascaderIdx" :clearable="true" ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader class="area-cascader" :key="cascaderIdx" :clearable="true" ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.areaType==2">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader  clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="lineOptions" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="lineOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
 
@@ -310,7 +310,7 @@ let devicesCustomOptions = [
 
 
 module.exports = {
-  props: ["type", "islook", "id", "isshowtoptitle"],
+  props: ["type", "islook", "id", "isshowtoptitle", "prizeid", "sourceid"],
 
   data() {
     let self = this  // 加上这一句就OK了
@@ -475,6 +475,16 @@ module.exports = {
 
       if (this.formData.id) {
         paramsForm.id = this.formData.id;
+      }
+
+      // 奖品ID
+      if (this.prizeid) {
+        paramsForm.sourceId = this.prizeid
+      }
+
+      // 素材源ID
+      if (this.sourceid) {
+        paramsForm.sourceId = this.sourceid
       }
 
       // 处理区域-省市区
@@ -686,7 +696,7 @@ module.exports = {
       }
 
       this.formData = { ...this.formData, ...form };
-     
+
 
       // this.$nextTick(()=>{
       //   console.log(this.formData)

@@ -22,7 +22,7 @@
   <script src="./mockdata.js"></script>
   <div id="app">
     <orientation-details :type="orientationDetailProps.type" :islook="orientationDetailProps.islook"
-      :id="orientationDetailProps.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle"></orientation-details>
+      :id="orientationDetailProps.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle" :prizeid="orientationDetailProps.prizeid" :sourceid="orientationDetailProps.sourceid"></orientation-details>
   </div>
 </body>
 
@@ -66,7 +66,8 @@
           type: "page",
           islook: 1, //是否查看
           id: "",
-          isshowtoptitle: 1 //是否展示title
+          isshowtoptitle: 1, //是否展示title
+          sourceid:"", //素材源id
         }
       }
     },
@@ -82,14 +83,19 @@
           type: query.type || "page",
           islook: query.islook, //是否查看
           id: query.id,
-          isshowtoptitle: query.isshowtoptitle //是否展示title
+          isshowtoptitle: query.isshowtoptitle, //是否展示title
+          sourceid:query.sourceId||"",
+          prizeid:query.prizeId||"",
+          
         }
       }else{
         this.orientationDetailProps = {
           type: query.type || "page",
           islook: query.islook, //是否查看
           id: "",
-          isshowtoptitle: query.isshowtoptitle //是否展示title
+          isshowtoptitle: query.isshowtoptitle, //是否展示title
+          sourceid:query.sourceId||"" ,//素材源id
+          prizeid:query.prizeId||"" //奖品id
         }
       }
       // 获取项目列表
