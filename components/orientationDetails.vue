@@ -1,6 +1,6 @@
  <template>
   <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData">
-    <div class="top-title" v-if="showTopTitle">奖品定向详情</div>
+    <div class="top-title" v-if="isShowTopTitle==1">奖品定向详情</div>
     <div class="title">
       信息</div>
 
@@ -211,7 +211,7 @@
       </el-col>
     </el-row>
     <el-form-item>
-      <div class="btns" v-if="!isLook">
+      <div class="btns" v-if="isLook==0">
         <el-button class="back" @click="goBack">返回</el-button>
         <el-button type="primary" @click="saveFn('formData')">保存</el-button>
       </div>
@@ -224,21 +224,21 @@
 
 <script>
 // 处理地址栏参数
-function getUrlQuery() {
-  let search = location.search
-  let obj = {}
-  if (search) {
-    let query = search.substring(1).split('&')
-    query.forEach((queryItem) => {
-      let keyValue = queryItem.split('=')
-      let [key, value] = keyValue
-      if (key) {
-        obj[key] = value
-      }
-    })
-  }
-  return obj
-}
+// function getUrlQuery() {
+//   let search = location.search
+//   let obj = {}
+//   if (search) {
+//     let query = search.substring(1).split('&')
+//     query.forEach((queryItem) => {
+//       let keyValue = queryItem.split('=')
+//       let [key, value] = keyValue
+//       if (key) {
+//         obj[key] = value
+//       }
+//     })
+//   }
+//   return obj
+// }
 
 // 递归处理城市数据
 function parseJson(arr) {
@@ -294,13 +294,13 @@ let legalOptions = [
   { name: "法定工作日", label: "2" }
 ]
 let weekOptions = [
-  { name: "星期一", label: "3" },
-  { name: "星期二", label: "4" },
-  { name: "星期三", label: "5" },
-  { name: "星期四", label: "6" },
-  { name: "星期五", label: "7" },
-  { name: "星期六", label: "8" },
-  { name: "星期日", label: "9" }
+  { name: "星期一", label: "4" },
+  { name: "星期二", label: "5" },
+  { name: "星期三", label: "6" },
+  { name: "星期四", label: "7" },
+  { name: "星期五", label: "8" },
+  { name: "星期六", label: "9" },
+  { name: "星期日", label: "3" }
 ]
 let devicesCustomOptions = [
   { name: "ios", label: "1" },
@@ -310,25 +310,8 @@ let devicesCustomOptions = [
 
 
 module.exports = {
-  props: {
-    // type用来标记当前组件是当做dialog使用还是page使用
-    type: {
-      type: String,
-      default: 'page'
-    },
-    isLook: {
-      type: Boolean,
-      default: true
-    },
-    id: {
-      type: Number,
-      default: 0
-    },
-    showTopTitle: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props: ["type", "isLook", "id", "isShowTopTitle"],
+ 
   data() {
     let self = this  // 加上这一句就OK了
     return {
@@ -558,8 +541,6 @@ module.exports = {
 
     // 保存成功后返回其他页面
     saveFn(formName) {
-
-
       let self = this;
       console.log(self.doSaveParams())
 
@@ -762,23 +743,23 @@ module.exports = {
       //     level: "area"
       //   },
       // }).then(({ data }) => {
-        let data = parseJson(areaData.data);
-        // 去除后端代码中多余的“一线、二线。。。”
-        data.map(item => {
-          let newChildren = [];
-          if (item.children && item.children.length) {
-            item.children.map(ele => {
-              if (![10, 11, 12, 13, 14, 15].includes(ele.value)) {
-                newChildren.push(ele)
-              }
-            })
-            item.children = newChildren;
+      let data = parseJson(areaData.data);
+      // 去除后端代码中多余的“一线、二线。。。”
+      data.map(item => {
+        let newChildren = [];
+        if (item.children && item.children.length) {
+          item.children.map(ele => {
+            if (![10, 11, 12, 13, 14, 15].includes(ele.value)) {
+              newChildren.push(ele)
+            }
+          })
+          item.children = newChildren;
 
-          } else {
-            delete item.children
-          }
-        })
-        this.areaOptions = data;
+        } else {
+          delete item.children
+        }
+      })
+      this.areaOptions = data;
 
       // })
     },
@@ -791,8 +772,8 @@ module.exports = {
       //     level: "line"
       //   },
       // }).then(({ data }) => {
-        let data = parseJson(lineData.data);
-        this.lineOptions = data;
+      let data = parseJson(lineData.data);
+      this.lineOptions = data;
 
       //   // console.log(data)
 
@@ -807,16 +788,18 @@ module.exports = {
 
 
   },
-  mounted() {
-  
-  },
   created() {
-    console.log(this.id)
     // this.getArea(); //获取省市县城市
     // this.getLine(); //获取线级城市
+    console.log(this.id)
+    console.log(this.isLook)
     if (this.id) {
       this.formData.id = this.id;
-      console.log(this.id)
+      // console.log("id-" + this.id)
+      // console.log("isLook-" + this.isLook)
+      // console.log("isShowTopTitle-" + this.isShowTopTitle)
+      // console.log("type-" + this.type)
+
       this.getDetails()
     }
   }

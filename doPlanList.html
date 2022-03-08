@@ -166,12 +166,6 @@
           :id="orientationDetailProps.id" :showTopTitle="orientationDetailProps.showTopTitle">
         </orientation-details>
       </el-dialog>
-
-
-
-
-
-
       <!-- 奖品列表弹框 -->
       <el-dialog title="奖品列表" :visible.sync="applicationListVisible" center>
         <div style="margin-bottom: 20px">执行方案名称: {{rows.name}}</div>
@@ -401,16 +395,16 @@
           this.rows = rows;
           this.orientationDetailProps = {
             type: "dialog",
-            isLook: true, //是否查看
+            isLook: "look", //是否查看
             id: rows.id, // 当前数据id
-            showTopTitle: false //是否展示title
+            showTopTitle: 0 //是否展示title
           }
           this.orientationDetailVisible = true;
 
         },
         onEdit(rows) {
           this.rows = rows;
-          location.href = `./prizeOrientationDetails.html?id=${rows.id}&isLook=false&showTopTitle=true&type=page`
+          location.href = `./prizeOrientationDetails.html?id=${rows.id}&isLook=0&showTopTitle=1&type=page`
         },
 
 
