@@ -161,10 +161,11 @@
       </el-pagination>
 
 
-      <el-dialog  title="奖品实际应用方案" class="dialogWidth" :visible.sync="orientationDetailVisible" center>
-        <orientation-details :type="orientationDetailProps.type" :isLook="orientationDetailProps.isLook" :id="orientationDetailProps.id" :showTopTitle="orientationDetailProps.showTopTitle">
+      <el-dialog title="奖品实际应用方案" class="dialogWidth" :visible.sync="orientationDetailVisible" center>
+        <orientation-details :type="orientationDetailProps.type" :isLook="orientationDetailProps.isLook"
+          :id="orientationDetailProps.id" :showTopTitle="orientationDetailProps.showTopTitle">
         </orientation-details>
-      </el-dialog> 
+      </el-dialog>
 
 
 
@@ -397,14 +398,14 @@
 
         // 查看
         lookFn(rows) {
-          this.rows = rows;    
+          this.rows = rows;
           this.orientationDetailProps = {
             type: "dialog",
             isLook: true, //是否查看
             id: rows.id, // 当前数据id
             showTopTitle: false //是否展示title
           }
-          this.orientationDetailVisible = true;   
+          this.orientationDetailVisible = true;
 
         },
         onEdit(rows) {

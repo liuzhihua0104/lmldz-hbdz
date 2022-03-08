@@ -755,13 +755,13 @@ module.exports = {
 
     // 获取区域信息
     getArea() {
-      service({
-        url: '/prize/area/list',
-        method: 'post',
-        data: {
-          level: "area"
-        },
-      }).then(({ data }) => {
+      // service({
+      //   url: '/prize/area/list',
+      //   method: 'post',
+      //   data: {
+      //     level: "area"
+      //   },
+      // }).then(({ data }) => {
         let data = parseJson(areaData.data);
         // 去除后端代码中多余的“一线、二线。。。”
         data.map(item => {
@@ -780,23 +780,23 @@ module.exports = {
         })
         this.areaOptions = data;
 
-      })
+      // })
     },
     // 获取区域信息
     getLine() {
-      service({
-        url: '/prize/area/list',
-        method: 'post',
-        data: {
-          level: "line"
-        },
-      }).then(({ data }) => {
+      // service({
+      //   url: '/prize/area/list',
+      //   method: 'post',
+      //   data: {
+      //     level: "line"
+      //   },
+      // }).then(({ data }) => {
         let data = parseJson(lineData.data);
         this.lineOptions = data;
 
-        // console.log(data)
+      //   // console.log(data)
 
-      })
+      // })
     },
     // 切换areaType
     changeAreaType() {
@@ -812,8 +812,8 @@ module.exports = {
   },
   created() {
     console.log(this.id)
-    this.getArea(); //获取省市县城市
-    this.getLine(); //获取线级城市
+    // this.getArea(); //获取省市县城市
+    // this.getLine(); //获取线级城市
     if (this.id) {
       this.formData.id = this.id;
       console.log(this.id)
