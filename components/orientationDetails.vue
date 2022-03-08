@@ -531,8 +531,6 @@ module.exports = {
       } else {
         paramsForm.devices = this.formData.devices;
       }
-
-      console.log(paramsForm)
       return paramsForm;
 
     },
@@ -541,10 +539,11 @@ module.exports = {
     // 保存成功后返回其他页面
     saveFn(formName) {
       let self = this;
-      console.log(self.doSaveParams())
+
 
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log(self.doSaveParams())
           service({
             url: '/prize/orientation/create',
             method: 'post',
