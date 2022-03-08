@@ -21,7 +21,8 @@
 <body>
   <script src="./mockdata.js"></script>
   <div id="app">
-    <orientation-details  :type="orientationDetailProps.type" :isLook="orientationDetailProps.isLook" :id="orientationDetailProps.id" :isshowTopTitle="orientationDetailProps.isshowTopTitle" ></orientation-details>
+    <orientation-details :type="orientationDetailProps.type" :islook="orientationDetailProps.islook"
+      :id="orientationDetailProps.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle"></orientation-details>
   </div>
 </body>
 
@@ -63,9 +64,9 @@
         id: "",
         orientationDetailProps: {
           type: "page",
-          isLook: 1, //是否查看
+          islook: 1, //是否查看
           id: "",
-          isshowTopTitle: 1 //是否展示title
+          isshowtoptitle: 1 //是否展示title
         }
       }
     },
@@ -79,9 +80,9 @@
       if (query.id) {
         this.orientationDetailProps = {
           type: query.type || "page",
-          isLook: query.isLook , //是否查看
+          islook: query.islook, //是否查看
           id: query.id,
-          isshowTopTitle: query.isshowTopTitle //是否展示title
+          isshowtoptitle: query.isshowtoptitle //是否展示title
         }
       }
       // 获取项目列表

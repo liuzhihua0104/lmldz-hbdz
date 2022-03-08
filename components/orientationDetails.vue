@@ -1,6 +1,6 @@
  <template>
   <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData">
-    <div class="top-title" v-if="isShowTopTitle==1">奖品定向详情</div>
+    <div class="top-title" v-if="isshowtoptitle==1">奖品定向详情</div>
     <div class="title">
       信息</div>
 
@@ -211,7 +211,7 @@
       </el-col>
     </el-row>
     <el-form-item>
-      <div class="btns">
+      <div class="btns" v-if="islook==0">
         <el-button class="back" @click="goBack">返回</el-button>
         <el-button type="primary" @click="saveFn('formData')">保存</el-button>
       </div>
@@ -310,7 +310,7 @@ let devicesCustomOptions = [
 
 
 module.exports = {
-  props: ["type", "isLook", "id", "isShowTopTitle"],
+  props: ["type", "islook", "id", "isshowtoptitle"],
 
   data() {
     let self = this  // 加上这一句就OK了
@@ -790,12 +790,12 @@ module.exports = {
     this.getArea(); //获取省市县城市
     this.getLine(); //获取线级城市
     console.log(this.id)
-    console.log(this.isshowTopTitle)
+    console.log(this.isLook)
     if (this.id) {
       this.formData.id = this.id;
       // console.log("id-" + this.id)
       // console.log("isLook-" + this.isLook)
-      // console.log("isShowTopTitle-" + this.isShowTopTitle)
+      // console.log("isshowtoptitle-" + this.isshowtoptitle)
       // console.log("type-" + this.type)
 
       this.getDetails()
@@ -861,6 +861,7 @@ module.exports = {
 
 /* 顶部标题 */
 .top-title {
+  text-align: center;
   font-size: 20px;
   font-weight: 600;
   line-height: 60px;

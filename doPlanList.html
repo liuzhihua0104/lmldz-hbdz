@@ -162,8 +162,8 @@
 
 
       <el-dialog title="奖品实际应用方案" class="dialogWidth" :visible.sync="orientationDetailVisible" center>
-        <orientation-details :type="orientationDetailProps.type" :isLook="orientationDetailProps.isLook" :id="rows.id"
-          :id="rows.id" :isshowTopTitle="orientationDetailProps.isshowTopTitle">
+        <orientation-details :type="orientationDetailProps.type" :islook="orientationDetailProps.islook" :id="rows.id"
+        :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle">
         </orientation-details>
       </el-dialog>
       <!-- 奖品列表弹框 -->
@@ -319,8 +319,8 @@
           orientationDetailVisible: false, // 奖品实际应用方案弹框的显示与隐藏
           orientationDetailProps: {
             type: "dialog",
-            isLook: 1, //是否查看
-            isshowTopTitle: 0 //是否展示title
+            look: 1, //是否查看
+            isshowtoptitle: 0 //是否展示title
           },
 
           applicationListVisible: false, // 控制奖品列表弹框弹框的展示与隐藏
@@ -399,13 +399,13 @@
         // 编辑
         onEdit(rows) {
           this.rows = rows;
-          location.href = `./prizeOrientationDetails.html?id=${rows.id}&isLook=0&isshowTopTitle=1&type=page`
+          location.href = `./prizeOrientationDetails.html?id=${rows.id}&look=0&isshowtoptitle=1&type=page`
         },
 
 
         // 跳转到新增执行方案
         onAdd(rows) {
-          location.href = `./prizeOrientationDetails.html?isLook=0&isshowTopTitle=1&type=page`
+          location.href = `./prizeOrientationDetails.html?look=0&isshowtoptitle=1&type=page`
         },
 
 
