@@ -792,7 +792,6 @@ module.exports = {
     // this.getArea(); //获取省市县城市
     // this.getLine(); //获取线级城市
     console.log(this.id)
-    console.log(this.isLook)
     if (this.id) {
       this.formData.id = this.id;
       // console.log("id-" + this.id)

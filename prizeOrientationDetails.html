@@ -81,9 +81,9 @@
       if (query.id) {
         this.orientationDetailProps = {
           type: query.type || "page",
-          isLook: query.isLook || true, //是否查看
+          isLook: query.isLook , //是否查看
           id: query.id,
-          showTopTitle: query.showTopTitle || true //是否展示title
+          showTopTitle: query.showTopTitle||1 //是否展示title
         }
       }
       // 获取项目列表
