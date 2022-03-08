@@ -578,26 +578,14 @@ module.exports = {
 
     // 编辑获取表单详情
     getDetails() {
-      //   service({
-      //     url: '/user/strategy/inversion/detail',
-      //     method: 'get',
-      //     data: {
-      //       id: this.formData.id,
-      //     },
-      //   }).then(({ data }) => {
-      //     Object.keys(this.formData).forEach((key) => {
-      //       console.log(key, data[key])
-      //       this.formData[key] = data[key]
-      //     })
-      //   })
-
+      
       let data = JSON.parse(sessionStorage.getItem("rows"));
       console.log(data)
 
       let form = {
         name: data.name, // 方案名称
         remarks: data.remarks, // 备注
-        areaType: data.areaType, // 区域
+        areaType: String(data.areaType), // 区域
         sex: data.sex, // 性别
         scanContent: data.scanContent, // 扫码工具
         timeType: data.timeType, // 时段

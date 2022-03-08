@@ -281,7 +281,6 @@
       },
       data() {
         return {
-
           formData: {
             name: '',
           },
@@ -437,7 +436,6 @@
         window.vue = this;
       },
       methods: {
-
         // 编辑获取表单详情
         getDetails() {
           this.formData = JSON.parse(sessionStorage.getItem("sourceRow"))
@@ -446,6 +444,29 @@
         addOrientationDetail(rows) {
           location.href = `./prizeOrientationDetails.html?islook=0&isshowtoptitle=1&type=page&sourceId=${this.formData.id}`
         },
+
+        // 获取素材源定向列表
+        getSourceOrientationList() {
+          let params = {
+            orientationId: this.rows.id,
+            sourceId: "",
+            prizeName: this.applyForm.prizeName
+          }
+
+          console.log(params)
+          // service({
+          //   url: '/prize/orientation/pList',
+          //   method: 'post',
+          //   data: params,
+          // }).then(({ data }) => {
+          let data = doPlanApplyList.data;
+          this.applyList = data.list
+          // })
+        },
+
+
+
+
         // testFn() {
         //   console.log("触发function")
         //   this.formData.radio1 = 2
