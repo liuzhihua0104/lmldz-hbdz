@@ -211,7 +211,7 @@
       </el-col>
     </el-row>
     <el-form-item>
-      <div class="btns" v-if="isLook==0">
+      <div class="btns">
         <el-button class="back" @click="goBack">返回</el-button>
         <el-button type="primary" @click="saveFn('formData')">保存</el-button>
       </div>

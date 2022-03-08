@@ -162,8 +162,8 @@
 
 
       <el-dialog title="奖品实际应用方案" class="dialogWidth" :visible.sync="orientationDetailVisible" center>
-        <orientation-details :type="orientationDetailProps.type" :isLook="orientationDetailProps.isLook"
-          :id="rows.id" :id="rows.id" :isshowTopTitle="orientationDetailProps.isshowTopTitle">
+        <orientation-details :type="orientationDetailProps.type" :isLook="orientationDetailProps.isLook" :id="rows.id"
+          :id="rows.id" :isshowTopTitle="orientationDetailProps.isshowTopTitle">
         </orientation-details>
       </el-dialog>
       <!-- 奖品列表弹框 -->
@@ -392,17 +392,18 @@
         // 查看
         lookFn(rows) {
           this.rows = rows;
-          sessionStorage.setItem("rows",JSON.stringify(rows));
+          sessionStorage.setItem("rows", JSON.stringify(rows));
           this.orientationDetailVisible = true;
 
         },
+        // 编辑
         onEdit(rows) {
           this.rows = rows;
           location.href = `./prizeOrientationDetails.html?id=${rows.id}&isLook=0&isshowTopTitle=1&type=page`
         },
 
 
-
+        // 跳转到新增执行方案
         onAdd(rows) {
           location.href = `./prizeOrientationDetails.html?isLook=0&isshowTopTitle=1&type=page`
         },
