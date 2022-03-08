@@ -163,7 +163,7 @@
 
       <el-dialog title="奖品实际应用方案" class="dialogWidth" :visible.sync="orientationDetailVisible" center>
         <orientation-details :type="orientationDetailProps.type" :isLook="orientationDetailProps.isLook"
-          :id="rows.id" :id1="123":showTopTitle="orientationDetailProps.showTopTitle">
+          :id="rows.id" :rows="rows" :showTopTitle="orientationDetailProps.showTopTitle">
         </orientation-details>
       </el-dialog>
       <!-- 奖品列表弹框 -->
@@ -403,7 +403,7 @@
 
 
         onAdd(rows) {
-          location.href = `./prizeOrientationDetails.html`
+          location.href = `./prizeOrientationDetails.html?isLook=0&showTopTitle=1&type=page`
         },
 
 

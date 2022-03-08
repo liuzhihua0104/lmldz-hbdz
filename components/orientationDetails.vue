@@ -310,7 +310,7 @@ let devicesCustomOptions = [
 
 
 module.exports = {
-  props: ["type", "isLook", "id", "isShowTopTitle"],
+  props: ["type", "isLook", "id", "rows","isShowTopTitle"],
 
   data() {
     let self = this  // 加上这一句就OK了
@@ -792,6 +792,7 @@ module.exports = {
     this.getArea(); //获取省市县城市
     this.getLine(); //获取线级城市
     console.log(this.id)
+    console.log(this.rows)
     if (this.id) {
       this.formData.id = this.id;
       // console.log("id-" + this.id)
