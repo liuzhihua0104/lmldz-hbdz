@@ -98,6 +98,7 @@
 </head>
 
 <body>
+  <script src="./mockdata.js"></script>
   <div id="app">
     <template>
       <div class="out-dialog">
@@ -439,6 +440,10 @@
         // 编辑获取表单详情
         getDetails() {
           this.formData = JSON.parse(sessionStorage.getItem("sourceRow"))
+
+          this.$nextTick(() => {
+            this.getSourceOrientationList() //素材源定向列表
+          })
         },
         // 添加素材源定向，跳转到定向详情，要携带资源id
         addOrientationDetail(rows) {
@@ -448,20 +453,19 @@
         // 获取素材源定向列表
         getSourceOrientationList() {
           let params = {
-            orientationId: this.rows.id,
-            sourceId: "",
-            prizeName: this.applyForm.prizeName
+            sourceId: this.formData.id,
+            pageNum: "",
+            pageSize: ""
           }
-
           console.log(params)
-          // service({
-          //   url: '/prize/orientation/pList',
-          //   method: 'post',
-          //   data: params,
-          // }).then(({ data }) => {
-          let data = doPlanApplyList.data;
-          this.applyList = data.list
-          // })
+          service({
+            url: '/prize/orientation/mList',
+            method: 'post',
+            data: params,
+          }).then(({ data }) => {
+            // let data = doPlanApplyList.data;
+            // this.applyList = data.list
+          })
         },
 
 
@@ -604,6 +608,7 @@
         let query = getUrlQuery()
         if (query.id) {
           this.getDetails();
+
           this.islook = query.islook;
         }
         // 获取项目列表

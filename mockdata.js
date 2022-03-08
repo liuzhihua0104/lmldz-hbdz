@@ -207,6 +207,10 @@ let sList = {
 }
 
 
+// 素材源定向列表
+let mList={}
+
+
 
 let areaList = {
     "code": 200,
