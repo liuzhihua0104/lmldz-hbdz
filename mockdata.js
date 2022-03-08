@@ -210,8 +210,15 @@ let sList = {
 }
 
 
-// 素材源定向列表
-let mList={}
+// 素材源列表主页面的定向列表
+let sourceListMainMlist={
+    "code": 200,
+    "msg": null,
+    "data": {
+        "total": 0,
+        "list": []
+    }
+}
 
 
 
