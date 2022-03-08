@@ -215,8 +215,34 @@ let sourceListMainMlist={
     "code": 200,
     "msg": null,
     "data": {
-        "total": 0,
-        "list": []
+        "total": 1,
+        "list": [
+            {
+                "id": "36c1638b72fa4ebf81d0fc6a335b33b3",
+                "createTime": 1646741281000,
+                "createUser": null,
+                "name": "sajdfkja;fdjksla",
+                "remarks": "fdsafsdaf",
+                "areaType": 1,
+                "areaContent": "110000",
+                "areaJson": "[[11,110000,110100,110101],[11,110000,110100,110102],[11,110000,110100,110105],[11,110000,110100,110106],[11,110000,110100,110107],[11,110000,110100,110108],[11,110000,110100,110109],[11,110000,110100,110111],[11,110000,110100,110112],[11,110000,110100,110113],[11,110000,110100,110114],[11,110000,110100,110115],[11,110000,110100,110116],[11,110000,110100,110117],[11,110000,110100,110118],[11,110000,110100,110119]]",
+                "networking": "2",
+                "scanContent": "2",
+                "timeType": "2",
+                "timeContent": "0-24,0-6",
+                "holidays": "4,5,6,7,8,9,3",
+                "devices": "3",
+                "sex": 2,
+                "status": 0,
+                "sourceId": null,
+                "roles": null,
+                "prizeId": null,
+                "prizeName": null,
+                "strategyPrize": null,
+                "strategyName": null,
+                "prizeCount": null
+            }
+        ]
     }
 }
 
