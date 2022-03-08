@@ -235,14 +235,14 @@
           location.href = `./prizeOrientationDetails.html?id=${rows.id}`
         },
         fetchList() {
-          // service({
-          //   url: '/prize/orientation/sList',
-          //   method: 'post',
-          //   data: this.filter,
-          // }).then(({ data }) => {
-          //   this.tableData = data.list
-          //   this.page.total = data.total
-          // })
+          service({
+            url: '/prize/orientation/sList',
+            method: 'post',
+            data: this.filter,
+          }).then(({ data }) => {
+            this.tableData = data.list
+            this.page.total = data.total
+          })
 
         },
         //搜索
