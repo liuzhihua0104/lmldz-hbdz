@@ -160,27 +160,23 @@
           <!-- 奖品列表-->
           <el-table max-height="350px" :data="prizeList" border style="width: 100%" size="mini"
             :header-cell-style="{background:'#e5e9f2'}" style="margin-bottom:20px">
-            <el-table-column align="center" label="开关" width="100">
+            <!-- <el-table-column align="center" label="开关" width="100">
               <template slot-scope="scope">
                 <el-switch :disabled="type=='dialog'" inactive-color="#cccccc"
                   @change="conditionChangeSwitch(scope.row)" v-model="scope.row.status==1"
                   :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
                 </el-switch>
               </template>
+            </el-table-column> -->
+
+            <el-table-column align="center" type="index" width="80">
             </el-table-column>
-            <el-table-column align="center" prop="date" label="商务投放限制条件" width="180">
+            <el-table-column align="center" prop="id" label="奖品ID" >
             </el-table-column>
-            <el-table-column align="center" prop="date" label="状态">
+            <el-table-column align="center" prop="name" label="奖品名称">
             </el-table-column>
-            <el-table-column align="center" prop="name" label="最近一次操作人">
-            </el-table-column>
-            <el-table-column v-if="type=='page'" align="center" label="操作" width="150">
-              <template slot-scope="scope">
-                <el-button type="text" size="small" @click="conditionlook(scope.row)">查看</el-button>
-                <el-button type="text" v-if="islook!=1" size="small" @click="conditionEdit(scope.row)">编辑</el-button>
-                <el-button type="text" v-if="islook!=1" size="small" @click="conditionDel(scope.row)">删除</el-button>
-              </template>
-            </el-table-column>
+            <el-table-column align="center" prop="strategyName" label="策略">
+            </el-table-column>    
           </el-table>
         </el-form>
 
