@@ -463,7 +463,7 @@
         // 删除
         getDel() {
           let params = {
-            oid: this.rows.id,
+            orientationId: this.rows.id,
           }
           service({
             url: 'prize/orientation/delOrientationMP',
@@ -471,6 +471,8 @@
             data: params
           }).then(() => {
             this.fetchList()
+          }).catch((err)=>{
+            this.$message.error(err.msg);
           })
         },
 
