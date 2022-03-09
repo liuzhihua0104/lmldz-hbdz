@@ -316,29 +316,16 @@
           console.log(this.oIdNames)
 
           let resultArr = [];
-          // prizeIds.map(item => {
-          //   let prizeItem = new Map();
-          //   data.map(element => {
-          //     if (element.pManagerId == item) {
-          //       prizeItem.set("pManagerId", element.pManagerId)
-          //       prizeItem.set("prizeName", element.prizeName)
-          //       prizeItem.set("strategyName", element.strategyName)
-          //       prizeItem.set(element.oId, element.oId)
-          //       prizeItem.set(element.oIdName, element.status)
-          //     }
-          //   })
-          //   resultArr.push(prizeItem)
-          // })
 
           prizeIds.map(item => {
             let prizeItem = {};
             data.map(element => {
               if (element.pManagerId == item) {
-                prizeItem.pManagerId = element.pManagerId;
+                prizeItem.pManagerId = item;
                 prizeItem.prizeName = element.prizeName;
                 prizeItem.strategyName = element.strategyName;
-                prizeItem[element.oId] = element[element.oId];
-                prizeItem[element.oIdName] = element.status;
+                prizeItem[`${element.oIdName}_oId`] = element.oId; // 一个奖品会有多个方案名称、多个方案ID，所以要拼接区分
+                prizeItem[element.oIdName] = element.status; // 方案名称不会有重复的，所以不用处理
               }
             })
             resultArr.push(prizeItem)
@@ -346,14 +333,10 @@
 
 
           this.prizeList = resultArr;
-          console.log(this.prizeList)
-          // this.prizeIds
 
 
 
 
-          // this.prizeList = data.list
-          // })
         },
 
         // 添加素材源定向，跳转到定向详情，要携带资源id
@@ -406,82 +389,37 @@
         },
 
 
-
-
-
-        // // 执行方案-切换switch
-        // planChangeSwitch(row) {
-        //   this.planListData.filter((item) => {
-        //     if (item.id == row.id) {
-        //       item.status = item.status == 1 ? 2 : 1
-        //     }
-        //   })
-        // },
-        // // 执行方案-查看,展示奖品定向详情弹框
-        // planlook(row) {
-        //   console.log("planlook")
-        //   this.orientationDetailsVisible = true;
-        //   this.orientationDetailsType = "dialog"
-        // },
-        // // 执行方案-编辑
-        // planEdit(row) {
-        //   console.log("执行方案-编辑")
-        //   this.orientationDetailsType = "page"
-        //   location.href = `./prizeOrientationDetails.html?id=${row.id}`
-        // },
-        // // 执行方案列表-删除按钮
-        // planDel(row) {
-        //   this.rowData = row
-        //   this.$confirm('确认删除吗?', '提示', {
-        //     confirmButtonText: '确定',
-        //     cancelButtonText: '取消',
-        //     type: 'warning',
-        //   })
-        //     .then(() => {
-        //       this.planGetDel()
-        //     })
-        //     .catch(() => { })
-        // },
-        // // 执行方案-执行删除请求
-        // planGetDel() {
-        //   console.log("发送删除请求")
-        // },
-
-
-        // 执行方案-切换switch
+        // 奖品-切换switch
         conditionChangeSwitch(row, oIdName) {
-          console.log(oIdName)
-          this.prizeList.filter((item) => {
-            if (item.pManagerId == row.pManagerId) {
-              item[oIdName] = item[oIdName] == 1 ? 0 : 1;
-            }
+          console.log(row)
+          let params = {
+            sourceId: "",
+            status: row[oIdName] == 1 ? 0 : 1, //目标状态
+            prizeId: row[`${oIdName}_oId`], // 奖品ID
+            orientationId: row.oId, //方案ID
+          }
+
+          console.log(params)
+          console.log(row[`${oIdName}_oId`])
+          service({
+            url: 'prize/orientation/updateOrientationMPAndPrize',
+            method: 'post',
+            data: params
+          }).then(() => {
+
+            // 不再重新调取列表了，节约性能，前端自行处理
+            this.prizeList.filter((item) => {
+              if (item.pManagerId == row.pManagerId) {
+                item[oIdName] = item[oIdName] == 1 ? 0 : 1;
+              }
+            })
+
+          }).catch((err) => {
+            this.$message.error(err.msg);
           })
+
+
         },
-        // // 条件列表-查看
-        // conditionlook(row) {
-        //   console.log("planlook")
-        // },
-        // // 条件列表-编辑
-        // conditionEdit(row) {
-        //   console.log("条件列表-编辑")
-        // },
-        // // 条件列表列表-删除按钮
-        // conditionDel(row) {
-        //   this.rowData = row
-        //   this.$confirm('确认删除吗?', '提示', {
-        //     confirmButtonText: '确定',
-        //     cancelButtonText: '取消',
-        //     type: 'warning',
-        //   })
-        //     .then(() => {
-        //       this.conditionGetDel()
-        //     })
-        //     .catch(() => { })
-        // },
-        // // 条件列表-执行删除请求
-        // conditionGetDel() {
-        //   console.log("发送删除请求")
-        // },
 
 
       },

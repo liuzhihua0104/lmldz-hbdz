@@ -1,9 +1,10 @@
  <template>
   <el-form :disabled="islook==1" label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData">
-    <div>
-      <el-button style="text-align:right" @click="window.location.reload()">重置123</el-button>
-    </div>
+
     <div class="top-title" v-if="isshowtoptitle==1">奖品定向详情</div>
+    <div style="text-align:right;padding-bottom:20px">
+      <el-button @click="window.location.reload()">重 置</el-button>
+    </div>
     <div class="title">
       信息</div>
 
@@ -838,7 +839,7 @@ module.exports = {
 .top-title {
   text-align: center;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 60px;
 }
 </style>

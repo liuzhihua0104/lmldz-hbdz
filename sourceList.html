@@ -219,27 +219,7 @@
 
       },
       created() {
-        this.fetchList()
-
-        let data = sourceDetailPrizePlist.data.list;
-
-        // 获取所有的奖品ID
-        let prizeIds = Array.from(new Set(data.map((item) => item.pManagerId)));
-
-        let resultArr = [];
-        prizeIds.map(item => {
-          let prizeItem = new Map();
-          data.map(element => {
-            if (element.pManagerId == item) {
-              prizeItem.set("pManagerId", element.pManagerId)
-              prizeItem.set("prizeName", element.prizeName)
-              prizeItem.set("strategyName", element.strategyName)
-              prizeItem.set(element.oId, element.oId)
-              prizeItem.set(element.oIdName, element.status)
-            }
-          })
-          resultArr.push(prizeItem)
-        })
+        this.fetchList();   
  
       },
     })
