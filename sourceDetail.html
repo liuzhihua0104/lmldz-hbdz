@@ -147,7 +147,7 @@
           <el-dialog title="定向详情" class="dialogWidth" :visible.sync="orientationDetailVisible" center>
             <template v-if="orientationDetailVisible">
               <orientation-details :type="orientationDetailProps.type" :islook="orientationDetailProps.islook"
-                :id="rows.id" :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle">
+                :id="rows.id" :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle" :sourceid="formData.id">
               </orientation-details>
             </template>
           </el-dialog>
