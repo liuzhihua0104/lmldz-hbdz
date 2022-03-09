@@ -97,8 +97,8 @@
         <el-form ref="directionalForm" size="mini" :inline="true" :model="directionalForm" class="demo-form-inline">
           <el-row>
             <el-col :span="12">
-              <el-form-item style="margin-right:0" label="关键字:" prop="name">
-                <el-input v-model="directionalForm.name" placeholder="请输入内容" :clearable="true"></el-input>
+              <el-form-item style="margin-right:0" label="关键字:" prop="sourceName">
+                <el-input v-model="directionalForm.sourceName" placeholder="请输入内容" :clearable="true"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="4">
@@ -142,7 +142,7 @@
 
           // 素材源定向列表弹框
           directionalForm: {
-            name: ""
+            sourceName: ""
           },
           directionalList: [],// 奖品列表
           directionalVisible: false, // 控制奖品列表弹框弹框的展示与隐藏
@@ -171,7 +171,7 @@
             sourceId: this.rows.id,
             pageNum: "",
             pageSize: "",
-            name: this.directionalForm.name,
+            sourceName: this.directionalForm.sourceName,
           }
 
           console.log(params)
@@ -190,7 +190,7 @@
           this.rows = rows;
           this.directionalList = [];
           this.directionalVisible = true;
-          this.directionalForm.name = "";
+          this.directionalForm.sourceName = "";
           this.getDirectionalList()
         },
 
