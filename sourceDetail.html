@@ -158,8 +158,8 @@
             </template>
           </el-dialog>
 
-          <!-- 条件表格-最多3条-->
-          <el-table max-height="350px" :data="conditionListData" border style="width: 100%" size="mini"
+          <!-- 奖品列表-->
+          <el-table max-height="350px" :data="prizeList" border style="width: 100%" size="mini"
             :header-cell-style="{background:'#e5e9f2'}" style="margin-bottom:20px">
             <el-table-column align="center" label="开关" width="100">
               <template slot-scope="scope">
@@ -324,7 +324,7 @@
           planListData: [],
 
           // 条件列表
-          conditionListData: [{
+          prizeList: [{
             id: 1,
             status: 1,
             date: '条件A',
@@ -399,8 +399,8 @@
           //   method: 'post',
           //   data: params,
           // }).then(({ data }) => {
-          // let data = doPlanApplyList.data;
-          // this.applyList = data.list
+          let data = sourceDetailPrizePlist.data;
+          this.prizeList = data.list
           // })
         },
 
@@ -498,7 +498,7 @@
 
         // // 执行方案-切换switch
         // conditionChangeSwitch(row) {
-        //   this.conditionListData.filter((item) => {
+        //   this.prizeList.filter((item) => {
         //     if (item.id == row.id) {
         //       item.status = item.status == 1 ? 2 : 1
         //     }
