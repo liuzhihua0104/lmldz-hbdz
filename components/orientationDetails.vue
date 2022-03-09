@@ -223,28 +223,11 @@
 
 
 <script>
-// 处理地址栏参数
-// function getUrlQuery() {
-//   let search = location.search
-//   let obj = {}
-//   if (search) {
-//     let query = search.substring(1).split('&')
-//     query.forEach((queryItem) => {
-//       let keyValue = queryItem.split('=')
-//       let [key, value] = keyValue
-//       if (key) {
-//         obj[key] = value
-//       }
-//     })
-//   }
-//   return obj
-// }
 
 // 递归处理城市数据
 function parseJson(arr) {
   arr = arr.slice()
   function toParse(arr) {
-    // console.log(arr)
     arr.forEach(function (item) {
       item.value = item.code;
       item.label = item.name;
@@ -577,8 +560,7 @@ module.exports = {
     },
 
     // 编辑获取表单详情
-    getDetails() {
-      
+    getDetails() {      
       let data = JSON.parse(sessionStorage.getItem("rows"));
       console.log(data)
 
@@ -685,11 +667,6 @@ module.exports = {
 
       this.formData = { ...this.formData, ...form };
 
-
-      // this.$nextTick(()=>{
-      //   console.log(this.formData)
-      // })
-
     },
 
     // 时间范围新增按钮
@@ -790,8 +767,6 @@ module.exports = {
   created() {
     this.getArea(); //获取省市县城市
     this.getLine(); //获取线级城市
-    console.log(this.id)
-    console.log(this.islook)
     if (this.id) {
       this.formData.id = this.id;
       this.getDetails()
