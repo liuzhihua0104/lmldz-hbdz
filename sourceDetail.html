@@ -128,7 +128,7 @@
             添加素材源定向</el-button>
 
           <!-- 执行方案列表表格 -->
-          <el-table :data="planListData" height="250" border style="width: 100%" size="mini"
+          <el-table max-height="350px" :data="planListData" height="250" border style="width: 100%" size="mini"
             :header-cell-style="{background:'#e5e9f2'}">
             <el-table-column label="序号" type="index"></el-table-column>
             <el-table-column label="定向名称" prop="name"></el-table-column>
@@ -143,8 +143,9 @@
             <el-table-column label="操作" width="170">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="lookFn(scope.row)">查看</el-button>
-                <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
-                <el-button type="text" size="small" @click="onDel(scope.row)" v-if="scope.row.status==0">删除</el-button>
+                <el-button type="text" v-if="islook!=1" size="small" @click="onEdit(scope.row)">编辑</el-button>
+                <el-button type="text" v-if="islook!=1" size="small" @click="onDel(scope.row)"
+                  v-if="scope.row.status==0">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -157,10 +158,8 @@
             </template>
           </el-dialog>
 
-
-
           <!-- 条件表格-最多3条-->
-          <el-table :data="conditionListData" border style="width: 100%" size="mini"
+          <el-table max-height="350px" :data="conditionListData" border style="width: 100%" size="mini"
             :header-cell-style="{background:'#e5e9f2'}" style="margin-bottom:20px">
             <el-table-column align="center" label="开关" width="100">
               <template slot-scope="scope">
@@ -422,10 +421,9 @@
           this.rows = rows;
           console.log(rows)
           sessionStorage.setItem("rows", JSON.stringify(rows));
-          location.href = `./prizeOrientationDetails.html?id=${rows.id}&islook=0&isshowtoptitle=1&type=page`
+          location.href = `./prizeOrientationDetails.html?id=${rows.id}&islook=0&isshowtoptitle=1&type=page&sourceId=${this.formData.id}`
         },
-
-
+        // 删除执行方案
         onDel(rows) {
           this.rows = rows
           this.$confirm('确认删除吗?', '提示', {
@@ -456,136 +454,81 @@
         },
 
 
-        // testFn() {
-        //   console.log("触发function")
-        //   this.formData.radio1 = 2
+
+
+
+        // // 执行方案-切换switch
+        // planChangeSwitch(row) {
+        //   this.planListData.filter((item) => {
+        //     if (item.id == row.id) {
+        //       item.status = item.status == 1 ? 2 : 1
+        //     }
+        //   })
         // },
-        // 返回
-        goBack() {
-          window.history.go(-1)
-        },
-        // 保存成功后返回其他页面
-        saveFn() {
-
-          setTimeout(() => {
-            this.goBack();
-          }, 3000)
-
-        },
-
-        // 点击添加方案:展示执行方案弹框
-        showPlan() {
-          this.implementationSchemeVisible = true;
-        },
-        closeImplementationPlan() {
-          this.implementationSchemeVisible = false;
-          this.multipleSelection = [];//清空选中的数据
-        },
-        // 执行方案列表弹框-搜索
-        planListSearch(formName) {
-          console.log(formName)
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              console.log(this.formInline)
-              console.log(valid)
-              // alert('submit!');
-            } else {
-              // console.log('error submit!!');
-              return false;
-            }
-          });
-        },
-        // 执行方案列表弹框-触发多选
-        handleSelectionChange(val) {
-          this.multipleSelection = val;
-          console.log(this.multipleSelection)
-        },
-        // 执行方案列表弹框-应用
-        releaseFn() { },
-
-        // 保存
-        onConfirm(formName) {
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              // 校验表单通过
-            } else {
-              console.log('error submit!!')
-              return false
-            }
-          })
-        },
-        // 执行方案-切换switch
-        planChangeSwitch(row) {
-          this.planListData.filter((item) => {
-            if (item.id == row.id) {
-              item.status = item.status == 1 ? 2 : 1
-            }
-          })
-        },
-        // 执行方案-查看,展示奖品定向详情弹框
-        planlook(row) {
-          console.log("planlook")
-          this.orientationDetailsVisible = true;
-          this.orientationDetailsType = "dialog"
-        },
-        // 执行方案-编辑
-        planEdit(row) {
-          console.log("执行方案-编辑")
-          this.orientationDetailsType = "page"
-          location.href = `./prizeOrientationDetails.html?id=${row.id}`
-        },
-        // 执行方案列表-删除按钮
-        planDel(row) {
-          this.rowData = row
-          this.$confirm('确认删除吗?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          })
-            .then(() => {
-              this.planGetDel()
-            })
-            .catch(() => { })
-        },
-        // 执行方案-执行删除请求
-        planGetDel() {
-          console.log("发送删除请求")
-        },
+        // // 执行方案-查看,展示奖品定向详情弹框
+        // planlook(row) {
+        //   console.log("planlook")
+        //   this.orientationDetailsVisible = true;
+        //   this.orientationDetailsType = "dialog"
+        // },
+        // // 执行方案-编辑
+        // planEdit(row) {
+        //   console.log("执行方案-编辑")
+        //   this.orientationDetailsType = "page"
+        //   location.href = `./prizeOrientationDetails.html?id=${row.id}`
+        // },
+        // // 执行方案列表-删除按钮
+        // planDel(row) {
+        //   this.rowData = row
+        //   this.$confirm('确认删除吗?', '提示', {
+        //     confirmButtonText: '确定',
+        //     cancelButtonText: '取消',
+        //     type: 'warning',
+        //   })
+        //     .then(() => {
+        //       this.planGetDel()
+        //     })
+        //     .catch(() => { })
+        // },
+        // // 执行方案-执行删除请求
+        // planGetDel() {
+        //   console.log("发送删除请求")
+        // },
 
 
-        // 执行方案-切换switch
-        conditionChangeSwitch(row) {
-          this.conditionListData.filter((item) => {
-            if (item.id == row.id) {
-              item.status = item.status == 1 ? 2 : 1
-            }
-          })
-        },
-        // 条件列表-查看
-        conditionlook(row) {
-          console.log("planlook")
-        },
-        // 条件列表-编辑
-        conditionEdit(row) {
-          console.log("条件列表-编辑")
-        },
-        // 条件列表列表-删除按钮
-        conditionDel(row) {
-          this.rowData = row
-          this.$confirm('确认删除吗?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          })
-            .then(() => {
-              this.conditionGetDel()
-            })
-            .catch(() => { })
-        },
-        // 条件列表-执行删除请求
-        conditionGetDel() {
-          console.log("发送删除请求")
-        },
+        // // 执行方案-切换switch
+        // conditionChangeSwitch(row) {
+        //   this.conditionListData.filter((item) => {
+        //     if (item.id == row.id) {
+        //       item.status = item.status == 1 ? 2 : 1
+        //     }
+        //   })
+        // },
+        // // 条件列表-查看
+        // conditionlook(row) {
+        //   console.log("planlook")
+        // },
+        // // 条件列表-编辑
+        // conditionEdit(row) {
+        //   console.log("条件列表-编辑")
+        // },
+        // // 条件列表列表-删除按钮
+        // conditionDel(row) {
+        //   this.rowData = row
+        //   this.$confirm('确认删除吗?', '提示', {
+        //     confirmButtonText: '确定',
+        //     cancelButtonText: '取消',
+        //     type: 'warning',
+        //   })
+        //     .then(() => {
+        //       this.conditionGetDel()
+        //     })
+        //     .catch(() => { })
+        // },
+        // // 条件列表-执行删除请求
+        // conditionGetDel() {
+        //   console.log("发送删除请求")
+        // },
 
 
       },
