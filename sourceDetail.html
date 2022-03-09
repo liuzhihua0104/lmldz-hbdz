@@ -175,12 +175,17 @@
 
             <el-table-column align="center" type="index" label="序号" width="80">
             </el-table-column>
-            <el-table-column align="center" prop="id" label="奖品ID" >
+            <el-table-column align="center" prop="pManagerId" label="奖品ID">
             </el-table-column>
             <el-table-column align="center" prop="prizeName" label="奖品名称">
             </el-table-column>
             <el-table-column align="center" prop="strategyName" label="策略">
-            </el-table-column>    
+            </el-table-column>
+            <template v-if="oIdNames.length">
+              <el-table-column v-for="item in oIdNames" align="center" :prop="item" :label="item">
+              </el-table-column>
+            </template>
+
           </el-table>
         </el-form>
 
@@ -242,6 +247,7 @@
           row: {}, //查看的那条定向详情数据
           planListData: [], // 方案列表
           prizeList: [],  // 奖品列表
+          oIdNames: [] //方案名称集合，用于渲染列表
         }
       },
       watch: {
@@ -294,8 +300,53 @@
           //   method: 'post',
           //   data: params,
           // }).then(({ data }) => {
-          let data = sourceDetailPrizePlist.data;
-          this.prizeList = data.list
+          // let data = sourceDetailPrizePlist.data;
+
+          let data = sourceDetailPrizePlist.data.list;
+
+          // 获取所有的奖品ID
+          let prizeIds = Array.from(new Set(data.map((item) => item.pManagerId)));
+          this.oIdNames = Array.from(new Set(data.map((item) => item.oIdName)));
+          console.log(this.oIdNames)
+
+          let resultArr = [];
+          // prizeIds.map(item => {
+          //   let prizeItem = new Map();
+          //   data.map(element => {
+          //     if (element.pManagerId == item) {
+          //       prizeItem.set("pManagerId", element.pManagerId)
+          //       prizeItem.set("prizeName", element.prizeName)
+          //       prizeItem.set("strategyName", element.strategyName)
+          //       prizeItem.set(element.oId, element.oId)
+          //       prizeItem.set(element.oIdName, element.status)
+          //     }
+          //   })
+          //   resultArr.push(prizeItem)
+          // })
+
+          prizeIds.map(item => {
+            let prizeItem = {};
+            data.map(element => {
+              if (element.pManagerId == item) {
+                prizeItem.pManagerId = element.pManagerId;
+                prizeItem.prizeName = element.prizeName;
+                prizeItem.strategyName = element.strategyName;
+                prizeItem[element.oId] = element[element.oId];
+                prizeItem[element.oIdName] = element.status;
+              }
+            })
+            resultArr.push(prizeItem)
+          })
+
+
+          this.prizeList = resultArr;
+          console.log(this.prizeList)
+          // this.prizeIds
+
+
+
+
+          // this.prizeList = data.list
           // })
         },
 
