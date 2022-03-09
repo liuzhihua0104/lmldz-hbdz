@@ -543,6 +543,8 @@ module.exports = {
             data: self.doSaveParams(),
           }).then(({ data }) => {
             self.goBack();
+          }).catch((err) => {
+            this.$message.error(err.msg);
           })
 
         } else {
@@ -560,7 +562,7 @@ module.exports = {
     },
 
     // 编辑获取表单详情
-    getDetails() {      
+    getDetails() {
       let data = JSON.parse(sessionStorage.getItem("rows"));
       console.log(data)
 
