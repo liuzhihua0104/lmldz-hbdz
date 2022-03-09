@@ -94,6 +94,11 @@
     .back {
       margin-right: 40px;
     }
+
+    /* 设置dialog的宽度 */
+    .dialogWidth>.el-dialog {
+      width: 1000px !important;
+    }
   </style>
 </head>
 
@@ -147,7 +152,7 @@
           <el-dialog title="定向详情" class="dialogWidth" :visible.sync="orientationDetailVisible" center>
             <template v-if="orientationDetailVisible">
               <orientation-details :type="orientationDetailProps.type" :islook="orientationDetailProps.islook"
-                :id="rows.id" :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle" :sourceid="formData.id">
+                :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle" :sourceid="formData.id">
               </orientation-details>
             </template>
           </el-dialog>
@@ -220,7 +225,7 @@
         },
       },
       components: {
-        'orientation-details': httpVueLoader('./orientationDetails.vue')
+        'orientation-details': httpVueLoader('./components/orientationDetails.vue')
       },
       data() {
         return {
@@ -388,15 +393,16 @@
             sourceId: this.formData.id,
             prizeName: ""
           }
+
           console.log(params)
-          service({
-            url: '/prize/orientation/pList',
-            method: 'post',
-            data: params,
-          }).then(({ data }) => {
-            // let data = doPlanApplyList.data;
-            // this.applyList = data.list
-          })
+          // service({
+          //   url: '/prize/orientation/pList',
+          //   method: 'post',
+          //   data: params,
+          // }).then(({ data }) => {
+          // let data = doPlanApplyList.data;
+          // this.applyList = data.list
+          // })
         },
 
         // 添加素材源定向，跳转到定向详情，要携带资源id
