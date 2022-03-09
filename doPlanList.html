@@ -464,12 +464,13 @@
 
         // 删除
         getDel() {
+          let params = {
+            oid: this.rows.id,
+          }
           service({
-            url: '/user/strategy/inversion/delete.shtml',
+            url: 'prize/orientation/delOrientationMP',
             method: 'post',
-            data: {
-              id: this.rows.id,
-            },
+            data: params
           }).then(() => {
             this.fetchList()
           })
