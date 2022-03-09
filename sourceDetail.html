@@ -182,7 +182,13 @@
             <el-table-column align="center" prop="strategyName" label="策略">
             </el-table-column>
             <template v-if="oIdNames.length">
-              <el-table-column v-for="item in oIdNames" align="center" :prop="item" :label="item">
+              <el-table-column v-for="pname in oIdNames" align="center" :label="pname">
+                <template slot-scope="scope">
+                  <el-switch :disabled="islook==1" inactive-color="#cccccc"
+                    @change="conditionChangeSwitch(scope.row,pname)" :value="scope.row[pname]==1"
+                    :active-text="scope.row[pname] == 1 ? '开' : '关'" :width="50">
+                  </el-switch>
+                </template>
               </el-table-column>
             </template>
 
@@ -442,14 +448,15 @@
         // },
 
 
-        // // 执行方案-切换switch
-        // conditionChangeSwitch(row) {
-        //   this.prizeList.filter((item) => {
-        //     if (item.id == row.id) {
-        //       item.status = item.status == 1 ? 2 : 1
-        //     }
-        //   })
-        // },
+        // 执行方案-切换switch
+        conditionChangeSwitch(row, oIdName) {
+          console.log(oIdName)
+          this.prizeList.filter((item) => {
+            if (item.pManagerId == row.pManagerId) {
+              item[oIdName] = item[oIdName] == 1 ? 0 : 1;
+            }
+          })
+        },
         // // 条件列表-查看
         // conditionlook(row) {
         //   console.log("planlook")
