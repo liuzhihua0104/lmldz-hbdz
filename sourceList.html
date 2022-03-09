@@ -91,7 +91,7 @@
       </el-pagination>
 
       <!-- 奖品列表弹框 -->
-      <el-dialog title="素材源定向列表" :visible.sync="directionalVisible" center>
+      <el-dialog title="素材源定向列表" :visible.sync="directionalVisible" center >
         <div style="margin-bottom: 20px">素材源名称: {{rows.name}}</div>
         <!-- 表单 -->
         <el-form ref="directionalForm" size="mini" :inline="true" :model="directionalForm" class="demo-form-inline">
@@ -109,7 +109,7 @@
           </el-row>
         </el-form>
 
-        <el-table :data="directionalList" class="table-wrap" :border="true" size="mini">
+        <el-table :data="directionalList" class="table-wrap" :border="true" size="mini" height="250">
           <el-table-column label="序号" type="index" width="100"></el-table-column>
           <el-table-column label="定向名称" prop="name"></el-table-column>
         </el-table>
@@ -200,6 +200,8 @@
         },
 
         fetchList() {
+          console.log(JSON.stringify(this.filter))
+
           // service({
           //   url: '/prize/orientation/sList',
           //   method: 'post',
