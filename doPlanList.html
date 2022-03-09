@@ -172,6 +172,10 @@
             :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle">
           </orientation-details>
         </template>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="orientationDetailVisible = false">关 闭</el-button>
+        </span>
       </el-dialog>
 
 

@@ -155,6 +155,10 @@
                 :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle" :sourceid="formData.id">
               </orientation-details>
             </template>
+
+            <span slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="orientationDetailVisible = false">关 闭</el-button>
+            </span>
           </el-dialog>
 
           <!-- 奖品列表-->
@@ -169,7 +173,7 @@
               </template>
             </el-table-column> -->
 
-            <el-table-column align="center" type="index" width="80">
+            <el-table-column align="center" type="index" label="序号" width="80">
             </el-table-column>
             <el-table-column align="center" prop="id" label="奖品ID" >
             </el-table-column>
