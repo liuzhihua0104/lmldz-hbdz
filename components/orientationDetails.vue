@@ -1,5 +1,8 @@
  <template>
   <el-form :disabled="islook==1" label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData">
+    <div>
+      <el-button style="text-align:right" @click="window.location.reload()">重置123</el-button>
+    </div>
     <div class="top-title" v-if="isshowtoptitle==1">奖品定向详情</div>
     <div class="title">
       信息</div>
@@ -39,12 +42,12 @@
       </el-col>
       <el-col :span="24" v-if="formData.areaType==1">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader class="area-cascader" :key="cascaderIdx" :clearable="true" ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader :disabled="false" class="area-cascader" :key="cascaderIdx" :clearable="true" ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="areaOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.areaType==2">
         <el-form-item style="margin-right:0" label="" prop="areaJson">
-          <el-cascader clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="lineOptions" :props="{ multiple: true }" filterable></el-cascader>
+          <el-cascader :disabled="false" clearable ref="areaLevel" style="width:700px" @change="handleChange('areaLevel')" v-model="formData.areaJson" placeholder="请输入关键词" :options="lineOptions" :props="{ multiple: true }" filterable></el-cascader>
         </el-form-item>
       </el-col>
 
@@ -114,7 +117,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="24" v-if="formData.timeType=='2'">
-        <el-table :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}" height="250">
+        <el-table max-height="250px" :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}">
           <el-table-column align="center" width="80" label="序号" type="index"></el-table-column>
           <el-table-column align="center" label="时间段">
             <template slot-scope="scope">
@@ -143,7 +146,6 @@
               </div>
 
             </template>
-
           </el-table-column>
           <el-table-column align="center" label="操作" width="100px" style="display:flex">
             <template slot-scope="scope">
@@ -152,7 +154,7 @@
           </el-table-column>
         </el-table>
 
-        <div style="width:800px;text-align:center;margin-left:80px">
+        <div v-if="islook!=1" style="width:800px;text-align:center;margin-left:80px">
           <el-button style="margin-top:20px" type="primary" size="mini" class="btn" @click="addTimeRange">新增</el-button>
         </div>
       </el-col>

@@ -16,7 +16,7 @@
     <button id="lookPlan" bindId="rose" onclick="fn('123')">执行方案</button>
 
     
-    <div id="app">
+    <div id="addSchemeEntryApp">
         <el-dialog title="奖品实际应用方案" :visible.sync="applicationSchemeVisible" center>
             <application-scheme type="dialog"></application-scheme>
         </el-dialog>
@@ -33,7 +33,7 @@
 
 <script type="text/javascript">
     var dialogVm = new Vue({
-        el: '#app',
+        el: '#addSchemeEntryApp',
         data() {
             return {
                 applicationSchemeVisible: false, // 奖品实际应用方案弹框的显示与隐藏

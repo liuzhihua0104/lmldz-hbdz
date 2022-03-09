@@ -60,7 +60,7 @@
 
   <script src="./mockdata.js"></script>
 
-  <div id="app">
+  <div id="sourceListApp">
     <template>
       <el-form :inline="true" :model="filter" size="small">
         <el-form-item style="margin-right:0" label="关键字:">
@@ -91,7 +91,7 @@
       </el-pagination>
 
       <!-- 奖品列表弹框 -->
-      <el-dialog title="素材源定向列表" :visible.sync="directionalVisible" center >
+      <el-dialog title="素材源定向列表" :visible.sync="directionalVisible" center>
         <div style="margin-bottom: 20px">素材源名称: {{rows.name}}</div>
         <!-- 表单 -->
         <el-form ref="directionalForm" size="mini" :inline="true" :model="directionalForm" class="demo-form-inline">
@@ -126,7 +126,7 @@
   <script>
 
     var el = new Vue({
-      el: '#app',
+      el: '#sourceListApp',
       data() {
         return {
           filter: {
@@ -146,8 +146,6 @@
           },
           directionalList: [],// 奖品列表
           directionalVisible: false, // 控制奖品列表弹框弹框的展示与隐藏
-
-
         }
       },
       computed: {},
@@ -222,6 +220,27 @@
       },
       created() {
         this.fetchList()
+
+        let data = sourceDetailPrizePlist.data.list;
+
+        // 获取所有的奖品ID
+        let prizeIds = Array.from(new Set(data.map((item) => item.pManagerId)));
+
+        let resultArr = [];
+        prizeIds.map(item => {
+          let prizeItem = new Map();
+          data.map(element => {
+            if (element.pManagerId == item) {
+              prizeItem.set("pManagerId", element.pManagerId)
+              prizeItem.set("prizeName", element.prizeName)
+              prizeItem.set("strategyName", element.strategyName)
+              prizeItem.set(element.oId, element.oId)
+              prizeItem.set(element.oIdName, element.status)
+            }
+          })
+          resultArr.push(prizeItem)
+        })
+ 
       },
     })
   </script>

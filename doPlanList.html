@@ -63,7 +63,7 @@
 <body>
   <script src="./mockdata.js"></script>
 
-  <div id="app">
+  <div id="doPlanListApp">
     <template>
       <el-form :inline="true" :model="filter" size="small">
         <el-form-item style="margin-right:0" label="关键字:">
@@ -276,7 +276,7 @@
 
   <script>
     var el = new Vue({
-      el: '#app',
+      el: '#doPlanListApp',
       data() {
         return {
           filter: {
