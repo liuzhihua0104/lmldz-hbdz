@@ -395,8 +395,8 @@
           let params = {
             sourceId: "",
             status: row[oIdName] == 1 ? 0 : 1, //目标状态
-            prizeId: row[`${oIdName}_oId`], // 奖品ID
-            orientationId: row.oId, //方案ID
+            prizeId: row.pManagerId, // 奖品ID
+            orientationId: row[`${oIdName}_oId`], //方案ID
           }
 
           console.log(params)
