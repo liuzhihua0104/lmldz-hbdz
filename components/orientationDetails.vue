@@ -568,7 +568,7 @@ module.exports = {
         name: data.name, // 方案名称
         remarks: data.remarks, // 备注
         areaType: String(data.areaType), // 区域
-        sex: data.sex, // 性别
+        sex: String(data.sex), // 性别
         scanContent: data.scanContent, // 扫码工具
         timeType: data.timeType, // 时段
         areaJson: JSON.parse(data.areaJson), //回显省市县||限级    

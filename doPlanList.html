@@ -83,8 +83,6 @@
             <el-button v-else type="text" size="small" @click="showApplicationList(scope.row)">{{scope.row.prizeCount}}
             </el-button>
 
-            <el-button type="text" size="small" @click="showApplicationList(scope.row)">{{scope.row.prizeCount||0}}
-            </el-button>
 
           </template>
         </el-table-column>
@@ -156,7 +154,7 @@
 
         <el-table-column label="操作" width="170">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="showApplyList(scope.row)">应用</el-button>
+            <!-- <el-button type="text" size="small" @click="showApplyList(scope.row)">应用</el-button> -->
             <el-button type="text" size="small" @click="lookFn(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
             <el-button type="text" size="small" @click="onDel(scope.row)" v-if="scope.row.status==0">删除</el-button>
