@@ -674,9 +674,9 @@ module.exports = {
           level: "area"
         },
       }).then(({ data }) => {
-        let data = parseJson(data);
+        let resultData = parseJson(data);
         // 去除后端代码中多余的“一线、二线。。。”
-        data.map(item => {
+        resultData.map(item => {
           let newChildren = [];
           if (item.children && item.children.length) {
             item.children.map(ele => {
@@ -690,7 +690,7 @@ module.exports = {
             delete item.children
           }
         })
-        this.areaOptions = data;
+        this.areaOptions = resultData;
 
       })
     },
@@ -703,8 +703,8 @@ module.exports = {
           level: "line"
         },
       }).then(({ data }) => {
-        let data = parseJson(data);
-        this.lineOptions = data;
+        let resultData = parseJson(data);
+        this.lineOptions = resultData;
       })
     },
     // 切换areaType
@@ -717,14 +717,12 @@ module.exports = {
 
   },
   created() {
-
-  console.log(12346)
-    // this.getArea(); //获取省市县城市
-    // this.getLine(); //获取线级城市
-    // if (this.id) {
-    //   this.formData.id = this.id;
-    //   this.getDetails()
-    // }
+    this.getArea(); //获取省市县城市
+    this.getLine(); //获取线级城市
+    if (this.id) {
+      this.formData.id = this.id;
+      this.getDetails()
+    }
   }
 }
 </script>
