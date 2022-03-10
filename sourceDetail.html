@@ -103,7 +103,6 @@
 </head>
 
 <body>
-  <script src="./mockdata.js"></script>
   <div id="sourceDetailApp">
     <template>
       <div class="out-dialog">
@@ -281,15 +280,13 @@
             pageSize: "",
             sourceName: ""
           }
-          console.log(params)
-          // service({
-          //   url: '/prize/orientation/mList',
-          //   method: 'post',
-          //   data: params,
-          // }).then(({ data }) => {
-          let data = sourceDetailMlist.data
-          this.planListData = data.list || [];
-          // })
+          service({
+            url: '/prize/orientation/mList',
+            method: 'post',
+            data: params,
+          }).then(({ data }) => {
+            this.planListData = data.list || [];
+          })
         },
 
         // 获取素材源奖品列表
@@ -299,39 +296,33 @@
             sourceId: this.formData.id,
             prizeName: ""
           }
+          service({
+            url: '/prize/orientation/pList',
+            method: 'post',
+            data: params,
+          }).then(({ data }) => {
+            let data = data.list;
+            // 获取所有的奖品ID
+            let prizeIds = Array.from(new Set(data.map((item) => item.pManagerId)));
+            this.oNames = Array.from(new Set(data.map((item) => item.oName)));
+            let resultArr = [];
 
-          console.log(params)
-          // service({
-          //   url: '/prize/orientation/pList',
-          //   method: 'post',
-          //   data: params,
-          // }).then(({ data }) => {
-          // let data = sourceDetailPrizePlist.data;
-
-          let data = sourceDetailPrizePlist.data.list;
-
-          // 获取所有的奖品ID
-          let prizeIds = Array.from(new Set(data.map((item) => item.pManagerId)));
-          this.oNames = Array.from(new Set(data.map((item) => item.oName)));
-          console.log(this.oNames)
-
-          let resultArr = [];
-
-          prizeIds.map(item => {
-            let prizeItem = {};
-            data.map(element => {
-              if (element.pManagerId == item) {
-                prizeItem.pManagerId = item;
-                prizeItem.prizeName = element.prizeName;
-                prizeItem.strategyName = element.strategyName;
-                prizeItem[`${element.oName}_oId`] = element.oId; // 一个奖品会有多个方案名称、多个方案ID，所以要拼接区分
-                prizeItem[element.oName] = element.status; // 方案名称不会有重复的，所以不用处理
-              }
+            prizeIds.map(item => {
+              let prizeItem = {};
+              data.map(element => {
+                if (element.pManagerId == item) {
+                  prizeItem.pManagerId = item;
+                  prizeItem.prizeName = element.prizeName;
+                  prizeItem.strategyName = element.strategyName;
+                  prizeItem[`${element.oName}_oId`] = element.oId; // 一个奖品会有多个方案名称、多个方案ID，所以要拼接区分
+                  prizeItem[element.oName] = element.status; // 方案名称不会有重复的，所以不用处理
+                }
+              })
+              resultArr.push(prizeItem)
             })
-            resultArr.push(prizeItem)
-          })
 
-          this.prizeList = resultArr;
+            this.prizeList = resultArr;
+          })
         },
 
         // 添加素材源定向，跳转到定向详情，要携带资源id
@@ -342,14 +333,12 @@
         // 查看定向
         lookFn(rows) {
           this.rows = rows;
-          console.log(rows)
           sessionStorage.setItem("rows", JSON.stringify(rows));
           this.orientationDetailVisible = true;
         },
         // 编辑定向
         onEdit(rows) {
           this.rows = rows;
-          console.log(rows)
           sessionStorage.setItem("rows", JSON.stringify(rows));
           location.href = `./prizeOrientationDetails.html?id=${rows.id}&islook=0&isshowtoptitle=1&type=page&sourceId=${this.formData.id}`
         },
@@ -386,7 +375,6 @@
 
         // 奖品-切换switch
         conditionChangeSwitch(row, oName) {
-          console.log(row)
           let params = {
             sourceId: "",
             status: row[oName] == 1 ? 0 : 1, //目标状态
@@ -424,11 +412,9 @@
         let query = getUrlQuery()
         if (query.id) {
           this.getDetails();
-
           this.islook = query.islook;
         }
-        // 获取项目列表
-        // this.getProjectList()
+    
       },
     })
   </script>

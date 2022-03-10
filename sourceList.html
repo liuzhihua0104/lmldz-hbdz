@@ -57,9 +57,6 @@
 </head>
 
 <body>
-
-  <script src="./mockdata.js"></script>
-
   <div id="sourceListApp">
     <template>
       <el-form :inline="true" :model="filter" size="small">
@@ -179,16 +176,14 @@
             pageSize: "",
             sourceName: this.directionalForm.sourceName,
           }
-
-          console.log(params)
-          // service({
-          //   url: '/prize/orientation/mList',
-          //   method: 'post',
-          //   data: params,
-          // }).then(({ data }) => {
-          let data = sourceListMainMlist.data;
+       
+          service({
+            url: '/prize/orientation/mList',
+            method: 'post',
+            data: params,
+          }).then(({ data }) => {
           this.directionalList = data.list
-          // })
+          })
         },
 
         // 定向列表-点击列表数字，弹出“定向列表弹框
@@ -206,17 +201,14 @@
         },
 
         fetchList() {
-          console.log(JSON.stringify(this.filter))
-
-          // service({
-          //   url: '/prize/orientation/sList',
-          //   method: 'post',
-          //   data: this.filter,
-          // }).then(({ data }) => {
-          let data = sList.data;
+          service({
+            url: '/prize/orientation/sList',
+            method: 'post',
+            data: this.filter,
+          }).then(({ data }) => {
           this.tableData = data.list
           this.page.total = data.total
-          // })
+          })
         },
         //搜索
         onSearch() {

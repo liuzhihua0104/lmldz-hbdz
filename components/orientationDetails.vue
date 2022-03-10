@@ -535,11 +535,8 @@ module.exports = {
     // 保存成功后返回其他页面
     saveFn(formName) {
       let self = this;
-
-
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(self.doSaveParams())
           service({
             url: '/prize/orientation/create',
             method: 'post',
@@ -567,8 +564,6 @@ module.exports = {
     // 编辑获取表单详情
     getDetails() {
       let data = JSON.parse(sessionStorage.getItem("rows"));
-      console.log(data)
-
       let form = {
         name: data.name, // 方案名称
         remarks: data.remarks, // 备注
@@ -641,7 +636,6 @@ module.exports = {
 
       } else if (_.intersection(["3", "4", "5", "6", "7", "8", "9"], data.holidays.split(",")).length) {
         form.holidays = "week";
-        // form.weekData_values = data.holidays.split(""); //星期
         //法定
         let values = data.holidays.split(",");
         form.weekData_values = values;
@@ -719,46 +713,45 @@ module.exports = {
 
     // 获取区域信息
     getArea() {
-      // service({
-      //   url: '/prize/area/list',
-      //   method: 'post',
-      //   data: {
-      //     level: "area"
-      //   },
-      // }).then(({ data }) => {
-      let data = parseJson(areaList.data);
-      // 去除后端代码中多余的“一线、二线。。。”
-      data.map(item => {
-        let newChildren = [];
-        if (item.children && item.children.length) {
-          item.children.map(ele => {
-            if (![10, 11, 12, 13, 14, 15].includes(ele.value)) {
-              newChildren.push(ele)
-            }
-          })
-          item.children = newChildren;
+      service({
+        url: '/prize/area/list',
+        method: 'post',
+        data: {
+          level: "area"
+        },
+      }).then(({ data }) => {
+        let data = parseJson(data);
+        // 去除后端代码中多余的“一线、二线。。。”
+        data.map(item => {
+          let newChildren = [];
+          if (item.children && item.children.length) {
+            item.children.map(ele => {
+              if (![10, 11, 12, 13, 14, 15].includes(ele.value)) {
+                newChildren.push(ele)
+              }
+            })
+            item.children = newChildren;
 
-        } else {
-          delete item.children
-        }
+          } else {
+            delete item.children
+          }
+        })
+        this.areaOptions = data;
+
       })
-      this.areaOptions = data;
-
-      // })
     },
     // 获取区域信息
     getLine() {
-      // service({
-      //   url: '/prize/area/list',
-      //   method: 'post',
-      //   data: {
-      //     level: "line"
-      //   },
-      // }).then(({ data }) => {
-      let data = parseJson(lineList.data);
-      this.lineOptions = data;
-
-      // })
+      service({
+        url: '/prize/area/list',
+        method: 'post',
+        data: {
+          level: "line"
+        },
+      }).then(({ data }) => {
+        let data = parseJson(data);
+        this.lineOptions = data;
+      })
     },
     // 切换areaType
     changeAreaType() {

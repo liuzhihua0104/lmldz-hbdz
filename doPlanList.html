@@ -61,8 +61,6 @@
 </head>
 
 <body>
-  <script src="./mockdata.js"></script>
-
   <div id="doPlanListApp">
     <template>
       <el-form :inline="true" :model="filter" size="small">
@@ -334,19 +332,14 @@
 
         // 获取列表
         fetchList() {
-          console.log(JSON.stringify(this.filter))
-
-          // service({
-          //   url: '/prize/orientation/list',
-          //   method: 'post',
-          //   data: this.filter,
-          // }).then(({ data }) => {
-          let data = doPlanList.data;
-
-          this.tableData = data.list
-          this.page.total = data.total
-
-          // })
+          service({
+            url: '/prize/orientation/list',
+            method: 'post',
+            data: this.filter,
+          }).then(({ data }) => {
+            this.tableData = data.list
+            this.page.total = data.total
+          })
         },
 
         // 奖品列表
@@ -356,16 +349,13 @@
             sourceId: "",
             prizeName: this.prizeForm.prizeName
           }
-
-          console.log(params)
-          // service({
-          //   url: '/prize/orientation/pList',
-          //   method: 'post',
-          //   data: params,
-          // }).then(({ data }) => {
-          let data = doPlanPrizeList.data;
-          this.prizeList = data.list
-          // })
+          service({
+            url: '/prize/orientation/pList',
+            method: 'post',
+            data: params,
+          }).then(({ data }) => {
+            this.prizeList = data.list
+          })
         },
 
         // 奖品列表-点击列表数字，弹出“奖品列表弹框
@@ -389,16 +379,13 @@
             sourceId: "",
             prizeName: this.applyForm.prizeName
           }
-
-          console.log(params)
-          // service({
-          //   url: '/prize/orientation/pList',
-          //   method: 'post',
-          //   data: params,
-          // }).then(({ data }) => {
-          let data = doPlanApplyList.data;
-          this.applyList = data.list
-          // })
+          service({
+            url: '/prize/orientation/pList',
+            method: 'post',
+            data: params,
+          }).then(({ data }) => {
+            this.applyList = data.list
+          })
         },
 
         // 应用列表-点击列表数字，弹出“应用列表弹框
@@ -427,20 +414,17 @@
               type: 'warning'
             });
           }
-          console.log("点击了发布")
         },
 
         // 查看
         lookFn(rows) {
           this.rows = rows;
-          console.log(rows)
           sessionStorage.setItem("rows", JSON.stringify(rows));
           this.orientationDetailVisible = true;
         },
         // 编辑
         onEdit(rows) {
           this.rows = rows;
-          console.log(rows)
           sessionStorage.setItem("rows", JSON.stringify(rows));
           location.href = `./prizeOrientationDetails.html?id=${rows.id}&islook=0&isshowtoptitle=1&type=page`
         },
@@ -460,7 +444,6 @@
             .then(() => {
               this.getDel()
             })
-            .catch(() => { })
         },
 
         // 删除
@@ -474,7 +457,7 @@
             data: params
           }).then(() => {
             this.fetchList()
-          }).catch((err)=>{
+          }).catch((err) => {
             this.$message.error(err.msg);
           })
         },
@@ -489,7 +472,6 @@
         submitCopyForm(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
-              console.log(this.copyForm)
             } else {
               return false;
             }
