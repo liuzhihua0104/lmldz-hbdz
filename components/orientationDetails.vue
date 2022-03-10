@@ -667,45 +667,57 @@ module.exports = {
 
     // 获取区域信息
     getArea() {
-      service({
-        url: '/prize/area/list',
-        method: 'post',
-        data: {
-          level: "area"
-        },
-      }).then(({ data }) => {
-        let resultData = parseJson(data);
-        // 去除后端代码中多余的“一线、二线。。。”
-        resultData.map(item => {
-          let newChildren = [];
-          if (item.children && item.children.length) {
-            item.children.map(ele => {
-              if (![10, 11, 12, 13, 14, 15].includes(ele.value)) {
-                newChildren.push(ele)
-              }
-            })
-            item.children = newChildren;
+      let areaOptions = JSON.parse(sessionStorage.getItem("areaOptions"))
+      if (areaOptions) {
+        this.areaOptions = areaOptions;
+      } else {
+        service({
+          url: '/prize/area/list',
+          method: 'post',
+          data: {
+            level: "area"
+          },
+        }).then(({ data }) => {
+          let resultData = parseJson(data);
+          // 去除后端代码中多余的“一线、二线。。。”
+          resultData.map(item => {
+            let newChildren = [];
+            if (item.children && item.children.length) {
+              item.children.map(ele => {
+                if (![10, 11, 12, 13, 14, 15].includes(ele.value)) {
+                  newChildren.push(ele)
+                }
+              })
+              item.children = newChildren;
 
-          } else {
-            delete item.children
-          }
+            } else {
+              delete item.children
+            }
+          })
+          this.areaOptions = resultData;
+          sessionStorage.setItem("areaOptions", JSON.stringify(resultData))
         })
-        this.areaOptions = resultData;
+      }
 
-      })
     },
     // 获取区域信息
     getLine() {
-      service({
-        url: '/prize/area/list',
-        method: 'post',
-        data: {
-          level: "line"
-        },
-      }).then(({ data }) => {
-        let resultData = parseJson(data);
-        this.lineOptions = resultData;
-      })
+      let lineOptions = JSON.parse(sessionStorage.getItem("lineOptions"))
+      if (lineOptions) {
+        this.lineOptions = lineOptions;
+      } else {
+        service({
+          url: '/prize/area/list',
+          method: 'post',
+          data: {
+            level: "line"
+          },
+        }).then(({ data }) => {
+          let resultData = parseJson(data);
+          this.lineOptions = resultData;
+          sessionStorage.setItem("lineOptions", JSON.stringify(resultData))
+        })
+      }
     },
     // 切换areaType
     changeAreaType() {
