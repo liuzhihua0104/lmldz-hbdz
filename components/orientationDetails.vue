@@ -717,12 +717,14 @@ module.exports = {
 
   },
   created() {
-    this.getArea(); //获取省市县城市
-    this.getLine(); //获取线级城市
-    if (this.id) {
-      this.formData.id = this.id;
-      this.getDetails()
-    }
+
+  console.log(12346)
+    // this.getArea(); //获取省市县城市
+    // this.getLine(); //获取线级城市
+    // if (this.id) {
+    //   this.formData.id = this.id;
+    //   this.getDetails()
+    // }
   }
 }
 </script>
