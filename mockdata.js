@@ -718,127 +718,126 @@ let sourceDetailPrizePlist={
     "code": 200,
     "msg": null,
     "data": {
-        "total": 10,
         "list": [
             {
                 "id": "d8677228ddf44d3da387cf658b512b93",
                 "mSourceId": "87ae8d1f62ec4eb097c42f0c6c085881",
                 "pManagerId": "2c9180827ba554e7017bf75263a40045",
                 "oId": "36c1638b72fa4ebf81d0fc6a335b33b3",
-                "oIdName":"定向01",
-                "status": 0,
+                "status": 1,
                 "prizeName": "北京青啤经典青岛啤酒白啤",
                 "strategyPrize": "2c9180827ba554e7017bf75263a30044",
                 "strategyName": "BJQPJD",
-                "prizeCount": null
+                "prizeCount": null,
+                "oName": "sajdfkja;fdjksla"
             },
             {
                 "id": "767dffbf95044f2ab043f99fb4145e91",
                 "mSourceId": "87ae8d1f62ec4eb097c42f0c6c085881",
                 "pManagerId": "2c9180827ba554e7017bf75263a40045",
                 "oId": "cc8ee94b0f2f4006ae30ad26cfacb0f3",
-                "oIdName":"定向02",
-                "status": 1,
+                "status": 0,
                 "prizeName": "北京青啤经典青岛啤酒白啤",
                 "strategyPrize": "2c9180827ba554e7017bf75263a30044",
                 "strategyName": "BJQPJD",
-                "prizeCount": null
+                "prizeCount": null,
+                "oName": "测试sourceId"
             },
             {
                 "id": "aed58dadb84b44839af2fe5477ae3438",
                 "mSourceId": "87ae8d1f62ec4eb097c42f0c6c085881",
                 "pManagerId": "40284b817c0c5af0017c0cbb97f50002",
                 "oId": "36c1638b72fa4ebf81d0fc6a335b33b3",
-                "oIdName":"定向01",
-                "status": 1,
+                "status": 0,
                 "prizeName": "北京青啤经典青岛啤酒白啤",
                 "strategyPrize": "40284b817c0c5af0017c0cbb968f0001",
                 "strategyName": "0922策略",
-                "prizeCount": null
+                "prizeCount": null,
+                "oName": "sajdfkja;fdjksla"
             },
             {
                 "id": "fbc2ca01dc5745c98a7b93ddaede225a",
                 "mSourceId": "87ae8d1f62ec4eb097c42f0c6c085881",
                 "pManagerId": "40284b817c0c5af0017c0cbb97f50002",
                 "oId": "cc8ee94b0f2f4006ae30ad26cfacb0f3",
-                "oIdName":"定向02",
-                "status": 0,
+                "status": 1,
                 "prizeName": "北京青啤经典青岛啤酒白啤",
                 "strategyPrize": "40284b817c0c5af0017c0cbb968f0001",
                 "strategyName": "0922策略",
-                "prizeCount": null
+                "prizeCount": null,
+                "oName": "测试sourceId"
             },
             {
                 "id": "9f19808ac26b4de5b0e4fef9e44621c2",
                 "mSourceId": "87ae8d1f62ec4eb097c42f0c6c085881",
                 "pManagerId": "40284b817c0c5af0017c0ccc8fcd0007",
                 "oId": "36c1638b72fa4ebf81d0fc6a335b33b3",
-                "oIdName":"定向01",
                 "status": 0,
                 "prizeName": "北京青啤经典青岛啤酒白啤",
                 "strategyPrize": "40284b817c0c5af0017c0ccc0d9c0006",
                 "strategyName": "0922策略1",
-                "prizeCount": null
+                "prizeCount": null,
+                "oName": "sajdfkja;fdjksla"
             },
             {
                 "id": "a5f04dbf2f99477d9ae51f354f2c1af3",
                 "mSourceId": "87ae8d1f62ec4eb097c42f0c6c085881",
                 "pManagerId": "40284b817c0c5af0017c0ccc8fcd0007",
                 "oId": "cc8ee94b0f2f4006ae30ad26cfacb0f3",
-                "oIdName":"定向02",
                 "status": 0,
                 "prizeName": "北京青啤经典青岛啤酒白啤",
                 "strategyPrize": "40284b817c0c5af0017c0ccc0d9c0006",
                 "strategyName": "0922策略1",
-                "prizeCount": null
+                "prizeCount": null,
+                "oName": "测试sourceId"
             },
             {
                 "id": "4807e1a1598b4c03a69443442ca44279",
                 "mSourceId": "87ae8d1f62ec4eb097c42f0c6c085881",
                 "pManagerId": "402881a97c1fc2c7017c2170476d0004",
                 "oId": "36c1638b72fa4ebf81d0fc6a335b33b3",
-                "oIdName":"定向01",
                 "status": 0,
                 "prizeName": "北京青啤经典青岛啤酒白啤",
                 "strategyPrize": "402881a97c1fc2c7017c217045040001",
                 "strategyName": "测试0926",
-                "prizeCount": null
+                "prizeCount": null,
+                "oName": "sajdfkja;fdjksla"
             },
             {
                 "id": "32f55176ec12456786194da9b02c4cac",
                 "mSourceId": "87ae8d1f62ec4eb097c42f0c6c085881",
                 "pManagerId": "402881a97c1fc2c7017c2170476d0004",
                 "oId": "cc8ee94b0f2f4006ae30ad26cfacb0f3",
-                "oIdName":"定向02",
                 "status": 0,
                 "prizeName": "北京青啤经典青岛啤酒白啤",
                 "strategyPrize": "402881a97c1fc2c7017c217045040001",
                 "strategyName": "测试0926",
-                "prizeCount": null
+                "prizeCount": null,
+                "oName": "测试sourceId"
             },
             {
                 "id": "010fc3391eb545a38fd1df5d45a7ee6a",
                 "mSourceId": "87ae8d1f62ec4eb097c42f0c6c085881",
                 "pManagerId": "402881e87c2b7bfe017c62ff07ca0003",
                 "oId": "36c1638b72fa4ebf81d0fc6a335b33b3",
-                "oIdName":"定向01",
                 "status": 0,
                 "prizeName": "北京青啤经典青岛啤酒白啤",
                 "strategyPrize": "402881e87c2b7bfe017c62ff07880001",
                 "strategyName": "20211009-l",
-                "prizeCount": null
+                "prizeCount": null,
+                "oName": "sajdfkja;fdjksla"
             },
             {
                 "id": "c330ba24b61843cc8e9eb59519796082",
                 "mSourceId": "87ae8d1f62ec4eb097c42f0c6c085881",
                 "pManagerId": "402881e87c2b7bfe017c62ff07ca0003",
                 "oId": "cc8ee94b0f2f4006ae30ad26cfacb0f3",
-                "oIdName":"定向02",
                 "status": 0,
                 "prizeName": "北京青啤经典青岛啤酒白啤",
                 "strategyPrize": "402881e87c2b7bfe017c62ff07880001",
                 "strategyName": "20211009-l",
-                "prizeCount": null
+                "prizeCount": null,
+                "oName": "测试sourceId"
             }
         ]
     }

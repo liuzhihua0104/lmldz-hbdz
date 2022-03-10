@@ -181,8 +181,8 @@
             </el-table-column>
             <el-table-column align="center" prop="strategyName" label="策略">
             </el-table-column>
-            <template v-if="oIdNames.length">
-              <el-table-column v-for="pname in oIdNames" align="center" :label="pname">
+            <template v-if="oNames.length">
+              <el-table-column v-for="pname in oNames" align="center" :label="pname">
                 <template slot-scope="scope">
                   <el-switch :disabled="islook==1" inactive-color="#cccccc"
                     @change="conditionChangeSwitch(scope.row,pname)" :value="scope.row[pname]==1"
@@ -253,7 +253,7 @@
           row: {}, //查看的那条定向详情数据
           planListData: [], // 方案列表
           prizeList: [],  // 奖品列表
-          oIdNames: [] //方案名称集合，用于渲染列表
+          oNames: [] //方案名称集合，用于渲染列表
         }
       },
       watch: {
@@ -312,8 +312,8 @@
 
           // 获取所有的奖品ID
           let prizeIds = Array.from(new Set(data.map((item) => item.pManagerId)));
-          this.oIdNames = Array.from(new Set(data.map((item) => item.oIdName)));
-          console.log(this.oIdNames)
+          this.oNames = Array.from(new Set(data.map((item) => item.oName)));
+          console.log(this.oNames)
 
           let resultArr = [];
 
@@ -324,8 +324,8 @@
                 prizeItem.pManagerId = item;
                 prizeItem.prizeName = element.prizeName;
                 prizeItem.strategyName = element.strategyName;
-                prizeItem[`${element.oIdName}_oId`] = element.oId; // 一个奖品会有多个方案名称、多个方案ID，所以要拼接区分
-                prizeItem[element.oIdName] = element.status; // 方案名称不会有重复的，所以不用处理
+                prizeItem[`${element.oName}_oId`] = element.oId; // 一个奖品会有多个方案名称、多个方案ID，所以要拼接区分
+                prizeItem[element.oName] = element.status; // 方案名称不会有重复的，所以不用处理
               }
             })
             resultArr.push(prizeItem)
@@ -390,17 +390,17 @@
 
 
         // 奖品-切换switch
-        conditionChangeSwitch(row, oIdName) {
+        conditionChangeSwitch(row, oName) {
           console.log(row)
           let params = {
             sourceId: "",
-            status: row[oIdName] == 1 ? 0 : 1, //目标状态
+            status: row[oName] == 1 ? 0 : 1, //目标状态
             prizeId: row.pManagerId, // 奖品ID
-            orientationId: row[`${oIdName}_oId`], //方案ID
+            orientationId: row[`${oName}_oId`], //方案ID
           }
 
           console.log(params)
-          console.log(row[`${oIdName}_oId`])
+          console.log(row[`${oName}_oId`])
           service({
             url: 'prize/orientation/updateOrientationMPAndPrize',
             method: 'post',
@@ -410,7 +410,7 @@
             // 不再重新调取列表了，节约性能，前端自行处理
             this.prizeList.filter((item) => {
               if (item.pManagerId == row.pManagerId) {
-                item[oIdName] = item[oIdName] == 1 ? 0 : 1;
+                item[oName] = item[oName] == 1 ? 0 : 1;
               }
             })
 
