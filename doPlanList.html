@@ -79,10 +79,9 @@
         <el-table-column label="执行方案名称" prop="name"></el-table-column>
         <el-table-column label="奖品定向关联数量">
           <template slot-scope="scope">
-            <span v-if="scope.row.prizeCount<=0" type="text" size="small">0</span>
+            <span v-if="scope.row.prizeCount<=0" type="text" size="small">{{scope.row.prizeCount||0}}</span>
             <el-button v-else type="text" size="small" @click="showApplicationList(scope.row)">{{scope.row.prizeCount}}
             </el-button>
-
 
           </template>
         </el-table-column>

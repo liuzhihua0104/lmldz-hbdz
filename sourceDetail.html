@@ -331,12 +331,7 @@
             resultArr.push(prizeItem)
           })
 
-
           this.prizeList = resultArr;
-
-
-
-
         },
 
         // 添加素材源定向，跳转到定向详情，要携带资源id
@@ -382,7 +377,7 @@
             method: 'post',
             data: params
           }).then(() => {
-            this.fetchList()
+            this.getSourceOrientationList(); //重新获取素材源定向列表
           }).catch((err) => {
             this.$message.error(err.msg);
           })
@@ -399,20 +394,22 @@
             orientationId: row[`${oName}_oId`], //方案ID
           }
 
-          console.log(params)
-          console.log(row[`${oName}_oId`])
           service({
             url: 'prize/orientation/updateOrientationMPAndPrize',
             method: 'post',
             data: params
           }).then(() => {
 
-            // 不再重新调取列表了，节约性能，前端自行处理
-            this.prizeList.filter((item) => {
-              if (item.pManagerId == row.pManagerId) {
-                item[oName] = item[oName] == 1 ? 0 : 1;
-              }
-            })
+            // 第一种 不再重新调取列表了，节约性能，前端自行处理
+            // this.prizeList.filter((item) => {
+            //   if (item.pManagerId == row.pManagerId) {
+            //     item[oName] = item[oName] == 1 ? 0 : 1;
+            //   }
+            // })
+
+            // 第二种方式，直接调取列表自动更新
+            this.getSourcePrizeList();
+
 
           }).catch((err) => {
             this.$message.error(err.msg);

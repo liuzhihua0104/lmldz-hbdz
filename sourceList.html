@@ -68,15 +68,23 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSearch">查询</el-button>
-          <!-- <el-button type="primary" @click="onAdd()">创建执行方案</el-button> -->
         </el-form-item>
       </el-form>
 
       <el-table :data="tableData" class="table-wrap" border align="center">
         <el-table-column label="素材源名称" prop="name"></el-table-column>
+        <!-- <el-table-column label="素材源定向数量">
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="scope.row.count?showDirectionalList(scope.row):null">
+              {{scope.row.count||0}}</el-button>
+          </template>
+        </el-table-column> -->
         <el-table-column label="素材源定向数量">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="showDirectionalList(scope.row)">10</el-button>
+            <span v-if="scope.row.count<=0" type="text" size="small">{{scope.row.count||0}}</span>
+            <el-button v-else type="text" size="small" @click="showDirectionalList(scope.row)">{{scope.row.count}}
+            </el-button>
+
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150">
@@ -219,8 +227,8 @@
 
       },
       created() {
-        this.fetchList();   
- 
+        this.fetchList();
+
       },
     })
   </script>
