@@ -301,15 +301,15 @@
             method: 'post',
             data: params,
           }).then(({ data }) => {
-            let data = data.list;
+            let list = data.list;
             // 获取所有的奖品ID
-            let prizeIds = Array.from(new Set(data.map((item) => item.pManagerId)));
-            this.oNames = Array.from(new Set(data.map((item) => item.oName)));
+            let prizeIds = Array.from(new Set(list.map((item) => item.pManagerId)));
+            this.oNames = Array.from(new Set(list.map((item) => item.oName)));
             let resultArr = [];
 
             prizeIds.map(item => {
               let prizeItem = {};
-              data.map(element => {
+              list.map(element => {
                 if (element.pManagerId == item) {
                   prizeItem.pManagerId = item;
                   prizeItem.prizeName = element.prizeName;
@@ -414,7 +414,7 @@
           this.getDetails();
           this.islook = query.islook;
         }
-    
+
       },
     })
   </script>
