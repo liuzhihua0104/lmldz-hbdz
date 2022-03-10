@@ -199,17 +199,8 @@
             <el-radio label="0">不限制</el-radio>
             <el-radio label="1">ios</el-radio>
             <el-radio label="2">Android</el-radio>
-            <el-radio label="3">HarmonyOS</el-radio>
-            <el-radio label="custom">自定义</el-radio>
+            <el-radio label="5">其他</el-radio>
           </el-radio-group>
-        </el-form-item>
-      </el-col>
-      <el-col :span="24" v-if="formData.devices=='custom'">
-        <el-checkbox style="margin:0 0 15px 100px" :indeterminate="formData.devicesCustomData_isIndeterminate" v-model="formData.devicesCustomData_checkAll" @change="commonChangeCheckAll($event,'devicesCustomData')">全选</el-checkbox>
-        <el-form-item style="margin-right:0" label="" prop="devicesCustomData_values">
-          <el-checkbox-group @change="commonSelectOption($event,'devicesCustomData')" v-model="formData.devicesCustomData_values">
-            <el-checkbox v-for="item in formData.devicesCustomData_options" :key="item.label" :label="item.label">{{item.name}}</el-checkbox>
-          </el-checkbox-group>
         </el-form-item>
       </el-col>
     </el-row>
@@ -288,12 +279,6 @@ let weekOptions = [
   { name: "星期六", label: "9" },
   { name: "星期日", label: "3" }
 ]
-let devicesCustomOptions = [
-  { name: "ios", label: "1" },
-  { name: "Android", label: "2" },
-  { name: "HarmonyOS", label: "3" }
-]
-
 
 module.exports = {
   props: ["type", "islook", "id", "isshowtoptitle", "prizeid", "sourceid"],
@@ -313,7 +298,7 @@ module.exports = {
         scanContent: "0", // 扫码工具 0不限1微信2支付宝
         timeType: "0", // 时段 0不限1时间段2自定义
         holidays: "0", // 节假日0不限1节假日2工作日3周一4周二5周三6周四7周五8周六9周日
-        devices: "0", // 设备0不限1ios2安卓3鸿蒙
+        devices: "0", // 设备0不限1ios2安卓5其他
         sex: "0", // 0不限1男2女
 
 
@@ -337,11 +322,6 @@ module.exports = {
         weekData_checkAll: false,// 是否全选
         weekData_isIndeterminate: false, //是否全选（只负责样式）
         weekData_values: [], //选中的结果
-        // 设备平台自定义
-        devicesCustomData_options: devicesCustomOptions,// 选项
-        devicesCustomData_checkAll: false,// 是否全选
-        devicesCustomData_isIndeterminate: false, //是否全选（只负责样式）
-        devicesCustomData_values: [], //选中的结果
       },
 
 
@@ -391,10 +371,7 @@ module.exports = {
         ],
         weekData_values: [
           { required: true, message: '请选择星期', trigger: 'change' },
-        ],
-        devicesCustomData_values: [
-          { required: true, message: '请选择设备', trigger: 'change' },
-        ],
+        ]
 
       },
 
@@ -457,6 +434,7 @@ module.exports = {
         sex: this.formData.sex, // 性别
         scanContent: this.formData.scanContent, // 扫码工具
         timeType: this.formData.timeType, // 时段
+        devices: this.formData.devices// 设备
       }
 
       if (this.formData.id) {
@@ -520,13 +498,6 @@ module.exports = {
         paramsForm.holidays = this.formData.weekData_values.join() // 星期
       }
 
-
-      // 处理设备平台
-      if (this.formData.devices == "custom") {
-        paramsForm.devices = this.formData.devicesCustomData_values.join() // 自定义
-      } else {
-        paramsForm.devices = this.formData.devices;
-      }
       return paramsForm;
 
     },
@@ -573,6 +544,7 @@ module.exports = {
         timeType: data.timeType, // 时段
         areaJson: JSON.parse(data.areaJson), //回显省市县||限级    
         areaContent: data.areaContent, //区域内容,库里存的'
+        devices: data.devices, //设备
       }
 
       // 判断时段是否是自定义时间段||自定义
@@ -644,24 +616,6 @@ module.exports = {
         form.weekData_checkAll = values.length == optLength
         // 全选按钮样式
         form.weekData_isIndeterminate = !(values.length == optLength)
-      }
-
-
-      // 处理设备平台
-      if (data.devices == 0) {
-        form.devices = "0" //不限
-      } else if (["1", "2", "3"].includes(data.devices)) {
-        form.devices = data.devices;
-      } else {
-        form.devices = "custom" //自定义
-        let values = data.devices.split(",");
-        form.devicesCustomData_values = values;
-        // 是否全选
-        let optLength = this.formData.devicesCustomData_options.length;
-        form.devicesCustomData_checkAll = values.length == optLength
-        // 全选按钮样式
-        form.devicesCustomData_isIndeterminate = !(values.length == optLength)
-
       }
 
       this.formData = { ...this.formData, ...form };
