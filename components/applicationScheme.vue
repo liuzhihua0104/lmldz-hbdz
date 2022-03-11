@@ -50,8 +50,8 @@
         </el-table-column>
       </el-table>
 
-      <!-- 条件表格-最多3条-->
-      <el-table :data="conditionListData" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}" style="margin-bottom:20px">
+      <!--素材源定向表格-->
+      <el-table :data="sourceDirectionalList" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}" style="margin-bottom:20px">
         <el-table-column align="center" label="开关" width="100">
           <template slot-scope="scope">
             <el-switch inactive-color="#cccccc" @change="conditionChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
@@ -161,6 +161,8 @@ module.exports = {
       rowData: {}, //；列表当前行数据
       pagePlanList: [], //页面上的方案列表
 
+
+      sourceDirectionalList: [],//资源定向列表
 
       // ===============
 
@@ -320,7 +322,7 @@ module.exports = {
 
       // 方案获取列表
       // service({
-      //   url: '/prize/orientation/list',
+      //   url: '/prize/orientation/listNoPage',
       //   method: 'post',
       //   data: this.planForm,
       // }).then(({ data }) => {
@@ -336,7 +338,7 @@ module.exports = {
       console.log(this.planForm)
       // 方案获取列表
       // service({
-      //   url: '/prize/orientation/list',
+      //   url: '/prize/orientation/listNoPage',
       //   method: 'post',
       //   data: this.planForm,
       // }).then(({ data }) => {
@@ -364,24 +366,43 @@ module.exports = {
         return this.$message.error("请先选择方案");
       }
 
-      let ids = Array.from(new Set(this.multipleSelection.map(item => item.id))).join(",")
+      let ids = Array.from(new Set(this.multipleSelection.map(item => item.id)))
+
+      let result = ids.length == 1 ? ids.join(",") : ids;
+      console.log(params)
+
+
+      let params = {
+
+      }
+
+
+      // service({
+      //   url: '/prize/orientation/updateOrientationMPAndPrize',
+      //   method: 'post',
+      //   data: ,
+      // }).then(({ data }) => {
+
+      let data = doPlanList.data;
+
+      this.pagePlanList = data.list
+      // })
       console.log(ids)
 
-       this.getPagePlanList(); //获取页面上的方案列表
+      this.getPagePlanList(); //获取页面上的方案列表
 
     },
 
     // 获取页面上的方案列表
     getPagePlanList() {
       let params = {
-        name: "",
         prizeId: this.prizeRows.id,
       }
       console.log(params)
 
       // 方案获取列表
       // service({
-      //   url: '/prize/orientation/list',
+      //   url: '/prize/orientation/listNoPage',
       //   method: 'post',
       //   data: params,
       // }).then(({ data }) => {
@@ -393,43 +414,23 @@ module.exports = {
     },
 
 
-
-
-
-
-    // ===============
-
-
-    // 定向列表
+    // 素材源定向列表
     getDirectionalList() {
       let params = {
-        sourceId: this.rows.id,
+        sourceId: this.prizeRows.sourceId,
         pageNum: "",
         pageSize: "",
-        sourceName: this.directionalForm.sourceName,
+        sourceName: "",
       }
 
+      console.log(params)
       service({
         url: '/prize/orientation/mList',
         method: 'post',
         data: params,
       }).then(({ data }) => {
-        this.directionalList = data.list
+        this.sourceDirectionalList = data.list
       })
-    },
-
-    // 定向列表-点击列表数字，弹出“定向列表弹框
-    showDirectionalList(rows) {
-      this.rows = rows;
-      this.directionalList = [];
-      this.directionalVisible = true;
-      this.directionalForm.sourceName = "";
-      this.getDirectionalList()
-    },
-
-    // 定向列表-搜索定向列表
-    searchDirectional() {
-      this.getDirectionalList(this.rows)
     },
 
 
@@ -586,6 +587,7 @@ module.exports = {
       this.prizeRows = JSON.parse(prizeRows);
 
       this.getPagePlanList(); //获取页面上的方案列表
+      this.getDirectionalList(); //获取页面上的素材源定向列表
     }
 
   },
