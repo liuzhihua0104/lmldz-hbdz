@@ -13,7 +13,8 @@
 <body>
     <script src="./mockdata.js"></script>
     <div id="prizePracticalApplicationSchemeApp">
-        <application-scheme  :query="query"></application-scheme>
+        <div style="font-size: 16px;text-align: center;line-height: 60px;">素材源详情</div>
+        <application-scheme></application-scheme>
     </div>
 </body>
 
@@ -48,12 +49,7 @@
     var dialogVm = new Vue({
         el: '#prizePracticalApplicationSchemeApp',
         data() {
-            return {
-                applicationSchemeVisible: true, // 奖品实际应用方案弹框的显示与隐藏
-                // prizeRows: {}, //编辑时前一个页面带过来的奖品信息
-                query: {},//地址栏携带过来的参数
-
-            }
+            return {}
         },
         components: {
             'application-scheme': httpVueLoader('./components/applicationScheme.vue')
@@ -61,9 +57,6 @@
         mounted() {
             window.vue = this;
         },
-        created() {
-        
-            this.query = getUrlQuery()
-        }
+        created() { }
     });
 </script>

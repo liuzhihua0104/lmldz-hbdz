@@ -1,7 +1,7 @@
  <template>
   <div class="out-dialog">
     <!-- 表单 -->
-    <el-form label-position="right" label-width="100px" :rules="formRules" ref="prizeRows" :model="prizeRows" size="mini">
+    <el-form label-position="right" label-width="100px" ref="prizeRows" :model="prizeRows" size="mini">
       <div class="title">信息</div>
       <!-- 主要信息-展示用 -->
       <el-row>
@@ -111,8 +111,7 @@
 <script>
 
 
-module.exports = { 
-  props: ["query"],
+module.exports = {
   components: {
     'orientation-details': httpVueLoader('./orientationDetails.vue')
   },
@@ -143,146 +142,6 @@ module.exports = {
       },
 
       rows: {}, // 查看或者编辑当前数据
-
-
-      // ===============
-
-      formRules: {
-        prizeName: [
-          { required: false, message: '请输入定向名称', trigger: 'change' },
-        ]
-      },
-
-      orientationDetailsType: "", //奖品定向详情的展示类型page||dialog
-      orientationDetailsVisible: false, // 奖品定向详情弹框的显示与隐藏
-
-
-      implementationSchemeVisible: false, // 执行方案弹框的显示与隐藏
-      implementationSchemeListData: [{
-        id: 1,
-        status: 1,
-        date: '执行方案A001',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 2,
-        status: 0,
-        date: '执行方案A0011',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 3,
-        status: 0,
-        date: '执行方案A001111',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 4,
-        status: 1,
-        date: '执行方案A00101',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 5,
-        status: 1,
-        date: '执行方案A00108',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 6,
-        status: 1,
-        date: '执行方案A00106',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 7,
-        status: 1,
-        date: '执行方案A00107',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }], //执行方案列表数据
-
-      // filter: {
-      //   planName: '',
-      //   startTime: '',
-      //   endTime: '',
-      //   pageNum: 1,
-      //   pageSize: 10,
-      // },
-      // page: {
-      //   total: 0,
-      // },
-
-
-
-
-      // 方案列表
-      planListData: [{
-        id: 1,
-        status: 1,
-        date: '执行方案A001',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 2,
-        status: 0,
-        date: '执行方案A0011',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 3,
-        status: 0,
-        date: '执行方案A001111',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 4,
-        status: 1,
-        date: '执行方案A00101',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 5,
-        status: 1,
-        date: '执行方案A00108',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 6,
-        status: 1,
-        date: '执行方案A00106',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 7,
-        status: 1,
-        date: '执行方案A00107',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }],
-
-      // 条件列表
-      conditionListData: [{
-        id: 1,
-        status: 1,
-        date: '条件A',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 2,
-        status: 0,
-        date: '条件A1',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        id: 3,
-        status: 0,
-        date: '条件A111',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }],
-
-
 
     }
   },
@@ -401,8 +260,8 @@ module.exports = {
       //   data: params,
       // }).then(({ data }) => {
 
-        data=sourceDirectionalList.data;
-        this.sourceDirectionalList = data.list
+      data = sourceDirectionalList.data;
+      this.sourceDirectionalList = data.list
       // })
     },
 
