@@ -66,10 +66,6 @@
           </template>
         </el-table-column>
       </el-table>
-
-      <!-- <el-form-item>
-            <el-button type="default" @click="onConfirm('prizeRows')">搜索</el-button>
-          </el-form-item> -->
     </el-form>
 
     <!-- 执行方案列表弹框 -->
@@ -114,25 +110,8 @@
  
 <script>
 
-function getUrlQuery() {
-  let search = location.search
-  let obj = {}
-  if (search) {
-    let query = search.substring(1).split('&')
-    query.forEach((queryItem) => {
-      let keyValue = queryItem.split('=')
-      let [key, value] = keyValue
-      if (key) {
-        obj[key] = value
-      }
-    })
-  }
-  return obj
-}
 
-module.exports = {
-  // prizeRows是奖品信息，query是地址栏的参数
-  // props: ["id", "type", "prizeRows", "query"],
+module.exports = { 
   props: ["query"],
   components: {
     'orientation-details': httpVueLoader('./orientationDetails.vue')
