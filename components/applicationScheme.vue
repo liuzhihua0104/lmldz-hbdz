@@ -32,16 +32,14 @@
       <el-button @click="showPlan" style="margin-bottom:10px" type="primary" plain size="small">添加方案</el-button>
 
       <!-- 执行方案列表表格 -->
-      <el-table :data="planListData" height="250" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}">
+      <el-table :data="pagePlanList" height="250" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}">
         <el-table-column label="开关" width="100" align="center">
           <template slot-scope="scope">
             <el-switch inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="date" label="执行方案名称">
-        </el-table-column>
-        <el-table-column align="center" prop="name" label="最近一次操作人">
+        <el-table-column align="center" prop="name" label="执行方案名称">
         </el-table-column>
         <el-table-column align="center" label="操作" width="150">
           <template slot-scope="scope">
@@ -161,7 +159,10 @@ module.exports = {
 
       // 方案列表||条件列表当前激活的数据
       rowData: {}, //；列表当前行数据
+      pagePlanList: [], //页面上的方案列表
 
+
+      // ===============
 
       formRules: {
         prizeName: [
@@ -360,14 +361,40 @@ module.exports = {
     // 方案弹框点击确定
     planDialogOk() {
       if (!this.multipleSelection.length) {
-       return this.$message.error("请先选择方案");
+        return this.$message.error("请先选择方案");
       }
 
-      let ids=Array.from(new Set(this.multipleSelection.map(item=>item.id))).join(",")
+      let ids = Array.from(new Set(this.multipleSelection.map(item => item.id))).join(",")
       console.log(ids)
-    
+
+       this.getPagePlanList(); //获取页面上的方案列表
 
     },
+
+    // 获取页面上的方案列表
+    getPagePlanList() {
+      let params = {
+        name: "",
+        prizeId: this.prizeRows.id,
+      }
+      console.log(params)
+
+      // 方案获取列表
+      // service({
+      //   url: '/prize/orientation/list',
+      //   method: 'post',
+      //   data: params,
+      // }).then(({ data }) => {
+
+      let data = doPlanList.data;
+
+      this.pagePlanList = data.list
+      // })
+    },
+
+
+
+
 
 
     // ===============
@@ -556,7 +583,9 @@ module.exports = {
     let prizeRows = sessionStorage.getItem("prizeRows")
 
     if (prizeRows) {
-      this.prizeRows = JSON.parse(prizeRows)
+      this.prizeRows = JSON.parse(prizeRows);
+
+      this.getPagePlanList(); //获取页面上的方案列表
     }
 
   },
