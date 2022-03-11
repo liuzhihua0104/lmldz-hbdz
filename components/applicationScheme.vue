@@ -43,9 +43,9 @@
         </el-table-column>
         <el-table-column align="center" label="操作" width="150">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="planlook(scope.row)">查看</el-button>
-            <el-button type="text" size="small" @click="planEdit(scope.row)">编辑</el-button>
-            <el-button type="text" size="small" @click="planDel(scope.row)">删除</el-button>
+            <el-button type="text" size="small" @click="lookFn(scope.row)">查看</el-button>
+            <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="onDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -98,8 +98,15 @@
     </el-dialog>
 
     <!-- 查看奖品定向详情 -->
-    <el-dialog title="方案详情" :visible.sync="orientationDetailsVisible" center>
-      <orientation-details :type="orientationDetailsType"></orientation-details>
+    <el-dialog title="方案详情" class="dialogWidth" :visible.sync="orientationDetailVisible" center>
+      <template v-if="orientationDetailVisible">
+        <orientation-details :type="orientationDetailProps.type" :islook="orientationDetailProps.islook" :id="rows.id" :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle">
+        </orientation-details>
+      </template>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="orientationDetailVisible = false">关 闭</el-button>
+      </span>
     </el-dialog>
   </div>
 
@@ -148,6 +155,16 @@ module.exports = {
 
 
       sourceDirectionalList: [],//资源定向列表
+      orientationDetailVisible: false, //定向详情查看弹框
+      // 定向详情传参
+      orientationDetailProps: {
+        type: "dialog",
+        islook: 1, //是否查看
+        isshowtoptitle: 0 //是否展示title
+      },
+
+      rows: {}, // 查看或者编辑当前数据
+
 
       // ===============
 
@@ -408,142 +425,54 @@ module.exports = {
       })
     },
 
-    // testFn() {
-    //   console.log("触发function")
-    //   this.prizeRows.radio1 = 2
-    // },
+
+    // 查看
+    lookFn(rows) {
+      this.rows = rows;
+      sessionStorage.setItem("rows", JSON.stringify(rows));
+      this.orientationDetailVisible = true;
+    },
+    // 编辑
+    onEdit(rows) {
+      this.rows = rows;
+      sessionStorage.setItem("rows", JSON.stringify(rows));
+      location.href = `./prizeOrientationDetails.html?id=${rows.id}&islook=0&isshowtoptitle=1&type=page`
+    },
+
+    onDel(rows) {
+      this.rows = rows
+      this.$confirm('确认删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          this.getDel()
+        })
+    },
+
+    // 删除
+    getDel() {
+      let params = {
+        orientationId: this.rows.id,
+      }
+      service({
+        url: '/prize/orientation/delOrientationMP',
+        method: 'post',
+        data: params
+      }).then(() => {
+        this.getPagePlanList()
+      }).catch((err) => {
+        this.$message.error(err.msg);
+      })
+    },
+
+
+
     // 返回
     goBack() {
       window.history.go(-1)
     },
-    // 保存成功后返回其他页面
-    saveFn() {
-
-      setTimeout(() => {
-        this.goBack();
-      }, 3000)
-
-    },
-
-    closeImplementationPlan() {
-      this.planDialogVisible = false;
-      this.multipleSelection = [];//清空选中的数据
-    },
-    // 执行方案列表弹框-搜索
-    planListSearch(formName) {
-      console.log(formName)
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log(this.planForm)
-          console.log(valid)
-          // alert('submit!');
-        } else {
-          // console.log('error submit!!');
-          return false;
-        }
-      });
-    },
-
-    // 保存
-    onConfirm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          // 校验表单通过
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    // 执行方案-切换switch
-    planChangeSwitch(row) {
-      this.planListData.filter((item) => {
-        if (item.id == row.id) {
-          item.status = item.status == 1 ? 2 : 1
-        }
-      })
-    },
-    // 执行方案-查看,展示奖品定向详情弹框
-    planlook(row) {
-      console.log("planlook")
-      this.orientationDetailsVisible = true;
-      this.orientationDetailsType = "dialog"
-    },
-    // 执行方案-编辑
-    planEdit(row) {
-      console.log("执行方案-编辑")
-      this.orientationDetailsType = "page"
-      location.href = `./prizeOrientationDetails.html?id=${row.id}`
-    },
-    // 执行方案列表-删除按钮
-    planDel(row) {
-      this.rowData = row
-      this.$confirm('确认删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          this.planGetDel()
-        })
-        .catch(() => { })
-    },
-    // 执行方案-执行删除请求
-    planGetDel() {
-      console.log("发送删除请求")
-    },
-
-
-    // 执行方案-切换switch
-    conditionChangeSwitch(row) {
-      this.conditionListData.filter((item) => {
-        if (item.id == row.id) {
-          item.status = item.status == 1 ? 2 : 1
-        }
-      })
-    },
-    // 条件列表-查看
-    conditionlook(row) {
-      console.log("planlook")
-    },
-    // 条件列表-编辑
-    conditionEdit(row) {
-      console.log("条件列表-编辑")
-    },
-    // 条件列表列表-删除按钮
-    conditionDel(row) {
-      this.rowData = row
-      this.$confirm('确认删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          this.conditionGetDel()
-        })
-        .catch(() => { })
-    },
-    // 条件列表-执行删除请求
-    conditionGetDel() {
-      console.log("发送删除请求")
-    },
-
-
-    // // 编辑获取表单详情
-    // getDetails() {
-    //   service({
-    //     url: '/prizeName/strategy/inversion/detail',
-    //     method: 'get',
-    //     data: {
-    //       id: this.prizeRows.id,
-    //     },
-    //   }).then(({ data }) => {
-    //     Object.keys(this.prizeRows).forEach((key) => {
-    //       console.log(key, data[key])
-    //       this.prizeRows[key] = data[key]
-    //     })
-    //   })
-    // },
   },
   mounted() {
     window.scheme = this;
