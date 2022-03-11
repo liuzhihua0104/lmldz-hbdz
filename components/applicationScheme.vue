@@ -35,7 +35,7 @@
       <el-table :data="pagePlanList" height="250" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}">
         <el-table-column label="开关" width="100" align="center">
           <template slot-scope="scope">
-            <el-switch inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" value="" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+            <el-switch inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" :value="scope.row.status==1?true:false" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
             </el-switch>
           </template>
         </el-table-column>
@@ -54,15 +54,15 @@
       <el-table :data="sourceDirectionalList" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}" style="margin-bottom:20px">
         <el-table-column align="center" label="开关" width="100">
           <template slot-scope="scope">
-            <el-switch inactive-color="#cccccc" @change="conditionChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+            <el-switch inactive-color="#cccccc" @change="conditionChangeSwitch(scope.row)" :value="scope.row.status==1?true:false" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="date" label="素材源定向">
+        <el-table-column align="center" prop="name" label="素材源定向">
         </el-table-column>
         <el-table-column align="center" label="操作" width="150">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="conditionlook(scope.row)">查看</el-button>
+            <el-button type="text" size="small" @click="lookFn(scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -407,7 +407,7 @@ module.exports = {
 
 
     // 素材源定向列表
-    getDirectionalList() {
+    getSourcePlanList() {
       let params = {
         sourceId: this.prizeRows.sourceId,
         pageNum: "",
@@ -415,14 +415,16 @@ module.exports = {
         sourceName: "",
       }
 
-      console.log(params)
-      service({
-        url: '/prize/orientation/mList',
-        method: 'post',
-        data: params,
-      }).then(({ data }) => {
+      // console.log(params)
+      // service({
+      //   url: '/prize/orientation/mList',
+      //   method: 'post',
+      //   data: params,
+      // }).then(({ data }) => {
+
+        data=sourceDirectionalList.data;
         this.sourceDirectionalList = data.list
-      })
+      // })
     },
 
 
@@ -461,13 +463,33 @@ module.exports = {
         method: 'post',
         data: params
       }).then(() => {
+        this.$message.success("删除成功");
         this.getPagePlanList()
       }).catch((err) => {
         this.$message.error(err.msg);
       })
     },
 
+    // 方案切换状态
+    planChangeSwitch(rows) {
+      let params = {
+        sourceId: "",
+        status: rows.status == 1 ? 0 : 1, //目标状态
+        prizeId: this.prizeRows.id, // 奖品ID
+        orientationId: rows.id, //方案ID
+      }
+      service({
+        url: 'prize/orientation/updateOrientationMPAndPrize',
+        method: 'post',
+        data: params
+      }).then(() => {
+        // 第二种方式，直接调取列表自动更新
+        this.getPagePlanList();
 
+      }).catch((err) => {
+        this.$message.error(err.msg);
+      })
+    },
 
     // 返回
     goBack() {
@@ -484,7 +506,7 @@ module.exports = {
       this.prizeRows = JSON.parse(prizeRows);
 
       this.getPagePlanList(); //获取页面上的方案列表
-      this.getDirectionalList(); //获取页面上的素材源定向列表
+      this.getSourcePlanList(); //获取页面上的素材源定向列表
     }
 
   },
