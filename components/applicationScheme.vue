@@ -6,8 +6,8 @@
       <!-- 主要信息-展示用 -->
       <el-row>
         <el-col :span="12">
-          <el-form-item style="margin-right:0" label="奖品ID:" prop="prizeName">
-            <el-input disabled class="inputWidth" v-model="prizeRows.prizeName" placeholder="请输入内容"></el-input>
+          <el-form-item style="margin-right:0" label="奖品ID:" prop="id">
+            <el-input disabled class="inputWidth" v-model="prizeRows.id" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -21,21 +21,21 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item style="margin-right:0" label="素材源名称:" prop="prizeName">
-            <el-input disabled class="inputWidth" v-model="prizeRows.prizeName" placeholder="请输入内容"></el-input>
+          <el-form-item style="margin-right:0" label="素材源名称:" prop="sourceName">
+            <el-input disabled class="inputWidth" v-model="prizeRows.sourceName" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
 
       <div class="title">实际应用方案</div>
 
-      <el-button  @click="showPlan" style="margin-bottom:10px" type="primary" plain size="small">添加方案</el-button>
+      <el-button @click="showPlan" style="margin-bottom:10px" type="primary" plain size="small">添加方案</el-button>
 
       <!-- 执行方案列表表格 -->
       <el-table :data="planListData" height="250" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}">
         <el-table-column label="开关" width="100" align="center">
           <template slot-scope="scope">
-            <el-switch  inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+            <el-switch inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
             </el-switch>
           </template>
         </el-table-column>
@@ -43,7 +43,7 @@
         </el-table-column>
         <el-table-column align="center" prop="name" label="最近一次操作人">
         </el-table-column>
-        <el-table-column  align="center" label="操作" width="150">
+        <el-table-column align="center" label="操作" width="150">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="planlook(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="planEdit(scope.row)">编辑</el-button>
@@ -56,7 +56,7 @@
       <el-table :data="conditionListData" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}" style="margin-bottom:20px">
         <el-table-column align="center" label="开关" width="100">
           <template slot-scope="scope">
-            <el-switch  inactive-color="#cccccc" @change="conditionChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+            <el-switch inactive-color="#cccccc" @change="conditionChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
             </el-switch>
           </template>
         </el-table-column>
@@ -66,7 +66,7 @@
         </el-table-column>
         <el-table-column align="center" prop="name" label="最近一次操作人">
         </el-table-column>
-        <el-table-column  align="center" label="操作" width="150">
+        <el-table-column align="center" label="操作" width="150">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="conditionlook(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="conditionEdit(scope.row)">编辑</el-button>
@@ -151,15 +151,7 @@ function getUrlQuery() {
 module.exports = {
   // prizeRows是奖品信息，query是地址栏的参数
   // props: ["id", "type", "prizeRows", "query"],
-  props: {
-    prizeRows: {
-      type: Object,
-      default: {
-        prizeName: "rose"
-      }
-    },
-
-  },
+  props: ["query"],
   components: {
     'orientation-details': httpVueLoader('./orientationDetails.vue')
   },
@@ -237,10 +229,6 @@ module.exports = {
         prizeName: '123',
         region: 'shanghai'
       },
-
-      // prizeRows: {
-      //   prizeName: '123',
-      // },
 
       // 方案列表
       planListData: [{
@@ -465,15 +453,17 @@ module.exports = {
     //   })
     // },
   },
+  mounted() {
+    window.scheme = this;
+  },
   created() {
-    console.log(this.prizeRows, this.query)
-    // let query = getUrlQuery()
-    // if (query.id) {
-    //   this.prizeRows.id = query.id
-    //   this.getDetails()
-    // }
-    // 获取项目列表
-    // this.getProjectList()
+    console.log(this.query)
+    let prizeRows = sessionStorage.getItem("prizeRows")
+   
+    if (prizeRows) {
+      this.prizeRows = JSON.parse(prizeRows)
+    }
+    
   },
 }
 </script>
