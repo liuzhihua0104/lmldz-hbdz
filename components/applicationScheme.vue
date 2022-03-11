@@ -35,7 +35,7 @@
       <el-table :data="pagePlanList" height="250" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}">
         <el-table-column label="开关" width="100" align="center">
           <template slot-scope="scope">
-            <el-switch inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+            <el-switch inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" value="" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
             </el-switch>
           </template>
         </el-table-column>
@@ -352,7 +352,6 @@ module.exports = {
     // 执行方案列表弹框-触发多选
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      console.log(this.multipleSelection)
     },
 
     // 方案弹框点击取消
@@ -366,31 +365,22 @@ module.exports = {
         return this.$message.error("请先选择方案");
       }
 
-      let ids = Array.from(new Set(this.multipleSelection.map(item => item.id)))
-
-      let result = ids.length == 1 ? ids.join(",") : ids;
-      console.log(params)
-
+      let orientationIds = Array.from(new Set(this.multipleSelection.map(item => item.id)))
 
       let params = {
-
+        prizeId: this.prizeRows.id,
+        orientationIds: orientationIds
       }
 
+      service({
+        url: '/prize/orientation/updatePrizeAndOrientationMP',
+        method: 'post',
+        data: params,
+      }).then(({ data }) => {
 
-      // service({
-      //   url: '/prize/orientation/updateOrientationMPAndPrize',
-      //   method: 'post',
-      //   data: ,
-      // }).then(({ data }) => {
-
-      let data = doPlanList.data;
-
-      this.pagePlanList = data.list
-      // })
-      console.log(ids)
-
-      this.getPagePlanList(); //获取页面上的方案列表
-
+        this.$message.success("添加方案成功");
+        this.getPagePlanList(); //获取页面上的方案列表
+      })
     },
 
     // 获取页面上的方案列表
