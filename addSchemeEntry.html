@@ -34,17 +34,18 @@
         }
 
         .addPlan {
-            background:#66b1ff;
+            background: #66b1ff;
         }
 
         .editPlan {
-            background:#909399;
+            background: #909399;
         }
     </style>
 
 </head>
 
 <body>
+    <script src="./mockdata.js"></script>
     <!-- <button id="addPlan" bindId="rose" onclick="fn('123')">添加</button> -->
     <span class="planIcon addPlan" id="addPlan" bindId="addPlan">添</span>
     <span class="planIcon editPlan" id="editPlan" bindId="editPlan">编</span>
@@ -91,8 +92,28 @@
         let addPlan = document.getElementById("addPlan");
         addPlan.addEventListener("click", function (e) {
             console.log(e.target.attributes.bindId)
-            location.href = `./prizePracticalApplicationScheme.html`
+            // 模拟旧的列表数据
+            let length = oldPageData.length;
+            let randomIndex = Math.round(Math.random() * (length - 1));
+            let target = oldPageData[randomIndex]
+            sessionStorage.setItem("prizeRows", JSON.stringify(target))
+            location.href = `./prizePracticalApplicationScheme.html?islook=0&action=add`
         })
+
+
+        // 编辑
+        let editPlan = document.getElementById("editPlan");
+        editPlan.addEventListener("click", function (e) {
+            console.log(e.target.attributes.bindId)
+            // 模拟旧的列表数据
+            let length = oldPageData.length;
+            let randomIndex = Math.round(Math.random() * (length - 1));
+            let target = oldPageData[randomIndex]
+            sessionStorage.setItem("prizeRows", JSON.stringify(target))
+            location.href = `./prizePracticalApplicationScheme.html?islook=0&action=edit`
+        })
+
+
 
         // 查看奖品实际应用方案-展示弹框
         let lookPlan = document.getElementById("lookPlan");

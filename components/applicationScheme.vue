@@ -1,41 +1,41 @@
  <template>
   <div class="out-dialog">
     <!-- 表单 -->
-    <el-form label-position="right" label-width="100px" :rules="formRules" ref="formData" :model="formData" size="mini">
+    <el-form label-position="right" label-width="100px" :rules="formRules" ref="prizeRows" :model="prizeRows" size="mini">
       <div class="title">信息</div>
       <!-- 主要信息-展示用 -->
       <el-row>
         <el-col :span="12">
-          <el-form-item style="margin-right:0" label="奖品ID:" prop="user">
-            <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+          <el-form-item style="margin-right:0" label="奖品ID:" prop="prizeName">
+            <el-input disabled class="inputWidth" v-model="prizeRows.prizeName" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item style="margin-right:0" label="策略名称:" prop="user">
-            <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+          <el-form-item style="margin-right:0" label="策略名称:" prop="prizeName">
+            <el-input disabled class="inputWidth" v-model="prizeRows.prizeName" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item style="margin-right:0" label="奖品名称:" prop="user">
-            <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+          <el-form-item style="margin-right:0" label="奖品名称:" prop="prizeName">
+            <el-input disabled class="inputWidth" v-model="prizeRows.prizeName" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item style="margin-right:0" label="素材源名称:" prop="user">
-            <el-input disabled class="inputWidth" v-model="formData.user" placeholder="请输入内容"></el-input>
+          <el-form-item style="margin-right:0" label="素材源名称:" prop="prizeName">
+            <el-input disabled class="inputWidth" v-model="prizeRows.prizeName" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
 
       <div class="title">实际应用方案</div>
 
-      <el-button v-if="type=='page'" @click="showPlan" style="margin-bottom:10px" type="primary" plain size="small">添加方案</el-button>
+      <el-button  @click="showPlan" style="margin-bottom:10px" type="primary" plain size="small">添加方案</el-button>
 
       <!-- 执行方案列表表格 -->
       <el-table :data="planListData" height="250" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}">
         <el-table-column label="开关" width="100" align="center">
           <template slot-scope="scope">
-            <el-switch :disabled="type=='dialog'" inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+            <el-switch  inactive-color="#cccccc" @change="planChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
             </el-switch>
           </template>
         </el-table-column>
@@ -43,7 +43,7 @@
         </el-table-column>
         <el-table-column align="center" prop="name" label="最近一次操作人">
         </el-table-column>
-        <el-table-column v-if="type=='page'" align="center" label="操作" width="150">
+        <el-table-column  align="center" label="操作" width="150">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="planlook(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="planEdit(scope.row)">编辑</el-button>
@@ -56,7 +56,7 @@
       <el-table :data="conditionListData" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}" style="margin-bottom:20px">
         <el-table-column align="center" label="开关" width="100">
           <template slot-scope="scope">
-            <el-switch :disabled="type=='dialog'" inactive-color="#cccccc" @change="conditionChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+            <el-switch  inactive-color="#cccccc" @change="conditionChangeSwitch(scope.row)" v-model="scope.row.status==1" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
             </el-switch>
           </template>
         </el-table-column>
@@ -66,7 +66,7 @@
         </el-table-column>
         <el-table-column align="center" prop="name" label="最近一次操作人">
         </el-table-column>
-        <el-table-column v-if="type=='page'" align="center" label="操作" width="150">
+        <el-table-column  align="center" label="操作" width="150">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="conditionlook(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="conditionEdit(scope.row)">编辑</el-button>
@@ -76,7 +76,7 @@
       </el-table>
 
       <!-- <el-form-item>
-            <el-button type="default" @click="onConfirm('formData')">搜索</el-button>
+            <el-button type="default" @click="onConfirm('prizeRows')">搜索</el-button>
           </el-form-item> -->
     </el-form>
 
@@ -94,10 +94,10 @@
       </div>
       <!-- 表单 -->
       <el-form ref="formInline" size="mini" :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item style="margin-right:0" label="执行方案名称:" prop="user" :rules="[
+        <el-form-item style="margin-right:0" label="执行方案名称:" prop="prizeName" :rules="[
               { required: true, message: '执行方案名称不能为空'}
             ]">
-          <el-input v-model="formInline.user" placeholder="请输入执行方案名称" :clearable="true"></el-input>
+          <el-input v-model="formInline.prizeName" placeholder="请输入执行方案名称" :clearable="true"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="default" @click="planListSearch('formInline')">搜索</el-button>
@@ -117,7 +117,7 @@
         <el-button type="default" @click="closeImplementationPlan">关 闭</el-button>
       </span> -->
     </el-dialog>
-    <div class="btns" v-if="type=='page'">
+    <div class="btns">
       <el-button class="back" @click="goBack">返回</el-button>
       <el-button type="primary" @click="saveFn">保存</el-button>
     </div>
@@ -149,18 +149,28 @@ function getUrlQuery() {
 }
 
 module.exports = {
+  // prizeRows是奖品信息，query是地址栏的参数
+  // props: ["id", "type", "prizeRows", "query"],
   props: {
-    // type用来标记当前组件是当做dialog使用还是page使用
-    type: {
-      type: String,
-      default: 'page'
+    prizeRows: {
+      type: Object,
+      default: {
+        prizeName: "rose"
+      }
     },
+
   },
   components: {
     'orientation-details': httpVueLoader('./orientationDetails.vue')
   },
   data() {
     return {
+      formRules: {
+        prizeName: [
+          { required: false, message: '请输入定向名称', trigger: 'change' },
+        ]
+      },
+
       orientationDetailsType: "", //奖品定向详情的展示类型page||dialog
       orientationDetailsVisible: false, // 奖品定向详情弹框的显示与隐藏
 
@@ -224,18 +234,14 @@ module.exports = {
 
       // 执行方案列表弹框搜索表单
       formInline: {
-        user: '123',
+        prizeName: '123',
         region: 'shanghai'
       },
 
-      formData: {
-        user: '123',
-      },
-      formRules: {
-        user: [
-          { required: false, message: '请输入定向名称', trigger: 'change' },
-        ]
-      },
+      // prizeRows: {
+      //   prizeName: '123',
+      // },
+
       // 方案列表
       planListData: [{
         id: 1,
@@ -313,7 +319,7 @@ module.exports = {
   methods: {
     // testFn() {
     //   console.log("触发function")
-    //   this.formData.radio1 = 2
+    //   this.prizeRows.radio1 = 2
     // },
     // 返回
     goBack() {
@@ -387,7 +393,7 @@ module.exports = {
     planEdit(row) {
       console.log("执行方案-编辑")
       this.orientationDetailsType = "page"
-       location.href = `./prizeOrientationDetails.html?id=${row.id}`
+      location.href = `./prizeOrientationDetails.html?id=${row.id}`
     },
     // 执行方案列表-删除按钮
     planDel(row) {
@@ -446,25 +452,26 @@ module.exports = {
     // // 编辑获取表单详情
     // getDetails() {
     //   service({
-    //     url: '/user/strategy/inversion/detail',
+    //     url: '/prizeName/strategy/inversion/detail',
     //     method: 'get',
     //     data: {
-    //       id: this.formData.id,
+    //       id: this.prizeRows.id,
     //     },
     //   }).then(({ data }) => {
-    //     Object.keys(this.formData).forEach((key) => {
+    //     Object.keys(this.prizeRows).forEach((key) => {
     //       console.log(key, data[key])
-    //       this.formData[key] = data[key]
+    //       this.prizeRows[key] = data[key]
     //     })
     //   })
     // },
   },
   created() {
-    let query = getUrlQuery()
-    if (query.id) {
-      this.formData.id = query.id
-      this.getDetails()
-    }
+    console.log(this.prizeRows, this.query)
+    // let query = getUrlQuery()
+    // if (query.id) {
+    //   this.prizeRows.id = query.id
+    //   this.getDetails()
+    // }
     // 获取项目列表
     // this.getProjectList()
   },
