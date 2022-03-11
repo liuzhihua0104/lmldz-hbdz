@@ -46,7 +46,6 @@
 
 <body>
     <script src="./mockdata.js"></script>
-    <!-- <button id="addPlan" bindId="rose" onclick="fn('123')">添加</button> -->
     <span class="planIcon addPlan" id="addPlan" bindId="addPlan">添</span>
     <span class="planIcon editPlan" id="editPlan" bindId="editPlan">编</span>
     <span class="planIcon delPlan" id="delPlan" bindId="delPlan">删</span>
@@ -55,7 +54,7 @@
 
     <div id="addSchemeEntryApp">
         <el-dialog title="奖品实际应用方案" :visible.sync="applicationSchemeVisible" center>
-            <application-scheme type="dialog"></application-scheme>
+            <application-scheme islook="1"></application-scheme>
         </el-dialog>
     </div>
 </body>
@@ -119,7 +118,7 @@
         lookPlan.addEventListener("click", function (e) {
             console.log(e.target.attributes.bindId)
             dialogVm.applicationSchemeVisible = true;
-            
+
         })
     }
 

@@ -29,7 +29,7 @@
 
       <div class="title">实际应用方案</div>
 
-      <el-button @click="showPlan" style="margin-bottom:10px" type="primary" plain size="small">添加方案</el-button>
+      <el-button @click="showPlan" style="margin-bottom:10px" type="primary" plain size="small" v-if="islook!=1">添加方案</el-button>
 
       <!-- 执行方案列表表格 -->
       <el-table :data="pagePlanList" height="250" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}">
@@ -44,8 +44,8 @@
         <el-table-column align="center" label="操作" width="150">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="lookFn(scope.row)">查看</el-button>
-            <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
-            <el-button type="text" size="small" @click="onDel(scope.row)">删除</el-button>
+            <el-button type="text" v-if="islook!=1" size="small" @click="onEdit(scope.row)">编辑</el-button>
+            <el-button type="text" v-if="islook!=1" size="small" @click="onDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -112,6 +112,12 @@
 
 
 module.exports = {
+  props: {
+    islook: {
+      type: String,
+      default: "page"
+    }
+  },
   components: {
     'orientation-details': httpVueLoader('./orientationDetails.vue')
   },
