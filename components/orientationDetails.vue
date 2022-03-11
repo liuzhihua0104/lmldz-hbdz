@@ -508,12 +508,35 @@ module.exports = {
       let self = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
+
+          let params = self.doSaveParams();
           service({
             url: '/prize/orientation/create',
             method: 'post',
-            data: self.doSaveParams(),
-          }).then(({ data }) => {
-            self.goBack();
+            data: params,
+          }).then(({ id }) => {
+
+            // 有资源id时需要单独调取这个接口
+            if (params.sourceId) {
+              service({
+                url: '/prize/orientation/addOrientationMP',
+                method: 'post',
+                data: {
+                  sourceId: params.sourceId,
+                  orientationId: id
+                },
+              }).then(({ data }) => {
+                this.$message.success("保存方案成功")
+                self.goBack();
+
+              }).catch((err) => {
+                this.$message.error(err.msg);
+              })
+            } else {
+              this.$message.success("保存方案成功")
+              self.goBack();
+            }
+
           }).catch((err) => {
             this.$message.error(err.msg);
           })

@@ -58,17 +58,11 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="date" label="商务投放限制条件" width="180">
-        </el-table-column>
-        <el-table-column align="center" prop="date" label="状态">
-        </el-table-column>
-        <el-table-column align="center" prop="name" label="最近一次操作人">
+        <el-table-column align="center" prop="date" label="素材源定向">
         </el-table-column>
         <el-table-column align="center" label="操作" width="150">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="conditionlook(scope.row)">查看</el-button>
-            <el-button type="text" size="small" @click="conditionEdit(scope.row)">编辑</el-button>
-            <el-button type="text" size="small" @click="conditionDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -80,10 +74,6 @@
 
     <!-- 执行方案列表弹框 -->
     <el-dialog :append-to-body="true" :width="'600px'" height="250" title="执行方案列表" :visible.sync="planDialogVisible" center customClass="customWidth">
-      <!-- <div style="margin-bottom: 20px;display: flex; justify-content: space-between;align-items: center;">
-        <div></div>
-        <el-button size="mini" type="primary" @click="releaseFn">应用</el-button>
-      </div> -->
       <!-- 表单 -->
       <el-form ref="planForm" size="mini" :inline="true" :model="planForm" class="demo-form-inline">
         <el-form-item style="margin-right:0" label="执行方案名称:" prop="name">
@@ -105,15 +95,10 @@
         <el-button @click="planDialogCancel">取 消</el-button>
         <el-button type="primary" @click="planDialogOk">确 定</el-button>
       </span>
-
     </el-dialog>
-    <div class="btns">
-      <el-button class="back" @click="goBack">返回</el-button>
-      <el-button type="primary" @click="saveFn">保存</el-button>
-    </div>
 
     <!-- 查看奖品定向详情 -->
-    <el-dialog title="奖品定向详情" :visible.sync="orientationDetailsVisible" center>
+    <el-dialog title="方案详情" :visible.sync="orientationDetailsVisible" center>
       <orientation-details :type="orientationDetailsType"></orientation-details>
     </el-dialog>
   </div>
@@ -423,10 +408,6 @@ module.exports = {
       })
     },
 
-
-
-
-
     // testFn() {
     //   console.log("触发function")
     //   this.prizeRows.radio1 = 2
@@ -462,9 +443,6 @@ module.exports = {
         }
       });
     },
-
-    // 执行方案列表弹框-应用
-    releaseFn() { },
 
     // 保存
     onConfirm(formName) {
