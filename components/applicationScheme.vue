@@ -40,12 +40,14 @@
           </template>
         </el-table-column>
         <el-table-column align="center" prop="name" label="执行方案名称">
+
         </el-table-column>
-        <el-table-column align="center" label="操作" width="150">
+        <el-table-column align="center" prop="createUser" label="最近一次操作人"></el-table-column>
+        <el-table-column align="center" label="操作" width="150" v-if="islook!=1">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="lookFn(scope.row)">查看</el-button>
-            <el-button type="text" v-if="islook!=1" size="small" @click="onEdit(scope.row)">编辑</el-button>
-            <el-button type="text" v-if="islook!=1" size="small" @click="onDel(scope.row)">删除</el-button>
+            <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="onDel(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -54,13 +56,14 @@
       <el-table :data="sourceDirectionalList" border style="width: 100%" size="mini" :header-cell-style="{background:'#e5e9f2'}" style="margin-bottom:20px">
         <el-table-column align="center" label="开关" width="100">
           <template slot-scope="scope">
-            <el-switch inactive-color="#cccccc" @change="conditionChangeSwitch(scope.row)" :value="scope.row.status==1?true:false" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
+            <el-switch inactive-color="#cccccc" @change="sourceChangeSwitch(scope.row)" :value="scope.row.status==1?true:false" :active-text="scope.row.status == 1 ? '开' : '关'" :width="50">
             </el-switch>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="name" label="素材源定向">
         </el-table-column>
-        <el-table-column align="center" label="操作" width="150">
+        <el-table-column align="center" prop="createUser" label="最近一次操作人"></el-table-column>
+        <el-table-column align="center" label="操作" width="150" v-if="islook!=1">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="lookFn(scope.row)">查看</el-button>
           </template>
@@ -318,6 +321,26 @@ module.exports = {
     planChangeSwitch(rows) {
       let params = {
         sourceId: "",
+        status: rows.status == 1 ? 0 : 1, //目标状态
+        prizeId: this.prizeRows.id, // 奖品ID
+        orientationId: rows.id, //方案ID
+      }
+      service({
+        url: 'prize/orientation/updateOrientationMPAndPrize',
+        method: 'post',
+        data: params
+      }).then(() => {
+        // 第二种方式，直接调取列表自动更新
+        this.getPagePlanList();
+
+      }).catch((err) => {
+        this.$message.error(err.msg);
+      })
+    },
+
+    sourceChangeSwitch(rows) {
+      let params = {
+        sourceId: this.prizeRows.sourceId, //素材源ID
         status: rows.status == 1 ? 0 : 1, //目标状态
         prizeId: this.prizeRows.id, // 奖品ID
         orientationId: rows.id, //方案ID

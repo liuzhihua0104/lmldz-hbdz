@@ -120,6 +120,28 @@
             dialogVm.applicationSchemeVisible = true;
 
         })
+
+
+        let delPlan = document.getElementById("delPlan")
+        delPlan.addEventListener("click", function (e) {
+            dialogVm.$confirm('确认清除此执行方案吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                dialogVm.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                });
+            }).catch(() => {
+                dialogVm.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+
+        })
+
     }
 
     function fn(e, value) {
