@@ -11,7 +11,6 @@
 </head>
 
 <body>
-  <script src="../mockdata.js"></script>
   <div id="my-app">
     <my-component></my-component>
   </div>
@@ -22,16 +21,23 @@
 <script src="https://unpkg.com/http-vue-loader"></script>
 <script src="../libs/vue/2.6.12/vue.min.js"></script>
 
+<script src="../mockdata.js"></script>
+<script src="../libs/moment.js"></script>
+<script src="../libs/antd.min.js"></script>
 
 <!-- 注意：引入 antd.js 前你需要自行引入 moment -->
 <!-- ant design of vue js文件 -->
-<script src="../libs/moment.js"></script>
-<script src="../libs/antd.min.js"></script>
 <script type="text/javascript">
+
   new Vue({
     el: '#my-app',
     components: {
       'my-component': httpVueLoader('my-component.vue')
+    },
+    data() {
+      return {
+   
+      }
     }
   });
 </script>
