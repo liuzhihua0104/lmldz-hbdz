@@ -72,7 +72,7 @@
     </el-form>
 
     <!-- 执行方案列表弹框 -->
-    <el-dialog :append-to-body="true" :width="'600px'" height="250" title="执行方案列表" :visible.sync="planDialogVisible" center customClass="customWidth">
+    <el-dialog :append-to-body="true" :width="'600px'"  title="执行方案列表" :visible.sync="planDialogVisible" center customClass="customWidth">
       <!-- 表单 -->
       <el-form ref="planForm" size="mini" :inline="true" :model="planForm" class="demo-form-inline">
         <el-form-item style="margin-right:0" label="执行方案名称:" prop="name">
@@ -170,31 +170,27 @@ module.exports = {
       console.log(this.planForm)
 
       // 方案获取列表
-      // service({
-      //   url: '/prize/orientation/listNoPage',
-      //   method: 'post',
-      //   data: this.planForm,
-      // }).then(({ data }) => {
-
-      let data = doPlanList.data;
-
+      service({
+        url: '/prize/orientation/listNoPage',
+        method: 'post',
+        data: this.planForm,
+      }).then(({ data }) => {
       this.dialogPlanList = data.list
-      // })
+      })
     },
 
     // 执行方案弹框中搜索方案
     searchPlan() {
       console.log(this.planForm)
       // 方案获取列表
-      // service({
-      //   url: '/prize/orientation/listNoPage',
-      //   method: 'post',
-      //   data: this.planForm,
-      // }).then(({ data }) => {
+      service({
+        url: '/prize/orientation/listNoPage',
+        method: 'post',
+        data: this.planForm,
+      }).then(({ data }) => {
 
-      let data = doPlanList.data;
       this.dialogPlanList = data.list
-      // })
+      })
     },
 
 
@@ -240,16 +236,13 @@ module.exports = {
       console.log(params)
 
       // 方案获取列表
-      // service({
-      //   url: '/prize/orientation/listNoPage',
-      //   method: 'post',
-      //   data: params,
-      // }).then(({ data }) => {
-
-      let data = doPlanList.data;
-
+      service({
+        url: '/prize/orientation/listNoPage',
+        method: 'post',
+        data: params,
+      }).then(({ data }) => {   
       this.pagePlanList = data.list
-      // })
+      })
     },
 
 
@@ -263,15 +256,13 @@ module.exports = {
       }
 
       // console.log(params)
-      // service({
-      //   url: '/prize/orientation/mList',
-      //   method: 'post',
-      //   data: params,
-      // }).then(({ data }) => {
-
-      data = sourceDirectionalList.data;
+      service({
+        url: '/prize/orientation/mList',
+        method: 'post',
+        data: params,
+      }).then(({ data }) => {  
       this.sourceDirectionalList = data.list
-      // })
+      })
     },
 
 

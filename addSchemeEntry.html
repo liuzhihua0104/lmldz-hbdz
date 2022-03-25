@@ -45,14 +45,25 @@
 </head>
 
 <body>
-    <script src="./mockdata.js"></script>
-    <span class="planIcon addPlan" id="addPlan" bindId="addPlan">添</span>
-    <span class="planIcon editPlan" id="editPlan" bindId="editPlan">编</span>
-    <span class="planIcon delPlan" id="delPlan" bindId="delPlan">删</span>
-    <span id="lookPlan" class="showPlan" bindId="lookPlan">执行方案</span>
 
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/http-vue-loader"></script>
+    <script src="./libs/vue/2.6.12/vue.min.js"></script>
+    <script src="./libs/element-ui/2.15.3/index.min.js"></script>
+    <script src="./libs/axios/0.21.1/axios.min.js"></script>
+    <script src="./js/request.js"></script>
+    <script src="./mockdata.js"></script>
+
+
+    <span class="planIcon addPlan" id="addPlan" bindId="1">添</span>
+    <span class="planIcon editPlan" id="editPlan" bindId="2">编</span>
+    <span class="planIcon delPlan" id="delPlan" bindId="3">删</span>
+    <span id="lookPlan" class="showPlan" bindId="4">执行方案</span>
+
+   
 
     <div id="addSchemeEntryApp">
+        
         <el-dialog title="奖品实际应用方案" :visible.sync="applicationSchemeVisible" center>
             <application-scheme islook="1"></application-scheme>
         </el-dialog>
@@ -60,12 +71,7 @@
 </body>
 
 </html>
-<script src="https://unpkg.com/vue"></script>
-<script src="https://unpkg.com/http-vue-loader"></script>
-<script src="./libs/vue/2.6.12/vue.min.js"></script>
-<script src="./libs/element-ui/2.15.3/index.min.js"></script>
-<script src="./libs/axios/0.21.1/axios.min.js"></script>
-<script src="./js/request.js"></script>
+
 
 <script type="text/javascript">
     var dialogVm = new Vue({
@@ -86,6 +92,8 @@
     console.log("这个位置需要重新调取列表,刷新")
 
     window.onload = function () {
+
+
         // 添加奖品实际应用方案-进入新页面
         let addPlan = document.getElementById("addPlan");
         addPlan.addEventListener("click", function (e) {
@@ -102,7 +110,7 @@
         // 编辑
         let editPlan = document.getElementById("editPlan");
         editPlan.addEventListener("click", function (e) {
-            console.log(e.target.attributes.bindId)
+
             // 模拟旧的列表数据
             let length = oldPageData.length;
             let randomIndex = Math.round(Math.random() * (length - 1));
@@ -112,35 +120,49 @@
         })
 
 
-
         // 查看奖品实际应用方案-展示弹框
         let lookPlan = document.getElementById("lookPlan");
         lookPlan.addEventListener("click", function (e) {
-            console.log(e.target.attributes.bindId)
-            dialogVm.applicationSchemeVisible = true;
 
+            // 模拟旧的列表数据
+            let length = oldPageData.length;
+            let randomIndex = Math.round(Math.random() * (length - 1));
+            let target = oldPageData[randomIndex]
+
+            sessionStorage.setItem("prizeRows", JSON.stringify(target))
+            dialogVm.applicationSchemeVisible = true;
         })
 
 
         let delPlan = document.getElementById("delPlan")
+
         delPlan.addEventListener("click", function (e) {
+            let params = {
+                id: delPlan.getAttribute('bindid')
+            }
             dialogVm.$confirm('确认清除此执行方案吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                dialogVm.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
-            }).catch(() => {
-                dialogVm.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                });
-            });
+
+                service({
+                    url: '/prize/orientation/delOrientationMP',
+                    method: 'post',
+                    data: params
+                }).then(() => {
+
+
+                    // 调取列表
+                }).catch((err) => {
+                    this.$message.error(err.msg);
+                })
+            })
 
         })
+
+
+
 
     }
 
