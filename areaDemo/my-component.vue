@@ -39,6 +39,9 @@ module.exports = {
       value: [11],
       SHOW_PARENT
     }
+  },
+  mounted(){
+    console.log(this.treeData)
   }
 }
 </script>

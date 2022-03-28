@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>奖品周期方案列表</title>
+  <link href="../libs/element-ui/2.15.3/theme-chalk/index.css" rel="stylesheet" />
+  <style>
+    body {
+      width: 100%;
+      height: 100%;
+
+    }
+
+    #prizeCycleListContainer {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="prizeCycleListContainer">
+    <prize-cycle-list></prize-cycle-list>
+  </div>
+  <script src="./libs/dayjs/1.8.21/dayjs.min.js.js"></script>
+  <script src="./libs/httpVueLoader/1.4.2/httpVueLoader.js"></script>
+  <script src="./libs/vue/2.6.12/vue.min.js"></script>
+  <script src="./libs/element-ui/2.15.3/index.min.js"></script>
+  <script src="./libs/axios/0.21.1/axios.min.js"></script>
+  <script src="./js/request.js"></script>
+  <script src="./libs/lodash/4.17.12-pre/lodash.min.js.js"></script>
+
+
+  <script>
+    var el = new Vue({
+      el: '#prizeCycleListContainer',
+      data() {
+        return {
+        }
+      },
+      components: {
+        'prize-cycle-list': httpVueLoader('./components/prizeCycleList.vue'), //奖品周期列表
+      },
+      computed: {},
+      mounted() {
+        window.vue = this;
+      },
+
+    })
+  </script>
+</body>
+
+</html>

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>奖品定向详情</title>
-  <link href="./libs/element-ui/2.15.3/theme-chalk/index.css" rel="stylesheet" />
+  <link href="../libs/element-ui/2.15.3/theme-chalk/index.css" rel="stylesheet" />
   <style>
     .inputWidth {
       width: 500px;
@@ -29,10 +29,10 @@
 <script src="https://unpkg.com/vue"></script>
 <script src="https://unpkg.com/http-vue-loader"></script>
 <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
-<script src="./libs/vue/2.6.12/vue.min.js"></script>
-<script src="./libs/element-ui/2.15.3/index.min.js"></script>
-<script src="./libs/axios/0.21.1/axios.min.js"></script>
-<script src="./js/request.js"></script>
+<script src="../libs/vue/2.6.12/vue.min.js"></script>
+<script src="../libs/element-ui/2.15.3/index.min.js"></script>
+<script src="../libs/axios/0.21.1/axios.min.js"></script>
+<script src="../js/request.js"></script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.12-pre/lodash.min.js"></script>
 
 <script>
@@ -56,7 +56,7 @@
   var el = new Vue({
     el: '#prizeOrientationDetailsApp',
     components: {
-      'orientation-details': httpVueLoader('./components/orientationDetails.vue')
+      'orientation-details': httpVueLoader('../components/orientationDetails.vue')
     },
     data() {
       return {
