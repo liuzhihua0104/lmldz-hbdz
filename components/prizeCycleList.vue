@@ -46,13 +46,18 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" width="170">
+      <el-table-column label="创建时间">
         <template slot-scope="scope">
-          <!-- <el-button type="text" size="small" @click="showApplyList(scope.row)">应用</el-button> -->
+          {{scope.row.createTime}}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="200">
+        <template slot-scope="scope">
           <el-button type="text" size="small" @click="lookFn(scope.row)">查看</el-button>
           <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
-          <el-button type="text" size="small" @click="onDel(scope.row)" v-if="scope.row.status==0">删除</el-button>
-          <!-- <el-button type="text" size="small" @click="copyPlan(scope.row)">复制</el-button> -->
+          <el-button type="text" size="small" @click="onDel(scope.row)">删除</el-button>
+          <el-button type="text" size="small" @click="showApplyList(scope.row)">关联奖品</el-button>
+          <el-button type="text" size="small" @click="copyPlan(scope.row)">复制</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -64,7 +69,6 @@
         <prize-cycleList :type="orientationDetailProps.type" :islook="orientationDetailProps.islook" :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle">
         </prize-cycleList>
       </template>
-
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="orientationDetailVisible = false">关 闭</el-button>
       </span>
@@ -72,16 +76,24 @@
 
     <!-- 奖品列表弹框 -->
     <el-dialog title="奖品列表" :visible.sync="prizeVisible" center class="dialogWidth">
-      <div style="margin-bottom: 20px">执行方案名称: {{rows.name}}</div>
-      <!-- 表单 -->
+      <div style="margin-bottom: 20px">奖品周期方案名称: {{rows.name}}</div>
       <el-form ref="prizeForm" size="default" :inline="true" :model="prizeForm" class="demo-form-inline">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item style="margin-right:0" label="关键字:" prop="prizeName">
-              <el-input v-model="prizeForm.prizeName" placeholder="请输入内容" :clearable="true"></el-input>
+              <el-input style="width:100%" v-model="prizeForm.prizeName" placeholder="请输入内容" :clearable="true"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="2">
+          <el-col :span="4">
+            <el-form-item style="margin-right:0" label="" prop="region">
+              <el-select v-model="prizeForm.type">
+                <el-option label="奖品名称" value="prizeName"></el-option>
+                <el-option label="策略名称" value="strategyName"></el-option>
+                <el-option label="素材源名称" value="sourceName"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="2" :offset="1">
             <el-form-item>
               <el-button type="default" @click="searchPrize">搜索</el-button>
             </el-form-item>
@@ -101,50 +113,63 @@
       </span>
     </el-dialog>
 
-    <!-- 批量应用弹框 -->
-    <el-dialog title="批量应用" class="dialogWidth" :visible.sync="applyVisible" center customClass="customWidth">
+    <!-- 关联奖品弹框 ------------------------------------------------------------------>
+    <el-dialog title="奖品列表" class="dialogWidth" :visible.sync="applyVisible" center customClass="customWidth">
       <div style="margin-bottom: 20px;display: flex; justify-content: space-between;align-items: center;">
-        <div> 执行方案名称: <span style="font-weight:bold">{{rows.name}}</span></div>
-        <el-button size="mini" type="primary" @click="releaseFn">发布</el-button>
+        <div> 奖品周期方案名称: <span style="font-weight:bold">{{rows.name}}</span></div>
       </div>
-      <!-- 表单 -->
       <el-form ref="applyForm" size="default" :inline="true" :model="applyForm" class="demo-form-inline">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="7">
             <el-form-item style="margin-right:0" label="关键字:" prop="prizeName">
               <el-input v-model="applyForm.prizeName" placeholder="请输入内容" :clearable="true"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="2">
+          <el-col :span="4">
+            <el-form-item style="margin-right:0" label="" prop="region">
+              <el-select v-model="applyForm.type">
+                <el-option label="奖品名称" value="prizeName"></el-option>
+                <el-option label="策略名称" value="strategyName"></el-option>
+                <el-option label="素材源名称" value="sourceName"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="2" :offset="1">
             <el-form-item>
               <el-button type="default" @click="searchApply">搜索</el-button>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-      <!-- 列表 -->
       <el-table :data="applyList" class="table-wrap" :border="true" size="mini" height="300px" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column label="序号" type="index" width="50"></el-table-column>
+        <el-table-column label="开关" width="100">
+          <template slot-scope="scope">
+            <el-switch v-show="Object.keys(scope.row).includes('status')" inactive-color="#cccccc" @change="null" :value="scope.row.status==1?true:false" :width="50">
+            </el-switch>
+          </template>
+        </el-table-column>
         <el-table-column label="奖品ID" prop="prizeId" width="300px"></el-table-column>
         <el-table-column label="奖品名称" prop="prizeName"></el-table-column>
         <el-table-column label="策略名称" prop="strategyName"></el-table-column>
         <el-table-column label="素材源名称" prop="sourceName"></el-table-column>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="default" @click="applyVisible = false">关 闭</el-button>
-        </span>
       </el-table>
 
+      <span slot="footer" class="dialog-footer">
+        <el-button style="margin-right:20px" type="primary" @click="releaseFn">确 定</el-button>
+        <el-button @click="applyVisible = false">取 消</el-button>
+      </span>
     </el-dialog>
 
-    <!-- 复制奖品方案弹框 -->
+    <!-- 复制奖品方案弹框 ---------------------------------------------------------->
     <el-dialog title="复制执行方案" :width="'1000px'" :visible.sync="copyPlanVisible" center customClass="customWidth">
       <el-form ref="copyForm" :inline="true" :model="copyForm" class="demo-form-inline">
 
-        <el-form-item style="margin-right:0" label="执行方案名称:" prop="name" :rules="[
-            { required: true, message: '新执行方案名称不能为空'}
+        <el-form-item style="margin-right:0" label="奖品周期方案名称:" prop="name" :rules="[
+            { required: true, message: '新奖品周期方案名称不能为空'}
           ]">
-          <el-input v-model="copyForm.name" placeholder="新执行方案名称" :clearable="true"></el-input>
+          <el-input v-model="copyForm.name" placeholder="新奖品周期方案名称" :clearable="true"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -159,35 +184,35 @@
 <script>
 
 module.exports = {
-  // props: ["type", "islook", "id", "isshowtoptitle", "prizeid", "sourceid"],
-
   data() {
     return {
       filter: {
         name: '',
-        status:'', //应用状态
+        status: '', //应用状态
         pageNum: 1,
         pageSize: 10,
       },
       page: {
         total: 0,
       },
-      tableData: [], // 执行方案列表
+      tableData: [{ id: 1, prizeCount: 10 }], // 周期方案列表
       rows: {}, // 当前数据
-      // 奖品列表弹框
+      // 奖品列表查看弹框
       prizeForm: {
-        prizeName: ""
+        prizeName: "",
+        type: ""
       },
       prizeList: [],// 奖品列表
       prizeVisible: false, // 控制奖品列表弹框弹框的展示与隐藏
-      // 批量应用
+      // 关联奖品
       applyForm: {
-        prizeName: ""
+        prizeName: "",
+        type: "prizeName"
       },
-      applyList: [],// 批量应用奖品列表
-      applyVisible: false,// 控制批量应用弹框的展示与隐藏
+      applyList: [],// 关联奖品奖品列表
+      applyVisible: false,// 控制关联奖品弹框的展示与隐藏
       orientationDetailVisible: false, // 奖品实际应用方案弹框的显示与隐藏
-      multipleSelection: [], //批量应用中触发多选
+      multipleSelection: [], //关联奖品中触发多选
 
       // 定向详情传参
       orientationDetailProps: {
@@ -230,7 +255,8 @@ module.exports = {
       let params = {
         orientationId: this.rows.id,
         sourceId: "",
-        prizeName: this.prizeForm.prizeName
+        prizeName: this.prizeForm.prizeName,
+        type: this.prizeForm.type
       }
       service({
         url: '/prize/orientation/pList',
@@ -285,11 +311,11 @@ module.exports = {
       this.getApplyList(this.rows)
     },
 
-    // 批量应用弹框-触发多选
+    // 关联奖品弹框-触发多选
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    // 批量应用弹框-点击发布
+    // 关联奖品弹框-点击发布
     releaseFn() {
       if (!this.multipleSelection.length) {
         this.$message({
@@ -363,6 +389,9 @@ module.exports = {
   },
   created() {
     // this.fetchList()
+  },
+  mounted() {
+    window.prizeCycleList = this;
   },
 }
 </script>
