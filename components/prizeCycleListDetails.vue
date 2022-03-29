@@ -24,14 +24,17 @@
     <div class="title">
       配置信息</div>
 
-    <el-form-item style="margin-right:0" label="条件:" prop="condition">
-      <el-switch v-model="formData.condition" :active-value="1" :inactive-value="0">
-      </el-switch>
-    </el-form-item>
-
-    <el-form-item style="margin-right:0" label="触发条件使用次数:" prop="useNum">
-      <el-input :clearable="true" class="inputWidth" v-model="formData.useNum"></el-input>
-    </el-form-item>
+    <el-col>
+      <el-form-item style="margin-right:0" label="条件:" prop="condition">
+        <el-switch v-model="formData.condition" :active-value="1" :inactive-value="0">
+        </el-switch>
+      </el-form-item>
+    </el-col>
+    <el-col :span="18" :offset="3" >
+      <el-form-item style="margin-right:0" label="触发条件使用次数:" prop="useNum">
+        <el-input :clearable="true" class="inputWidth" v-model="formData.useNum"></el-input>
+      </el-form-item>
+    </el-col>
 
     <el-form-item style="margin-right:0" label="间隔次数:" prop="intervalNum">
       <el-input :clearable="true" class="inputWidth" v-model="formData.intervalNum"></el-input>
@@ -195,7 +198,7 @@ module.exports = {
         intervalNum: "", // 间隔次数
         relationship: 1, // 或||且
         intervalTime: "", // 间隔时间
-        unit:1, //天||小时
+        unit: 1, //天||小时
       },
 
 
