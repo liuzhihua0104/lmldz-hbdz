@@ -64,13 +64,14 @@
     <el-pagination :destroy-on-close="true" class="tac" background layout="prev, pager, next" :total="page.total" :current-page.sync="filter.pageNum" :page-size.sync="filter.pageSize" @current-change="fetchList">
     </el-pagination>
 
-    <el-dialog title="定向详情" class="dialogWidth" :visible.sync="orientationDetailVisible" center>
-      <template v-if="orientationDetailVisible">
-        <prize-cycleList :type="orientationDetailProps.type" :islook="orientationDetailProps.islook" :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle">
-        </prize-cycleList>
+    <!-- 奖品周期方案详情弹框 -->
+    <el-dialog title="奖品周期方案详情" class="dialogWidth" :visible.sync="prizeCycleListDetailsVisible" center>
+      <template v-if="prizeCycleListDetailsVisible">
+        <prize-cycle-list-details :type="orientationDetailProps.type" :islook="orientationDetailProps.islook" :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle">
+        </prize-cycle-list-details>
       </template>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="orientationDetailVisible = false">关 闭</el-button>
+        <el-button type="primary" @click="prizeCycleListDetailsVisible = false">关 闭</el-button>
       </span>
     </el-dialog>
 
@@ -177,6 +178,7 @@
         <el-button type="primary" @click="submitCopyForm('copyForm')">确 定</el-button>
       </span>
     </el-dialog>
+
   </div>
 </template>
 
@@ -211,7 +213,7 @@ module.exports = {
       },
       applyList: [],// 关联奖品奖品列表
       applyVisible: false,// 控制关联奖品弹框的展示与隐藏
-      orientationDetailVisible: false, // 奖品实际应用方案弹框的显示与隐藏
+      prizeCycleListDetailsVisible: true, // 奖品实际应用方案弹框的显示与隐藏
       multipleSelection: [], //关联奖品中触发多选
 
       // 定向详情传参
@@ -329,7 +331,7 @@ module.exports = {
     lookFn(rows) {
       this.rows = rows;
       sessionStorage.setItem("rows", JSON.stringify(rows));
-      this.orientationDetailVisible = true;
+      this.prizeCycleListDetailsVisible = true;
     },
     // 编辑
     onEdit(rows) {
@@ -392,6 +394,9 @@ module.exports = {
   },
   mounted() {
     window.prizeCycleList = this;
+  },
+  components: {
+    'prize-cycle-list-details': httpVueLoader('../components/prizeCycleListDetails.vue'), //奖品周期方案详情
   },
 }
 </script>
