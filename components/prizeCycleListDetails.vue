@@ -20,34 +20,42 @@
       配置信息</div>
 
     <el-row>
-      <el-col :span="18">
+      <el-col :span="24">
         <el-form-item style="margin-right:0" label="条件:" prop="condition">
           <el-switch v-model="formData.condition" :active-value="1" :inactive-value="0">
           </el-switch>
         </el-form-item>
 
-        <el-form-item style="margin-right:0" label="触发条件使用次数:" prop="useNum">
-          <el-input placeholder="请输入数字" :clearable="true" class="inputWidth" v-model="formData.useNum"></el-input>
-        </el-form-item>
+        <div class="wrap" style="border:1px solid #eaedf3;padding:20px 100px 20px 0">
+          <el-form-item style="margin-right:0" label="触发条件使用次数:" prop="useNum">
+            <el-input placeholder="请输入数字" :clearable="true" class="inputWidth" v-model="formData.useNum"></el-input>
+          </el-form-item>
 
-        <el-form-item style="margin-right:0" label="间隔次数:" prop="intervalNum">
-          <el-input placeholder="请输入数字" :clearable="true" class="inputWidth" v-model="formData.intervalNum"></el-input>
-        </el-form-item>
+          <el-form-item style="margin-right:0" label="间隔次数:" prop="intervalNum">
+            <el-input placeholder="请输入数字" :clearable="true" class="inputWidth" v-model="formData.intervalNum"></el-input>
+          </el-form-item>
 
-        <el-form-item style="margin-right:0" label="" prop="relationship">
-          <el-select v-model="formData.relationship">
-            <el-option label="或" :value="1"></el-option>
-            <el-option label="且" :value="2"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item style="margin-right:0" label="间隔时间:" prop="intervalTime">
-          <el-input v-model="formData.intervalTime" placeholder="请输入数字" class="input-with-select">
-            <el-select v-model="formData.unit" slot="append" style="width:100px">
-              <el-option label="天" :value="1"></el-option>
-              <el-option label="小时" :value="2"></el-option>
+          <el-form-item style="margin-right:0" label="" prop="relationship">
+            <el-select v-model="formData.relationship">
+              <el-option label="或" :value="1"></el-option>
+              <el-option label="且" :value="2"></el-option>
             </el-select>
-          </el-input>
+          </el-form-item>
+
+          <el-form-item style="margin-right:0" label="间隔时间:" prop="intervalTime">
+            <el-input v-model="formData.intervalTime" placeholder="请输入数字" class="input-with-select">
+              <el-select v-model="formData.unit" slot="append" style="width:100px">
+                <el-option label="天" :value="1"></el-option>
+                <el-option label="小时" :value="2"></el-option>
+              </el-select>
+            </el-input>
+          </el-form-item>
+
+        </div>
+
+        <el-form-item style="margin-right:0" label="时间周期:" prop="time">
+          <el-switch v-model="formData.time" :active-value="1" :inactive-value="0">
+          </el-switch>
         </el-form-item>
 
         <!-- 时段 -->
@@ -157,6 +165,7 @@ module.exports = {
         relationship: 1, // 或||且
         intervalTime: "", // 间隔时间
         unit: 1, //天||小时
+        time: 1, //时间周期
       },
 
       rangeListData: [], //时间段自定义列表数据
