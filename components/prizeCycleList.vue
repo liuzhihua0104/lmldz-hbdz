@@ -393,7 +393,7 @@ module.exports = {
     // this.fetchList()
   },
   mounted() {
-    window.prizeCycleList = this;
+    window.listData = this;
   },
   components: {
     'prize-cycle-list-details': httpVueLoader('../components/prizeCycleListDetails.vue'), //奖品周期方案详情

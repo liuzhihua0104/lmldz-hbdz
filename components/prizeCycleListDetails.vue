@@ -9,11 +9,6 @@
         <el-form-item style="margin-right:0" label="奖品周期方案名称:" prop="name">
           <el-input :clearable="true" class="inputWidth" maxLength="30" v-model="formData.name" placeholder="请输入奖品周期方案名称，30个字符以内"></el-input>
         </el-form-item>
-      </el-col>
-    </el-row>
-
-    <el-row>
-      <el-col :span="18">
         <el-form-item style="margin-right:0" label="备注:" prop="remarks">
           <el-input :clearable="true" class="inputWidth" type="textarea" :rows="4" v-model="formData.remarks" placeholder="请输入内容，100个字符以内">
           </el-input>
@@ -24,94 +19,95 @@
     <div class="title">
       配置信息</div>
 
-    <el-col>
-      <el-form-item style="margin-right:0" label="条件:" prop="condition">
-        <el-switch v-model="formData.condition" :active-value="1" :inactive-value="0">
-        </el-switch>
-      </el-form-item>
-    </el-col>
-    <el-col :span="18" :offset="3" >
-      <el-form-item style="margin-right:0" label="触发条件使用次数:" prop="useNum">
-        <el-input :clearable="true" class="inputWidth" v-model="formData.useNum"></el-input>
-      </el-form-item>
-    </el-col>
-
-    <el-form-item style="margin-right:0" label="间隔次数:" prop="intervalNum">
-      <el-input :clearable="true" class="inputWidth" v-model="formData.intervalNum"></el-input>
-    </el-form-item>
-    <el-form-item style="margin-right:0" label="" prop="relationship">
-      <el-select v-model="formData.relationship">
-        <el-option label="或" :value="1"></el-option>
-        <el-option label="且" :value="2"></el-option>
-      </el-select>
-    </el-form-item>
-
-    <!-- <el-form-item style="margin-right:0" label="间隔时间:" prop="intervalTime">
-      <el-input :clearable="true" class="inputWidth" v-model="formData.intervalTime"></el-input>
-    </el-form-item> -->
-    <el-form-item style="margin-right:0" label="间隔时间:" prop="intervalTime">
-      <el-input v-model="formData.intervalTime" class="input-with-select">
-        <el-select v-model="formData.unit" slot="append" style="width:100px">
-          <el-option label="天" :value="1"></el-option>
-          <el-option label="小时" :value="2"></el-option>
-        </el-select>
-      </el-input>
-    </el-form-item>
-
-    <!-- 时段 -->
     <el-row>
+      <el-col :span="18">
+        <el-form-item style="margin-right:0" label="条件:" prop="condition">
+          <el-switch v-model="formData.condition" :active-value="1" :inactive-value="0">
+          </el-switch>
+        </el-form-item>
 
-      <el-col :span="24" v-if="formData.timeType=='2'">
-        <el-table max-height="250px" :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}">
-          <el-table-column align="center" width="80" label="序号" type="index"></el-table-column>
-          <el-table-column align="center" label="时间段">
-            <template slot-scope="scope">
-              <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="24" :min="0" :step="1">
-              </el-slider>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" label="时间范围" width="300">
-            <template slot-scope="scope">
-              <div style="display:flex;align-items:center">
-                <el-time-select :clearable="false" @change="changeTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
+        <el-form-item style="margin-right:0" label="触发条件使用次数:" prop="useNum">
+          <el-input placeholder="请输入数字" :clearable="true" class="inputWidth" v-model="formData.useNum"></el-input>
+        </el-form-item>
+
+        <el-form-item style="margin-right:0" label="间隔次数:" prop="intervalNum">
+          <el-input placeholder="请输入数字" :clearable="true" class="inputWidth" v-model="formData.intervalNum"></el-input>
+        </el-form-item>
+
+        <el-form-item style="margin-right:0" label="" prop="relationship">
+          <el-select v-model="formData.relationship">
+            <el-option label="或" :value="1"></el-option>
+            <el-option label="且" :value="2"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item style="margin-right:0" label="间隔时间:" prop="intervalTime">
+          <el-input v-model="formData.intervalTime" placeholder="请输入数字" class="input-with-select">
+            <el-select v-model="formData.unit" slot="append" style="width:100px">
+              <el-option label="天" :value="1"></el-option>
+              <el-option label="小时" :value="2"></el-option>
+            </el-select>
+          </el-input>
+        </el-form-item>
+
+        <!-- 时段 -->
+        <el-row>
+          <el-col :span="24" v-if="formData.timeType=='2'">
+            <el-table max-height="250px" :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}">
+              <el-table-column align="center" width="80" label="序号" type="index"></el-table-column>
+              <el-table-column align="center" label="时间段">
+                <template slot-scope="scope">
+                  <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="24" :min="0" :step="1">
+                  </el-slider>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="时间范围" width="300">
+                <template slot-scope="scope">
+                  <div style="display:flex;align-items:center">
+                    <el-time-select :clearable="false" @change="changeTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
       start: '00:00',
       step: '01:00',
       end: '23:00',
       maxTime:scope.row.endTime
     }">
-                </el-time-select>
-                <span style="padding:0 10px">至</span>
-                <el-time-select :clearable="false" :disabled="!scope.row.startTime" @change="changeTime(scope.row,'endTime')" placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
+                    </el-time-select>
+                    <span style="padding:0 10px">至</span>
+                    <el-time-select :clearable="false" :disabled="!scope.row.startTime" @change="changeTime(scope.row,'endTime')" placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
      start: '00:00',
       step: '01:00',
       end: '24:00',
       minTime: scope.row.startTime
     }">
-                </el-time-select>
-              </div>
+                    </el-time-select>
+                  </div>
 
-            </template>
-          </el-table-column>
-          <el-table-column align="center" label="操作" width="100px" style="display:flex">
-            <template slot-scope="scope">
-              <el-button type="text" size="small" @click="delTimeRange(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="操作" width="100px" style="display:flex">
+                <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="delTimeRange(scope.row)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
 
-        <div v-if="islook!=1" style="width:800px;text-align:center;margin-left:80px">
-          <el-button style="margin-top:20px" type="primary" size="mini" class="btn" @click="addTimeRange">新增</el-button>
-        </div>
-      </el-col>
-    </el-row>
+            <div v-if="islook!=1" style="width:800px;text-align:center;margin-left:80px">
+              <el-button style="margin-top:20px" type="primary" size="mini" class="btn" @click="addTimeRange">新增</el-button>
+            </div>
+          </el-col>
+        </el-row>
 
-    <el-form-item>
-      <div class="btns" v-if="islook==0">
+        <el-form-item>
+          <!-- <div class="btns" v-if="islook==0">
         <el-button class="back" @click="goBack">返回</el-button>
         <el-button type="primary" @click="saveFn('formData')">保存</el-button>
-      </div>
-    </el-form-item>
-
+      </div> -->
+          <div class="btns">
+            <el-button class="back" @click="goBack">返回</el-button>
+            <el-button type="primary" @click="saveFn('formData')">保存</el-button>
+          </div>
+        </el-form-item>
+      </el-col>
+    </el-row>
   </el-form>
 </template>
  
@@ -145,42 +141,6 @@ function parseJson(arr) {
   }
   return toParse(arr)
 }
-
-let timeSlotOptions = [
-  { name: "0点 ~ 3点", label: "0-3" },
-  { name: "3点 ~ 6点", label: "3-6" },
-  { name: "6点 ~8点", label: "6-8" },
-  { name: "8点 ~10点", label: "8-10" },
-  { name: "10点 ~12点", label: "10-12" },
-  { name: "12点 ~ 14点", label: "12-14" },
-  { name: "14点 ~16点", label: "14-16" },
-  { name: "16点 ~18点", label: "16-18" },
-  { name: "18点 ~20点", label: "18-20" },
-  { name: "20点 ~22点", label: "20-22" },
-  { name: "22点 ~24点", label: "22-24" },
-]
-
-let networkingOptions = [
-  { name: "wifi", label: "1" },
-  { name: "移动", label: "2" },
-  { name: "联通", label: "3" },
-  { name: "电信", label: "4" }
-]
-
-let legalOptions = [
-  { name: "法定节假日", label: "1" },
-  { name: "法定工作日", label: "2" }
-]
-let weekOptions = [
-  { name: "星期一", label: "4" },
-  { name: "星期二", label: "5" },
-  { name: "星期三", label: "6" },
-  { name: "星期四", label: "7" },
-  { name: "星期五", label: "8" },
-  { name: "星期六", label: "9" },
-  { name: "星期日", label: "3" }
-]
-
 module.exports = {
   props: ["type", "islook", "id", "isshowtoptitle", "prizeid", "sourceid"],
 
@@ -188,12 +148,10 @@ module.exports = {
     let self = this  // 加上这一句就OK了
     return {
       formData: {
-
         id: "", // 
         name: "", // 方案名称  
         remarks: "", // 备注
         condition: 1, //条件
-
         useNum: "", // 使用次数
         intervalNum: "", // 间隔次数
         relationship: 1, // 或||且
@@ -201,14 +159,21 @@ module.exports = {
         unit: 1, //天||小时
       },
 
-
-
       rangeListData: [], //时间段自定义列表数据
 
 
       formRules: {
         name: [
           { required: true, message: '请输入定向名称', trigger: 'change' },
+        ],
+        useNum: [
+          { required: true, message: '请填入数字', pattern: /^[0-9]?$|^[1-9]{1}[0-9]*$/ }  //大于等于0的正整数
+        ],
+        intervalNum: [
+          { required: true, message: '请填入数字', pattern: /^[0-9]?$|^[1-9]{1}[0-9]*$/ }  //大于等于0的正整数
+        ],
+        intervalTime: [
+          { required: true, message: '请填入数字', pattern: /^(?:[1-9]\d*|0)(?:\.\d{1,2})?$/ }  // 大于等于0，最多保留两位小数
         ],
 
 
@@ -232,6 +197,9 @@ module.exports = {
       },
       deep: true
     }
+  },
+  mounted() {
+    window.detailData = this;
   },
 
   methods: {
