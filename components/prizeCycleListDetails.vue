@@ -26,7 +26,7 @@
           </el-switch>
         </el-form-item>
 
-        <div class="wrap" style="border:1px solid #eaedf3;padding:20px 100px 20px 0">
+        <div class="wrap" style="border:1px solid #eaedf3;padding:20px 100px 20px 0;margin-bottom:20px">
           <el-form-item style="margin-right:0" label="触发条件使用次数:" prop="useNum">
             <el-input placeholder="请输入数字" :clearable="true" class="inputWidth" v-model="formData.useNum"></el-input>
           </el-form-item>
@@ -59,61 +59,61 @@
         </el-form-item>
 
         <!-- 时段 -->
-        <el-row>
-          <el-col :span="24" v-if="formData.timeType=='2'">
-            <el-table max-height="250px" :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}">
-              <el-table-column align="center" width="80" label="序号" type="index"></el-table-column>
-              <el-table-column align="center" label="时间段">
-                <template slot-scope="scope">
-                  <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="24" :min="0" :step="1">
-                  </el-slider>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" label="时间范围" width="300">
-                <template slot-scope="scope">
-                  <div style="display:flex;align-items:center">
-                    <el-time-select :clearable="false" @change="changeTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
+
+        <div class="wrap" style="text-align:center;border:1px solid #eaedf3;padding:20px 0">
+          <el-table max-height="250px" :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}">
+            <el-table-column align="center" width="80" label="序号" type="index"></el-table-column>
+            <el-table-column align="center" label="时间段">
+              <template slot-scope="scope">
+                <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="24" :min="0" :step="1">
+                </el-slider>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="时间范围" width="300">
+              <template slot-scope="scope">
+                <div style="display:flex;align-items:center">
+                  <el-time-select :clearable="false" @change="changeTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
       start: '00:00',
       step: '01:00',
       end: '23:00',
       maxTime:scope.row.endTime
     }">
-                    </el-time-select>
-                    <span style="padding:0 10px">至</span>
-                    <el-time-select :clearable="false" :disabled="!scope.row.startTime" @change="changeTime(scope.row,'endTime')" placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
+                  </el-time-select>
+                  <span style="padding:0 10px">至</span>
+                  <el-time-select :clearable="false" :disabled="!scope.row.startTime" @change="changeTime(scope.row,'endTime')" placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
      start: '00:00',
       step: '01:00',
       end: '24:00',
       minTime: scope.row.startTime
     }">
-                    </el-time-select>
-                  </div>
+                  </el-time-select>
+                </div>
 
-                </template>
-              </el-table-column>
-              <el-table-column align="center" label="操作" width="100px" style="display:flex">
-                <template slot-scope="scope">
-                  <el-button type="text" size="small" @click="delTimeRange(scope.row)">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="操作" width="100px" style="display:flex">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="delTimeRange(scope.row)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
 
-            <div v-if="islook!=1" style="width:800px;text-align:center;margin-left:80px">
-              <el-button style="margin-top:20px" type="primary" size="mini" class="btn" @click="addTimeRange">新增</el-button>
-            </div>
-          </el-col>
-        </el-row>
+          <!-- <div v-if="islook!=1" style="width:800px;text-align:center;margin-left:80px"> -->
+        
+            <el-button style="margin-top:20px" type="primary" size="mini" class="btn" @click="addTimeRange">新增</el-button>
+    
 
-        <el-form-item>
-          <!-- <div class="btns" v-if="islook==0">
+        </div>
+
+        <!-- <div class="btns" v-if="islook==0">
         <el-button class="back" @click="goBack">返回</el-button>
         <el-button type="primary" @click="saveFn('formData')">保存</el-button>
       </div> -->
-          <div class="btns">
-            <el-button class="back" @click="goBack">返回</el-button>
-            <el-button type="primary" @click="saveFn('formData')">保存</el-button>
-          </div>
-        </el-form-item>
+        <div style="text-align:center;margin-top:20px">
+          <el-button class="back" @click="goBack">返回</el-button>
+          <el-button type="primary" @click="saveFn('formData')">保存</el-button>
+        </div>
+
       </el-col>
     </el-row>
   </el-form>
@@ -188,57 +188,20 @@ module.exports = {
 
       },
 
-      areaOptions: [], //省市县
-      lineOptions: [], //线级城市级
 
-
-      checkedNodeList: [], //子节点全选后，只留下父节点，后端需要的
-      cascaderIdx: 0 //防止级联组件报错
 
 
 
     }
   },
   watch: {
-    config: {
-      handler() {
-        this.cascaderIdx++
-      },
-      deep: true
-    }
   },
   mounted() {
     window.detailData = this;
   },
 
   methods: {
-    // 切换选中的省市区
-    handleChange(value) {
-      let checkedNodeList = this.$refs[value].getCheckedNodes();
-      checkedNodeList = checkedNodeList.filter(item => !(item.parent && item.parent.checked)); // 核心
-      // 后台只要父级别
-      this.checkedNodeList = checkedNodeList
-    },
 
-    // 公共方法-切换全选
-    commonChangeCheckAll(checkAll, keyName) {
-      if (checkAll) {
-        let values = [];
-        this.formData[`${keyName}_options`].map(item => {
-          values.push(item.label)
-        })
-        this.formData[`${keyName}_values`] = values;
-      } else {
-        this.formData[`${keyName}_values`] = [];
-      }
-      this.formData[`${keyName}_isIndeterminate`] = false;
-    },
-    // 公共方法-切换单个选项
-    commonSelectOption(value, keyName) {
-      let checkedCount = value.length;
-      this.formData[`${keyName}_checkAll`] = checkedCount === this.formData[`${keyName}_options`].length;
-      this.formData[`${keyName}_isIndeterminate`] = checkedCount > 0 && checkedCount < this.formData[`${keyName}_options`].length;
-    },
 
 
     // 处理保存参数
@@ -332,26 +295,6 @@ module.exports = {
             data: params,
           }).then(({ id }) => {
 
-            // 有资源id时需要单独调取这个接口
-            if (params.sourceId) {
-              service({
-                url: '/prize/orientation/addOrientationMP',
-                method: 'post',
-                data: {
-                  sourceId: params.sourceId,
-                  orientationId: id
-                },
-              }).then(({ data }) => {
-                this.$message.success("保存方案成功")
-                self.goBack();
-
-              }).catch((err) => {
-                this.$message.error(err.msg);
-              })
-            } else {
-              this.$message.success("保存方案成功")
-              self.goBack();
-            }
 
           }).catch((err) => {
             this.$message.error(err.msg);
@@ -505,72 +448,13 @@ module.exports = {
       })
     },
 
-    // 获取区域信息
-    getArea() {
-      let areaOptions = JSON.parse(sessionStorage.getItem("areaOptions"))
-      if (areaOptions) {
-        this.areaOptions = areaOptions;
-      } else {
-        service({
-          url: '/prize/area/list',
-          method: 'post',
-          data: {
-            level: "area"
-          },
-        }).then(({ data }) => {
-          let resultData = parseJson(data);
-          // 去除后端代码中多余的“一线、二线。。。”
-          resultData.map(item => {
-            let newChildren = [];
-            if (item.children && item.children.length) {
-              item.children.map(ele => {
-                if (![10, 11, 12, 13, 14, 15].includes(ele.value)) {
-                  newChildren.push(ele)
-                }
-              })
-              item.children = newChildren;
 
-            } else {
-              delete item.children
-            }
-          })
-          this.areaOptions = resultData;
-          sessionStorage.setItem("areaOptions", JSON.stringify(resultData))
-        })
-      }
-
-    },
-    // 获取区域信息
-    getLine() {
-      let lineOptions = JSON.parse(sessionStorage.getItem("lineOptions"))
-      if (lineOptions) {
-        this.lineOptions = lineOptions;
-      } else {
-        service({
-          url: '/prize/area/list',
-          method: 'post',
-          data: {
-            level: "line"
-          },
-        }).then(({ data }) => {
-          let resultData = parseJson(data);
-          this.lineOptions = resultData;
-          sessionStorage.setItem("lineOptions", JSON.stringify(resultData))
-        })
-      }
-    },
-    // 切换areaType
-    changeAreaType() {
-      this.formData.areaContent = "";
-      this.formData.areaJson = [];
-    },
 
 
 
   },
   created() {
-    this.getArea(); //获取省市县城市
-    this.getLine(); //获取线级城市
+
     if (this.id) {
       this.formData.id = this.id;
       this.getDetails()
