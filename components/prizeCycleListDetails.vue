@@ -65,7 +65,7 @@
             <el-table-column align="center" width="50" label="序号" type="index"></el-table-column>
             <el-table-column align="center" label="时间段" width="150px">
               <template slot-scope="scope">
-                <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="24" :min="0" :step="1">
+                <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="366" :min="0" :step="1">
                 </el-slider>
               </template>
             </el-table-column>
@@ -80,7 +80,7 @@
                     </template>
                   </el-select> -->
 
-                  <el-select v-model="scope.row.startTime" placeholder="请选择" filterable clearable>
+                  <el-select @change.enter="changeTime(scope.row,'startTime')" v-model="scope.row.startTime" placeholder="请选择" filterable clearable>
                     <el-option-group v-for="month in dateOptions" :key="month.month" :label="month.month">
                       <el-option v-for="itemDay in month.children" :key="itemDay.date" :label="itemDay.date" :value="itemDay.date">
                       </el-option>
@@ -89,7 +89,7 @@
 
                   <span style="padding:0 10px">至</span>
              
-                  <el-select v-model="scope.row.endTime" placeholder="请选择" filterable clearable>
+                  <el-select @change.enter="changeTime(scope.row,'endTime')" v-model="scope.row.endTime" placeholder="请选择" filterable clearable>
                     <el-option-group v-for="month in dateOptions" :key="month.month" :label="month.month">
                       <el-option v-for="itemDay in month.children" :key="itemDay.date" :label="itemDay.date" :value="itemDay.date">
                       </el-option>
@@ -494,6 +494,8 @@ module.exports = {
 
     // 切换时间段-通过时间选择控件
     changeTime(row, name) {
+
+
       this.rangeListData.filter(item => {
         if (item.id == row.id) {
           let valueNum = parseInt(row[name].split()[0]);
