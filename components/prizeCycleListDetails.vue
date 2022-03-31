@@ -62,14 +62,14 @@
 
         <div class="wrap" style="text-align:center;border:1px solid #eaedf3;padding:20px 0">
           <el-table max-height="250px" :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}">
-            <el-table-column align="center" width="80" label="序号" type="index"></el-table-column>
-            <el-table-column align="center" label="时间段">
+            <el-table-column align="center" width="50" label="序号" type="index"></el-table-column>
+            <el-table-column align="center" label="时间段" width="150px">
               <template slot-scope="scope">
                 <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="24" :min="0" :step="1">
                 </el-slider>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="时间范围" width="300">
+            <el-table-column align="center" label="时间范围" width="250px">
               <template slot-scope="scope">
                 <div style="display:flex;align-items:center">
                   <el-time-select :clearable="false" @change="changeTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
@@ -91,7 +91,20 @@
 
               </template>
             </el-table-column>
-            <el-table-column align="center" label="操作" width="100px" style="display:flex">
+
+            <el-table-column align="center" label="单人可派奖总次数" width="140px" style="display:flex">
+              <template slot-scope="scope">
+                <el-input :clearable="true"   v-model="scope.row.count" placeholder="请输入数字">
+                </el-input>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="重置时间" width="140px" style="display:flex">
+              <template slot-scope="scope">
+                <el-input :clearable="true"    v-model="scope.row.resetTime" placeholder="请输入数字">
+                </el-input>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="操作"  style="display:flex">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="delTimeRange(scope.row)">删除</el-button>
               </template>
@@ -99,9 +112,8 @@
           </el-table>
 
           <!-- <div v-if="islook!=1" style="width:800px;text-align:center;margin-left:80px"> -->
-        
-            <el-button style="margin-top:20px" type="primary" size="mini" class="btn" @click="addTimeRange">新增</el-button>
-    
+
+          <el-button style="margin-top:20px" type="primary" size="mini" class="btn" @click="addTimeRange">新增</el-button>
 
         </div>
 

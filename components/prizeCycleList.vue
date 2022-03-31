@@ -390,7 +390,7 @@ module.exports = {
     }
   },
   created() {
-    // this.fetchList()
+    this.fetchList()
   },
   mounted() {
     window.listData = this;
