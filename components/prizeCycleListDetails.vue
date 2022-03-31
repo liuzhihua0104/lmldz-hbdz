@@ -72,21 +72,29 @@
             <el-table-column align="center" label="时间范围" width="250px">
               <template slot-scope="scope">
                 <div style="display:flex;align-items:center">
-                  <el-time-select :clearable="false" @change="changeTime(scope.row,'startTime')" placeholder="起始时间" v-model="scope.row.startTime" :picker-options="{
-      start: '00:00',
-      step: '01:00',
-      end: '23:00',
-      maxTime:scope.row.endTime
-    }">
-                  </el-time-select>
+
+                  <!-- <el-select v-model="scope.row.startTime" filterable placeholder="请选择">
+                    <template v-for="item in dateOptions">
+                      <el-option v-for="child in item.children" :key="child.date" :label="child.date" :value="child.date">
+                      </el-option>
+                    </template>
+                  </el-select> -->
+
+                  <el-select v-model="scope.row.startTime" placeholder="请选择" filterable clearable>
+                    <el-option-group v-for="month in dateOptions" :key="month.month" :label="month.month">
+                      <el-option v-for="itemDay in month.children" :key="itemDay.date" :label="itemDay.date" :value="itemDay.date">
+                      </el-option>
+                    </el-option-group>
+                  </el-select>
+
                   <span style="padding:0 10px">至</span>
-                  <el-time-select :clearable="false" :disabled="!scope.row.startTime" @change="changeTime(scope.row,'endTime')" placeholder="结束时间" v-model="scope.row.endTime" :picker-options="{
-     start: '00:00',
-      step: '01:00',
-      end: '24:00',
-      minTime: scope.row.startTime
-    }">
-                  </el-time-select>
+             
+                  <el-select v-model="scope.row.endTime" placeholder="请选择" filterable clearable>
+                    <el-option-group v-for="month in dateOptions" :key="month.month" :label="month.month">
+                      <el-option v-for="itemDay in month.children" :key="itemDay.date" :label="itemDay.date" :value="itemDay.date">
+                      </el-option>
+                    </el-option-group>
+                  </el-select>
                 </div>
 
               </template>
@@ -94,17 +102,17 @@
 
             <el-table-column align="center" label="单人可派奖总次数" width="140px" style="display:flex">
               <template slot-scope="scope">
-                <el-input :clearable="true"   v-model="scope.row.count" placeholder="请输入数字">
+                <el-input :clearable="true" v-model="scope.row.count" placeholder="请输入数字">
                 </el-input>
               </template>
             </el-table-column>
             <el-table-column align="center" label="重置时间" width="140px" style="display:flex">
               <template slot-scope="scope">
-                <el-input :clearable="true"    v-model="scope.row.resetTime" placeholder="请输入数字">
+                <el-input :clearable="true" v-model="scope.row.resetTime" placeholder="请输入数字">
                 </el-input>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="操作"  style="display:flex">
+            <el-table-column align="center" label="操作" style="display:flex">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="delTimeRange(scope.row)">删除</el-button>
               </template>
@@ -134,6 +142,43 @@
 
 
 <script>
+
+function getAllDay() {
+
+  let dateOptions = []; // 月份和日子分级
+  let dayOptions = []; // 只有日，不分级别
+  for (let month = 1; month <= 12; month++) {
+    let minMonth = [4, 6, 9, 11] // 4月、6月、9月、11月为30天
+    let maxMonth = [1, 3, 5, 7, 8, 10, 12] //1月、3月、5月、7月、8月、10月、12月为31天
+    let maxDay;
+    if (minMonth.includes(month)) {
+      maxDay = 30;
+    } else if (maxMonth.includes(month)) {
+      maxDay = 31;
+    } else {
+      maxDay = 29   //2月份最大29
+    }
+
+    let obj = {
+      month: month + "月",
+      children: []
+    }
+
+    for (let day = 1; day <= maxDay; day++) {
+      obj.children.push({ date: `${month >= 10 ? month : ("0" + month)}-${day >= 10 ? day : ("0" + day)}` })
+
+      dayOptions.push(`${month >= 10 ? month : ("0" + month)}-${day >= 10 ? day : ("0" + day)}`)
+    }
+    dateOptions.push(obj)
+
+  }
+
+  console.log(dateOptions)
+
+  return dateOptions
+
+}
+
 
 // 递归处理城市数据
 function parseJson(arr) {
@@ -182,7 +227,6 @@ module.exports = {
 
       rangeListData: [], //时间段自定义列表数据
 
-
       formRules: {
         name: [
           { required: true, message: '请输入定向名称', trigger: 'change' },
@@ -196,9 +240,9 @@ module.exports = {
         intervalTime: [
           { required: true, message: '请填入数字', pattern: /^(?:[1-9]\d*|0)(?:\.\d{1,2})?$/ }  // 大于等于0，最多保留两位小数
         ],
-
-
       },
+
+      dateOptions: getAllDay()
 
 
 
@@ -421,9 +465,9 @@ module.exports = {
     addTimeRange() {
       let needAdd = {
         id: this.rangeListData.length + 1,
-        startTime: "00:00",
-        endTime: "24:00",
-        sliderValue: [0, 24]
+        startTime: "",
+        endTime: "",
+        sliderValue: []
       }
       this.rangeListData.push(needAdd);
     },
