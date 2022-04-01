@@ -63,38 +63,22 @@
         <div class="wrap" style="text-align:center;border:1px solid #eaedf3;padding:20px 0">
           <el-table max-height="250px" :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}">
             <el-table-column align="center" width="50" label="序号" type="index"></el-table-column>
-            <el-table-column align="center" label="时间段" width="150px">
+            <!-- <el-table-column align="center" label="时间段" width="150px">
               <template slot-scope="scope">
-                <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="366" :min="0" :step="1">
+                <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="366" :min="1" :step="1">
                 </el-slider>
               </template>
-            </el-table-column>
-            <el-table-column align="center" label="时间范围" width="250px">
+            </el-table-column> -->
+            <el-table-column align="center" label="时间范围" width="400px">
               <template slot-scope="scope">
                 <div style="display:flex;align-items:center">
 
-                  <!-- <el-select v-model="scope.row.startTime" filterable placeholder="请选择">
-                    <template v-for="item in dateOptions">
-                      <el-option v-for="child in item.children" :key="child.date" :label="child.date" :value="child.date">
-                      </el-option>
-                    </template>
-                  </el-select> -->
-
-                  <el-select @change.enter="changeTime(scope.row,'startTime')" v-model="scope.row.startTime" placeholder="请选择" filterable clearable>
-                    <el-option-group v-for="month in dateOptions" :key="month.month" :label="month.month">
-                      <el-option v-for="itemDay in month.children" :key="itemDay.date" :label="itemDay.date" :value="itemDay.date">
-                      </el-option>
-                    </el-option-group>
-                  </el-select>
+                  <el-cascader @change="changeStarTime(scope.row,'startTime')" v-model="scope.row.startTime" :options="dateOptions" clearable :show-all-levels="false" filterable></el-cascader>
 
                   <span style="padding:0 10px">至</span>
-             
-                  <el-select @change.enter="changeTime(scope.row,'endTime')" v-model="scope.row.endTime" placeholder="请选择" filterable clearable>
-                    <el-option-group v-for="month in dateOptions" :key="month.month" :label="month.month">
-                      <el-option v-for="itemDay in month.children" :key="itemDay.date" :label="itemDay.date" :value="itemDay.date">
-                      </el-option>
-                    </el-option-group>
-                  </el-select>
+
+                  <el-cascader :disabled="!scope.row.startTime" v-model="scope.row.endTime" :options="dateOptions" clearable :show-all-levels="false" filterable></el-cascader>
+
                 </div>
 
               </template>
@@ -146,7 +130,6 @@
 function getAllDay() {
 
   let dateOptions = []; // 月份和日子分级
-  let dayOptions = []; // 只有日，不分级别
   for (let month = 1; month <= 12; month++) {
     let minMonth = [4, 6, 9, 11] // 4月、6月、9月、11月为30天
     let maxMonth = [1, 3, 5, 7, 8, 10, 12] //1月、3月、5月、7月、8月、10月、12月为31天
@@ -160,14 +143,18 @@ function getAllDay() {
     }
 
     let obj = {
-      month: month + "月",
+      label: month + "月",
+      value: month,
       children: []
     }
 
     for (let day = 1; day <= maxDay; day++) {
-      obj.children.push({ date: `${month >= 10 ? month : ("0" + month)}-${day >= 10 ? day : ("0" + day)}` })
+      let dateItem = {
+        label: `${month >= 10 ? month : ("0" + month)}-${day >= 10 ? day : ("0" + day)}`,
+        value: `${month >= 10 ? month : ("0" + month)}-${day >= 10 ? day : ("0" + day)}`
+      }
 
-      dayOptions.push(`${month >= 10 ? month : ("0" + month)}-${day >= 10 ? day : ("0" + day)}`)
+      obj.children.push(dateItem)
     }
     dateOptions.push(obj)
 
@@ -257,6 +244,10 @@ module.exports = {
   },
 
   methods: {
+    // 确定禁止选中的日期
+    changeStarTime(row,name) { 
+      console.log(row,name)
+    },
 
 
 
@@ -276,62 +267,6 @@ module.exports = {
         paramsForm.id = this.formData.id;
       }
 
-      // 奖品ID
-      if (this.prizeid) {
-        paramsForm.sourceId = this.prizeid
-      }
-
-      // 素材源ID
-      if (this.sourceid) {
-        paramsForm.sourceId = this.sourceid
-      }
-
-      // 处理区域-省市区
-      if (["1", "2"].includes(this.formData.areaType)) {
-        paramsForm.areaJson = JSON.stringify(this.formData.areaJson);
-
-        // 编辑的情况
-        if (this.checkedNodeList.length) {
-          let areaContentArr = [];
-          this.checkedNodeList.map(item => {
-            areaContentArr.push(item.data.value)
-          })
-          paramsForm.areaContent = areaContentArr.join();
-        } else {
-          // 编辑模式下未动选中的省市县
-          paramsForm.areaContent = this.formData.areaContent
-        }
-
-      }
-
-      // 处理联网方式  
-      if (this.formData.networking == "custom") {
-        paramsForm.networking = this.formData.networkingCustomData_values.join()
-      } else {
-        paramsForm.networking = this.formData.networking
-      }
-
-
-      // 处理时段
-      if (this.formData.timeType == "1") {
-        paramsForm.timeContent = this.formData.timeType1Data_values.join() // 时间段
-      } else if (this.formData.timeType == "2") {
-        let timeContent = [];
-        this.rangeListData.map(item => {
-          timeContent.push(`${item.sliderValue[0]}-${item.sliderValue[1]}`)
-        })
-        paramsForm.timeContent = timeContent.join()
-      }
-
-
-      // 处理节假日
-      if (this.formData.holidays == "0") {
-        paramsForm.holidays = this.formData.holidays // 不限制
-      } else if (this.formData.holidays == "legal") {
-        paramsForm.holidays = this.formData.legalData_values.join() // 法定
-      } else if (this.formData.holidays == "week") {
-        paramsForm.holidays = this.formData.weekData_values.join() // 星期
-      }
 
       return paramsForm;
 
@@ -386,76 +321,6 @@ module.exports = {
         devices: data.devices, //设备
       }
 
-      // 判断时段是否是自定义时间段||自定义
-      if (data.timeType == 1) {
-        let values = data.timeContent.split(",");
-        form.timeType1Data_values = values;
-        // 是否全选
-        let optLength = this.formData.timeType1Data_options.length;
-        form.timeType1Data_checkAll = values.length == optLength
-        // 全选按钮样式
-        form.timeType1Data_isIndeterminate = !(values.length == optLength);
-      } else if (data.timeType == 2) {
-        let values = data.timeContent.split(",");
-        let rangeListData = [];
-        values.map((item, index) => {
-          let arr = item.split("-");
-          let endTime = dayjs().hour(Number(arr[1])).format('HH:00');
-
-          rangeListData.push({
-            id: index + 1,
-            sliderValue: [Number(arr[0]), Number(arr[1])],
-            startTime: dayjs().hour(Number(arr[0])).format('HH:00'),
-            endTime: endTime == "00:00" ? "24:00" : endTime,
-          })
-        })
-        this.rangeListData = rangeListData; //自定义时间列表数据
-
-      }
-
-
-      // 判断联网方式     
-      if (data.networking == 0) {
-        form.networking = "0" //不限制
-      } else if (data.networking == 1) {
-        form.networking = "1" //wifi
-      } else {
-        form.networking = "custom" // 自定义
-        let values = data.networking.split(",");
-        form.networkingCustomData_values = values;
-        // 是否全选
-        let optLength = this.formData.networkingCustomData_options.length;
-        form.networkingCustomData_checkAll = values.length == optLength
-        // 全选按钮样式
-        form.networkingCustomData_isIndeterminate = !(values.length == optLength)
-      }
-
-      // 判断节假日
-      if (data.holidays == 0) {
-        form.holidays = "0" //不限制
-      } else if (_.intersection(["1", "2"], data.holidays.split(",")).length) {
-        form.holidays = "legal";
-        //法定
-        let values = data.holidays.split(",");
-        form.legalData_values = values;
-        // 是否全选
-        let optLength = this.formData.legalData_options.length;
-        form.legalData_checkAll = values.length == optLength
-        // 全选按钮样式
-        form.legalData_isIndeterminate = !(values.length == optLength)
-
-
-      } else if (_.intersection(["3", "4", "5", "6", "7", "8", "9"], data.holidays.split(",")).length) {
-        form.holidays = "week";
-        //法定
-        let values = data.holidays.split(",");
-        form.weekData_values = values;
-        // 是否全选
-        let optLength = this.formData.weekData_options.length;
-        form.weekData_checkAll = values.length == optLength
-        // 全选按钮样式
-        form.weekData_isIndeterminate = !(values.length == optLength)
-      }
 
       this.formData = { ...this.formData, ...form };
 
@@ -467,7 +332,7 @@ module.exports = {
         id: this.rangeListData.length + 1,
         startTime: "",
         endTime: "",
-        sliderValue: []
+        sliderValue: [0, 0]
       }
       this.rangeListData.push(needAdd);
     },
@@ -478,33 +343,7 @@ module.exports = {
       this.rangeListData.splice(index, 1)
     },
 
-    // 切换时间段-通过滑块
-    changeSlider(row) {
-      this.rangeListData.filter(item => {
-        if (item.id == row.id) {
-          item.startTime = dayjs().hour(row.sliderValue[0]).format('HH:00');
-          item.endTime = dayjs().hour(row.sliderValue[1]).format('HH:00');
 
-          if (item.endTime == "00:00") {
-            item.endTime = "24:00"
-          }
-        }
-      })
-    },
-
-    // 切换时间段-通过时间选择控件
-    changeTime(row, name) {
-
-
-      this.rangeListData.filter(item => {
-        if (item.id == row.id) {
-          let valueNum = parseInt(row[name].split()[0]);
-          let sliderValue = [];
-          name == "startTime" ? sliderValue = [valueNum, row.sliderValue[1]] : sliderValue = [row.sliderValue[0], valueNum]
-          item.sliderValue = sliderValue;
-        }
-      })
-    },
 
 
 
