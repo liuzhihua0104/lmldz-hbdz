@@ -73,11 +73,11 @@
               <template slot-scope="scope">
                 <div style="display:flex;align-items:center">
 
-                  <el-cascader @change="changeStarTime(scope.row,'startTime')" v-model="scope.row.startTime" :options="dateOptions" clearable :show-all-levels="false" filterable></el-cascader>
+                  <el-cascader @focus="startFocus" @change="changeStarTime(scope.row,'startTime')" v-model="scope.row.startTime" :options="dateOptions" clearable :show-all-levels="false" filterable></el-cascader>
 
                   <span style="padding:0 10px">至</span>
 
-                  <el-cascader :disabled="!scope.row.startTime" v-model="scope.row.endTime" :options="dateOptions" clearable :show-all-levels="false" filterable></el-cascader>
+                  <el-cascader @focus="endFocus(scope.row)" :disabled="!scope.row.startTime" v-model="scope.row.endTime" :options="dateOptions" clearable :show-all-levels="false" filterable></el-cascader>
 
                 </div>
 
@@ -151,7 +151,9 @@ function getAllDay() {
     for (let day = 1; day <= maxDay; day++) {
       let dateItem = {
         label: `${month >= 10 ? month : ("0" + month)}-${day >= 10 ? day : ("0" + day)}`,
-        value: `${month >= 10 ? month : ("0" + month)}-${day >= 10 ? day : ("0" + day)}`
+        value: `${month >= 10 ? month : ("0" + month)}-${day >= 10 ? day : ("0" + day)}`,
+        dayValue: day
+
       }
 
       obj.children.push(dateItem)
@@ -244,17 +246,67 @@ module.exports = {
   },
 
   methods: {
-    // 确定禁止选中的日期
-    changeStarTime(row,name) { 
-      console.log(row,name)
+    // 选择完第一个时间后，最大只能选择3个自然月内的日期，确定后面禁止选中的日期
+    // 例如：01-01=》03-31之后不可选 ；01-02=》04-01之后不可选
+    endFocus(row) {
+      console.log(123456)
+      console.log(row)
+
+      // 用户点击清除的情况，所有的都能点击
+      if (row.startTime.length == 0) {
+        this.dateOptions = getAllDay();
+
+        // 当前这条数据的结束时间清除,如果不清除会受3个月的限制
+        this.rangeListData.filter(item => {
+          item.endTime = [];
+        })
+        return
+      }
+      let targetMonth = (Number(row.startTime[0]) + 3)
+      let targetDay = (Number(row.startTime[1].split("-")[1]))
+
+      // 如果是1号，可选日的最大日期应该取前一个月的最后一天
+      let minMonth = [4, 6, 9, 11] // 4月、6月、9月、11月为30天
+      let maxMonth = [1, 3, 5, 7, 8, 10, 12] //1月、3月、5月、7月、8月、10月、12月为31天
+
+      if (targetDay == 1) {
+        targetMonth = targetMonth - 1 >= 12 ? 12 : targetMonth - 1;  // 不能跨年      
+        if (minMonth.indexOf(targetMonth) != -1) {
+          targetDay = 30
+        } else if (maxMonth.indexOf(targetMonth) != -1) {
+          targetDay = 31
+        } else {
+          targetDay = 29
+        }
+      } else {
+        targetDay = targetDay - 1;
+      }
+
+      this.dateOptions.map(item => {
+        item.children.map(element => {
+          // 当月的只要大于这个日期就禁止选择
+          if (item.value == targetMonth && (element.dayValue > targetDay)) {
+            element.disabled = true;
+          } else if (item.value > targetMonth) {
+            // 之后的月份全部禁止选择
+            element.disabled = true;
+            item.disabled = true;
+          }
+        })
+      })
+
+      this.dateOptions = this.dateOptions;
     },
 
-
+    // 开始时间获取焦点后所有的都放开可以选择，供开始控件使用
+    startFocus() {
+      this.dateOptions = getAllDay();
+    },
 
     // 处理保存参数
     doSaveParams() {
       let paramsForm = {
-        name: this.formData.name, // 方案名称
+        name: this.formData.name, // 方案名称·
         remarks: this.formData.remarks, // 备注
         areaType: this.formData.areaType, // 区域
         sex: this.formData.sex, // 性别
@@ -330,9 +382,8 @@ module.exports = {
     addTimeRange() {
       let needAdd = {
         id: this.rangeListData.length + 1,
-        startTime: "",
-        endTime: "",
-        sliderValue: [0, 0]
+        startTime: [],
+        endTime: [],
       }
       this.rangeListData.push(needAdd);
     },
