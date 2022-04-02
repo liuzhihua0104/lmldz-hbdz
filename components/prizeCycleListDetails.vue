@@ -73,11 +73,11 @@
               <template slot-scope="scope">
                 <div style="display:flex;align-items:center">
 
-                  <el-cascader @focus="startFocus" @change="changeStarTime(scope.row,'startTime')" v-model="scope.row.startTime" :options="dateOptions" clearable :show-all-levels="false" filterable></el-cascader>
+                  <el-cascader @focus="startFocus" @change="changeStarTime(scope.row)" v-model="scope.row.startTime" :options="dateOptions" clearable :show-all-levels="false" filterable></el-cascader>
 
                   <span style="padding:0 10px">至</span>
 
-                  <el-cascader @focus="endFocus(scope.row)" :disabled="!scope.row.startTime" v-model="scope.row.endTime" :options="dateOptions" clearable :show-all-levels="false" filterable></el-cascader>
+                  <el-cascader @focus="endFocus(scope.row)" :disabled="!scope.row.startTime.length" v-model="scope.row.endTime" :options="dateOptions" clearable :show-all-levels="false" filterable></el-cascader>
 
                 </div>
 
@@ -249,7 +249,7 @@ module.exports = {
     // 选择完第一个时间后，最大只能选择3个自然月内的日期，确定后面禁止选中的日期
     // 例如：01-01=》03-31之后不可选 ；01-02=》04-01之后不可选
     endFocus(row) {
-      console.log(123456)
+      console.log("点击结束按钮")
       console.log(row)
 
       // 用户点击清除的情况，所有的都能点击
@@ -295,12 +295,40 @@ module.exports = {
         })
       })
 
-      this.dateOptions = this.dateOptions;
+      // 以下处理之前不能选择的日期
+      let earlyMonth = row.startTime[0];
+      let earlyDay = Number(row.startTime[1].split("-")[1]);
+      this.dateOptions.map(item => {
+        item.children.map(element => {
+          // 当月的只要大于这个日期就禁止选择
+          if (item.value == earlyMonth && (element.dayValue <= earlyDay)) {
+            element.disabled = true;
+          } else if (item.value < earlyMonth) {
+            // 之后的月份全部禁止选择
+            element.disabled = true;
+            item.disabled = true;
+          }
+        })
+      })
     },
 
     // 开始时间获取焦点后所有的都放开可以选择，供开始控件使用
     startFocus() {
+      console.log("开始按钮")
       this.dateOptions = getAllDay();
+    },
+
+    // 每次修改前面的日期都要清除后面的日期
+    changeStarTime(row) {
+      this.rangeListData.filter(item => {
+        if (item.id == row.id) {
+          item.endTime = []
+        }
+      })
+
+
+
+
     },
 
     // 处理保存参数
