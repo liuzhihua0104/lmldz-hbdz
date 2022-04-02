@@ -61,7 +61,7 @@
         <!-- 时段 -->
 
         <div class="wrap" style="text-align:center;border:1px solid #eaedf3;padding:20px 0">
-          <el-table max-height="250px" :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}">
+          <el-table max-height="330px" type="mini" :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}">
             <el-table-column align="center" width="50" label="序号" type="index"></el-table-column>
             <!-- <el-table-column align="center" label="时间段" width="150px">
               <template slot-scope="scope">
@@ -69,7 +69,7 @@
                 </el-slider>
               </template>
             </el-table-column> -->
-            <el-table-column align="center" label="时间范围" width="400px">
+            <el-table-column align="center" label="时间范围" width="380px">
               <template slot-scope="scope">
                 <div style="display:flex;align-items:center">
 
@@ -247,11 +247,9 @@ module.exports = {
 
   methods: {
     // 选择完第一个时间后，最大只能选择3个自然月内的日期，确定后面禁止选中的日期
-    // 例如：01-01=》03-31之后不可选 ；01-02=》04-01之后不可选
+    // 例如：01-01=》03-31之后不可选 ；01-02=》04-01之后不可选，01-02之前的日期不可以选择
     endFocus(row) {
-      console.log("点击结束按钮")
       console.log(row)
-
       // 用户点击清除的情况，所有的都能点击
       if (row.startTime.length == 0) {
         this.dateOptions = getAllDay();
@@ -265,12 +263,15 @@ module.exports = {
       let targetMonth = (Number(row.startTime[0]) + 3)
       let targetDay = (Number(row.startTime[1].split("-")[1]))
 
+      console.log(targetMonth, targetDay)
+
       // 如果是1号，可选日的最大日期应该取前一个月的最后一天
       let minMonth = [4, 6, 9, 11] // 4月、6月、9月、11月为30天
       let maxMonth = [1, 3, 5, 7, 8, 10, 12] //1月、3月、5月、7月、8月、10月、12月为31天
 
       if (targetDay == 1) {
-        targetMonth = targetMonth - 1 >= 12 ? 12 : targetMonth - 1;  // 不能跨年      
+        targetMonth = targetMonth - 1 >= 12 ? 12 : targetMonth - 1;  // 不能跨年  
+
         if (minMonth.indexOf(targetMonth) != -1) {
           targetDay = 30
         } else if (maxMonth.indexOf(targetMonth) != -1) {
@@ -282,15 +283,28 @@ module.exports = {
         targetDay = targetDay - 1;
       }
 
+
+
+        console.log(targetMonth, targetDay)  
+
       this.dateOptions.map(item => {
         item.children.map(element => {
+
           // 当月的只要大于这个日期就禁止选择
+
+
+
+
           if (item.value == targetMonth && (element.dayValue > targetDay)) {
+            console.log(1)
             element.disabled = true;
           } else if (item.value > targetMonth) {
+            console.log(2)
             // 之后的月份全部禁止选择
             element.disabled = true;
-            item.disabled = true;
+          } else {
+            console.log(3)
+            element.disabled = false
           }
         })
       })
@@ -298,6 +312,7 @@ module.exports = {
       // 以下处理之前不能选择的日期
       let earlyMonth = row.startTime[0];
       let earlyDay = Number(row.startTime[1].split("-")[1]);
+      console.log(earlyMonth, earlyDay)
       this.dateOptions.map(item => {
         item.children.map(element => {
           // 当月的只要大于这个日期就禁止选择
@@ -306,7 +321,8 @@ module.exports = {
           } else if (item.value < earlyMonth) {
             // 之后的月份全部禁止选择
             element.disabled = true;
-            item.disabled = true;
+          } else {
+            element.disabled = false;
           }
         })
       })
@@ -336,16 +352,36 @@ module.exports = {
       let paramsForm = {
         name: this.formData.name, // 方案名称·
         remarks: this.formData.remarks, // 备注
-        areaType: this.formData.areaType, // 区域
-        sex: this.formData.sex, // 性别
-        scanContent: this.formData.scanContent, // 扫码工具
-        timeType: this.formData.timeType, // 时段
-        devices: this.formData.devices// 设备
+
       }
 
       if (this.formData.id) {
         paramsForm.id = this.formData.id;
       }
+
+
+      // 判断 rangeListData不能有重叠的日期
+
+      // 给日期排序  
+
+
+      // 用时间戳排序
+      this.rangeListData.sort(function (a, b) {
+        console.log(a, b)
+        return a.startTime[0] - b.startTime[0]
+      })
+
+
+      // this.rangeListData
+
+
+
+
+
+
+
+
+
 
 
       return paramsForm;
@@ -356,6 +392,7 @@ module.exports = {
     // 保存成功后返回其他页面
     saveFn(formName) {
       let self = this;
+      self.doSaveParams()
       this.$refs[formName].validate((valid) => {
         if (valid) {
 
