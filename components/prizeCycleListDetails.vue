@@ -249,7 +249,6 @@ module.exports = {
     // 选择完第一个时间后，最大只能选择3个自然月内的日期，确定后面禁止选中的日期
     // 例如：01-01=》03-31之后不可选 ；01-02=》04-01之后不可选，01-02之前的日期不可以选择
     endFocus(row) {
-      console.log(row)
       // 用户点击清除的情况，所有的都能点击
       if (row.startTime.length == 0) {
         this.dateOptions = getAllDay();
@@ -260,10 +259,13 @@ module.exports = {
         })
         return
       }
+
+
+
+
+
       let targetMonth = (Number(row.startTime[0]) + 3)
       let targetDay = (Number(row.startTime[1].split("-")[1]))
-
-      console.log(targetMonth, targetDay)
 
       // 如果是1号，可选日的最大日期应该取前一个月的最后一天
       let minMonth = [4, 6, 9, 11] // 4月、6月、9月、11月为30天
@@ -283,47 +285,30 @@ module.exports = {
         targetDay = targetDay - 1;
       }
 
-
-
-        console.log(targetMonth, targetDay)  
-
-      this.dateOptions.map(item => {
-        item.children.map(element => {
-
-          // 当月的只要大于这个日期就禁止选择
-
-
-
-
-          if (item.value == targetMonth && (element.dayValue > targetDay)) {
-            console.log(1)
-            element.disabled = true;
-          } else if (item.value > targetMonth) {
-            console.log(2)
-            // 之后的月份全部禁止选择
-            element.disabled = true;
-          } else {
-            console.log(3)
-            element.disabled = false
-          }
-        })
-      })
-
-      // 以下处理之前不能选择的日期
+      let targetDate = `2024/${targetMonth > 10 ? targetMonth : "0" + targetMonth}/${targetDay > 10 ? targetDay : "0" + targetDay}`
+      // 以下处理之前不能选择的日期,2024可以取任何一个闰年，只是为了得到2月份有29天
       let earlyMonth = row.startTime[0];
       let earlyDay = Number(row.startTime[1].split("-")[1]);
-      console.log(earlyMonth, earlyDay)
+
+      let earlyDate = `2024/${earlyMonth > 10 ? earlyMonth : "0" + earlyMonth}/${earlyDay > 10 ? earlyDay : "0" + earlyDay}`
+
+
       this.dateOptions.map(item => {
         item.children.map(element => {
-          // 当月的只要大于这个日期就禁止选择
-          if (item.value == earlyMonth && (element.dayValue <= earlyDay)) {
+          let date = `2024/${element.label.replace(/-/ig, "/")}`
+          let minTime = new Date(earlyDate).getTime();
+          let maxTime = new Date(targetDate).getTime();
+          let currentTime = new Date(date).getTime();
+
+          // 当前项的时间大于最大可选，则禁止选择||当前项的时间小于最小选项则禁止选择
+          if (currentTime <= minTime) {
             element.disabled = true;
-          } else if (item.value < earlyMonth) {
-            // 之后的月份全部禁止选择
+          } else if (currentTime > maxTime) {
             element.disabled = true;
           } else {
-            element.disabled = false;
+            element.disabled = false
           }
+
         })
       })
     },
