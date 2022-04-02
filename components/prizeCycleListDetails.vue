@@ -252,7 +252,6 @@ module.exports = {
       // 用户点击清除的情况，所有的都能点击
       if (row.startTime.length == 0) {
         this.dateOptions = getAllDay();
-
         // 当前这条数据的结束时间清除,如果不清除会受3个月的限制
         this.rangeListData.filter(item => {
           item.endTime = [];
@@ -260,50 +259,21 @@ module.exports = {
         return
       }
 
-
-
-
-
-      let targetMonth = (Number(row.startTime[0]) + 3)
-      let targetDay = (Number(row.startTime[1].split("-")[1]))
-
-      // 如果是1号，可选日的最大日期应该取前一个月的最后一天
-      let minMonth = [4, 6, 9, 11] // 4月、6月、9月、11月为30天
-      let maxMonth = [1, 3, 5, 7, 8, 10, 12] //1月、3月、5月、7月、8月、10月、12月为31天
-
-      if (targetDay == 1) {
-        targetMonth = targetMonth - 1 >= 12 ? 12 : targetMonth - 1;  // 不能跨年  
-
-        if (minMonth.indexOf(targetMonth) != -1) {
-          targetDay = 30
-        } else if (maxMonth.indexOf(targetMonth) != -1) {
-          targetDay = 31
-        } else {
-          targetDay = 29
-        }
-      } else {
-        targetDay = targetDay - 1;
-      }
-
-      let targetDate = `2024/${targetMonth > 10 ? targetMonth : "0" + targetMonth}/${targetDay > 10 ? targetDay : "0" + targetDay}`
-      // 以下处理之前不能选择的日期,2024可以取任何一个闰年，只是为了得到2月份有29天
-      let earlyMonth = row.startTime[0];
-      let earlyDay = Number(row.startTime[1].split("-")[1]);
-
-      let earlyDate = `2024/${earlyMonth > 10 ? earlyMonth : "0" + earlyMonth}/${earlyDay > 10 ? earlyDay : "0" + earlyDay}`
-
+      // 防止谷歌浏览器报错
+      let rowStartTime = `2024/${row.startTime[1].replace(/-/ig, "/")}`;
+      let rowMaxEndTime = dayjs(rowStartTime).subtract(-3, 'month').format('YYYY/MM/DD'); //最大可选日期
 
       this.dateOptions.map(item => {
         item.children.map(element => {
           let date = `2024/${element.label.replace(/-/ig, "/")}`
-          let minTime = new Date(earlyDate).getTime();
-          let maxTime = new Date(targetDate).getTime();
+          let minTime = new Date(rowStartTime).getTime();
+          let maxTime = new Date(rowMaxEndTime).getTime();
           let currentTime = new Date(date).getTime();
 
           // 当前项的时间大于最大可选，则禁止选择||当前项的时间小于最小选项则禁止选择
           if (currentTime <= minTime) {
             element.disabled = true;
-          } else if (currentTime > maxTime) {
+          } else if (currentTime >= maxTime) {
             element.disabled = true;
           } else {
             element.disabled = false
@@ -345,15 +315,16 @@ module.exports = {
       }
 
 
-      // 判断 rangeListData不能有重叠的日期
-
-      // 给日期排序  
-
-
       // 用时间戳排序
       this.rangeListData.sort(function (a, b) {
-        console.log(a, b)
-        return a.startTime[0] - b.startTime[0]
+        // console.log(a, b)
+
+        // let rowStartTime = `2024/${row.startTime[1].replace(/-/ig, "/")}`;
+
+        // let rowMaxEndTime = dayjs(rowStartTime).subtract(-3, 'month').format('YYYY/MM/DD'); //最大可选日期
+
+        // return a.startTime[0] - b.startTime[0]
+        return new Date(`2024/${a.startTime[1].replace(/-/ig, "/")}`).getTime() - new Date(`2024/${b.startTime[1].replace(/-/ig, "/")}`).getTime()
       })
 
 
