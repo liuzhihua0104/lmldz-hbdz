@@ -67,7 +67,7 @@
     <!-- 奖品周期方案详情弹框 -->
     <el-dialog title="奖品周期方案详情" class="dialogWidth" :visible.sync="prizeCycleListDetailsVisible" center>
       <template v-if="prizeCycleListDetailsVisible">
-        <prize-cycle-list-details :type="orientationDetailProps.type" :islook="orientationDetailProps.islook" :id="rows.id" :isshowtoptitle="orientationDetailProps.isshowtoptitle">
+        <prize-cycle-list-details :formProps="formProps">
         </prize-cycle-list-details>
       </template>
       <span slot="footer" class="dialog-footer">
@@ -216,11 +216,11 @@ module.exports = {
       prizeCycleListDetailsVisible: true, // 奖品实际应用方案弹框的显示与隐藏
       multipleSelection: [], //关联奖品中触发多选
 
-      // 定向详情传参
-      orientationDetailProps: {
-        type: "dialog",
-        islook: 1, //是否查看
-        isshowtoptitle: 0 //是否展示title
+      //  周期表单传参
+      formProps: {
+        isLook: true, //是否是查看
+        isShowTitle: false, //是否显示title
+        isDialog: false //是否是弹框形式展示
       },
 
       // 复制功能，本期未开放，保留
@@ -329,20 +329,33 @@ module.exports = {
 
     // 查看
     lookFn(rows) {
-      this.rows = rows;
-      sessionStorage.setItem("rows", JSON.stringify(rows));
+      // this.rows = rows;
+      this.formProps.isLook = true; //是否查看
+      this.formProps.isShowTitle = true // 是否展示title
+      this.formProps.isDialog = true //是否是弹框形式展示
+      // sessionStorage.setItem("rows", JSON.stringify(rows));
+      sessionStorage.setItem("itemRow", JSON.stringify(rows));
       this.prizeCycleListDetailsVisible = true;
     },
     // 编辑
     onEdit(rows) {
-      this.rows = rows;
-      sessionStorage.setItem("rows", JSON.stringify(rows));
-      location.href = `./prizeOrientationDetails.html?id=${rows.id}&islook=0&isshowtoptitle=1&type=page`
+      // this.rows = rows;
+
+      this.formProps.isLook = false; //是否查看
+      this.formProps.isShowTitle = true // 是否展示title
+      this.formProps.isDialog = false // 是不是弹框
+
+
+      sessionStorage.setItem("itemRow", JSON.stringify(rows));
+      // location.href = `./prizeCycleFormDetail.html?id=${rows.id}&islook=0&isshowtoptitle=1&type=page`
+
+      // sessionStorage.setItem("formProps",this.formProps) ; //
+      location.href = `./prizeCycleFormDetail.html?formProps=${this.formProps}`
     },
 
     // 跳转到新增执行方案
     onAdd(rows) {
-      location.href = `./prizeOrientationDetails.html?islook=0&isshowtoptitle=1&type=page`
+      location.href = `./prizeCycleFormDetail.html?islook=0&isshowtoptitle=1&type=page`
     },
 
     onDel(rows) {

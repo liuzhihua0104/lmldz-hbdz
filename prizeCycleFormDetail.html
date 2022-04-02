@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>奖品周期方案列表</title>
+  <link href="../libs/element-ui/2.15.3/theme-chalk/index.css" rel="stylesheet" />
+  <style>
+    body {
+      width: 100%;
+      height: 100%;
+    }
+
+    #prizeCycleFormDetail {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="prizeCycleFormDetail">
+    <prize-cycle-list-details :formProps="formProps"></prize-cycle-list-details>
+  </div>
+  <script src="./libs/dayjs/1.8.21/dayjs.min.js.js"></script>
+  <script src="./libs/httpVueLoader/1.4.2/httpVueLoader.js"></script>
+  <script src="./libs/vue/2.6.12/vue.min.js"></script>
+  <script src="./libs/element-ui/2.15.3/index.min.js"></script>
+  <script src="./libs/axios/0.21.1/axios.min.js"></script>
+  <script src="./js/request.js"></script>
+  <script src="./libs/lodash/4.17.12-pre/lodash.min.js.js"></script>
+
+
+  <script>
+    function getUrlQuery() {
+      let search = location.search
+      let obj = {}
+      if (search) {
+        let query = search.substring(1).split('&')
+        query.forEach((queryItem) => {
+          let keyValue = queryItem.split('=')
+          let [key, value] = keyValue
+          if (key) {
+            obj[key] = value
+          }
+        })
+      }
+      return obj
+    }
+    var el = new Vue({
+      el: '#prizeCycleFormDetail',
+      data() {
+        return {
+          formProps: {
+            isLook: true, //是否是查看
+            isShowTitle: false, //是否显示title
+            isDialog: false, //是否是弹框
+          }
+        }
+      },
+      components: {
+        'prize-cycle-list-details': httpVueLoader('../components/prizeCycleListDetails.vue'), //奖品周期方案详情
+      },
+      computed: {},
+      mounted() {
+        console.log(getUrlQuery())
+      }
+
+
+    })
+  </script>
+</body>
+
+</html>

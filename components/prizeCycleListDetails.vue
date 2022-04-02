@@ -1,7 +1,7 @@
  <template>
-  <el-form :disabled="!islook==1" label-position="right" label-width="200px" :rules="formRules" ref="formData" :model="formData">
+  <el-form :disabled="formProps.isLook" label-position="right" label-width="200px" :rules="formRules" ref="formData" :model="formData">
 
-    <div class="top-title" v-if="isshowtoptitle==1">奖品周期方案详情</div>
+    <div class="top-title" v-if="formProps.isShowTitle">奖品周期方案详情</div>
     <div class="title">
       基本信息</div>
     <el-row>
@@ -56,7 +56,7 @@
                 <el-option label="天" :value="1"></el-option>
                 <el-option label="小时" :value="2"></el-option>
               </el-select>
-               <el-tooltip style="margin-left:0"  slot="append" effect="dark" content="间隔时间(天/小时):触发条件后间隔多长时间（天/小时）后可再中此奖" placement="top-start">
+              <el-tooltip style="margin-left:0" slot="append" effect="dark" content="间隔时间(天/小时):触发条件后间隔多长时间（天/小时）后可再中此奖" placement="top-start">
                 <el-button style="font-size:22px" icon="el-icon-question"></el-button>
               </el-tooltip>
             </el-input>
@@ -74,12 +74,6 @@
         <div class="wrap" style="text-align:center;border:1px solid #eaedf3;padding:20px 0">
           <el-table max-height="330px" type="mini" :data="rangeListData" class="table-wrap time-list" :border="true" size="mini" :header-cell-style="{background:'#e5e9f2'}">
             <el-table-column align="center" width="50" label="序号" type="index"></el-table-column>
-            <!-- <el-table-column align="center" label="时间段" width="150px">
-              <template slot-scope="scope">
-                <el-slider @change="changeSlider(scope.row)" v-model="scope.row.sliderValue" range :max="366" :min="1" :step="1">
-                </el-slider>
-              </template>
-            </el-table-column> -->
             <el-table-column align="center" label="时间范围" width="380px">
               <template slot-scope="scope">
                 <div style="display:flex;align-items:center">
@@ -124,7 +118,7 @@
         <el-button class="back" @click="goBack">返回</el-button>
         <el-button type="primary" @click="saveFn('formData')">保存</el-button>
       </div> -->
-        <div style="text-align:center;margin-top:20px">
+        <div v-show="!formProps.isDialog" style="text-align:center;margin-top:20px">
           <el-button class="back" @click="goBack">返回</el-button>
           <el-button type="primary" @click="saveFn('formData')">保存</el-button>
         </div>
@@ -207,7 +201,18 @@ function parseJson(arr) {
   return toParse(arr)
 }
 module.exports = {
-  props: ["type", "islook", "id", "isshowtoptitle", "prizeid", "sourceid"],
+  // props: ["type", "islook", "id", "isshowtoptitle", "prizeid", "sourceid"],
+
+  props: {
+    formProps: {
+      type: Object,
+      default: {
+        isLook: true, //是否是查看
+        isShowTitle: false,//是否显示title
+        isDialog: true, //是否是弹框,除了弹框就是页面，主要用于控制按钮的展示
+      }
+    }
+  },
 
   data() {
     let self = this  // 加上这一句就OK了
