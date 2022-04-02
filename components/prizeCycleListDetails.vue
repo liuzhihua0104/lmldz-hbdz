@@ -28,11 +28,19 @@
 
         <div class="wrap" style="border:1px solid #eaedf3;padding:20px 100px 20px 0;margin-bottom:20px">
           <el-form-item style="margin-right:0" label="触发条件使用次数:" prop="useNum">
-            <el-input placeholder="请输入数字" :clearable="true" class="inputWidth" v-model="formData.useNum"></el-input>
+            <el-input placeholder="请输入数字" :clearable="true" class="inputWidth" v-model="formData.useNum">
+              <el-tooltip style="background:transparent" slot="append" class="item" effect="dark" content="触发条件使用次数:表示第几次抽中此奖后执行该周期规则。如果数字为“0”表示抽中此奖即可生效" placement="top-start">
+                <el-button style="font-size:22px" icon="el-icon-question"></el-button>
+              </el-tooltip>
+            </el-input>
           </el-form-item>
 
           <el-form-item style="margin-right:0" label="间隔次数:" prop="intervalNum">
-            <el-input placeholder="请输入数字" :clearable="true" class="inputWidth" v-model="formData.intervalNum"></el-input>
+            <el-input placeholder="请输入数字" :clearable="true" class="inputWidth" v-model="formData.intervalNum">
+              <el-tooltip slot="append" class="item" effect="dark" content="间隔次数:触发条件后间隔多少次后可再中此奖" placement="top-start">
+                <el-button style="font-size:22px" icon="el-icon-question"></el-button>
+              </el-tooltip>
+            </el-input>
           </el-form-item>
 
           <el-form-item style="margin-right:0" label="" prop="relationship">
@@ -44,10 +52,13 @@
 
           <el-form-item style="margin-right:0" label="间隔时间:" prop="intervalTime">
             <el-input v-model="formData.intervalTime" placeholder="请输入数字" class="input-with-select">
-              <el-select v-model="formData.unit" slot="append" style="width:100px">
+              <el-select v-model="formData.unit" slot="append" style="width:80px">
                 <el-option label="天" :value="1"></el-option>
                 <el-option label="小时" :value="2"></el-option>
               </el-select>
+               <el-tooltip style="margin-left:0"  slot="append" effect="dark" content="间隔时间(天/小时):触发条件后间隔多长时间（天/小时）后可再中此奖" placement="top-start">
+                <el-button style="font-size:22px" icon="el-icon-question"></el-button>
+              </el-tooltip>
             </el-input>
           </el-form-item>
 
