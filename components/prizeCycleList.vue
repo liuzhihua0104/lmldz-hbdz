@@ -330,7 +330,7 @@ module.exports = {
     // 查看
     lookFn(rows) {
       this.formprops.isLook = true; //是否查看
-      this.formprops.isShowTitle = true // 是否展示title
+      this.formprops.isShowTitle = false // 是否展示title
       this.formprops.isDialog = true //是否是弹框形式展示
       sessionStorage.setItem("itemRow", JSON.stringify(rows));
       this.prizeCycleListDetailsVisible = true;
@@ -347,7 +347,7 @@ module.exports = {
 
     // 跳转到新增执行方案
     onAdd(rows) {
-      location.href = `./prizeCycleFormDetail.html?islook=0&isshowtoptitle=1&type=page`
+      location.href = `./prizeCycleFormDetail.html?islook=0&isshowtoptitle=1&type=page` 
     },
 
     onDel(rows) {
