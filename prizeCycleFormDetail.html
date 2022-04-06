@@ -22,7 +22,7 @@
 
 <body>
   <div id="prizeCycleFormDetail">
-    <prize-cycle-list-details :formProps="formProps"></prize-cycle-list-details>
+    <prize-cycle-list-details :formprops="formprops"></prize-cycle-list-details>
   </div>
   <script src="./libs/dayjs/1.8.21/dayjs.min.js.js"></script>
   <script src="./libs/httpVueLoader/1.4.2/httpVueLoader.js"></script>
@@ -53,7 +53,7 @@
       el: '#prizeCycleFormDetail',
       data() {
         return {
-          formProps: {
+          formprops: {
             isLook: true, //是否是查看
             isShowTitle: false, //是否显示title
             isDialog: false, //是否是弹框
@@ -65,7 +65,10 @@
       },
       computed: {},
       mounted() {
-        console.log(getUrlQuery())
+        let query = JSON.parse(getUrlQuery().formprops.replace(/%22/ig, '"'));
+        this.formprops = { ...this.formprops, ...query }
+        console.log(this.formprops)
+        window.vueBox = this;
       }
 
 

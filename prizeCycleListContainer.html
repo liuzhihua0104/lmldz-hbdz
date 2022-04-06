@@ -44,7 +44,10 @@
         'prize-cycle-list': httpVueLoader('./components/prizeCycleList.vue'), //奖品周期列表
       },
       computed: {},
-    
+      mounted() {
+        window.vueBox = this;
+      }
+
 
     })
   </script>

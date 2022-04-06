@@ -67,7 +67,7 @@
     <!-- 奖品周期方案详情弹框 -->
     <el-dialog title="奖品周期方案详情" class="dialogWidth" :visible.sync="prizeCycleListDetailsVisible" center>
       <template v-if="prizeCycleListDetailsVisible">
-        <prize-cycle-list-details :formProps="formProps">
+        <prize-cycle-list-details :formprops="formprops">
         </prize-cycle-list-details>
       </template>
       <span slot="footer" class="dialog-footer">
@@ -213,11 +213,11 @@ module.exports = {
       },
       applyList: [],// 关联奖品奖品列表
       applyVisible: false,// 控制关联奖品弹框的展示与隐藏
-      prizeCycleListDetailsVisible: true, // 奖品实际应用方案弹框的显示与隐藏
+      prizeCycleListDetailsVisible: false, // 奖品实际应用方案弹框的显示与隐藏
       multipleSelection: [], //关联奖品中触发多选
 
       //  周期表单传参
-      formProps: {
+      formprops: {
         isLook: true, //是否是查看
         isShowTitle: false, //是否显示title
         isDialog: false //是否是弹框形式展示
@@ -329,28 +329,20 @@ module.exports = {
 
     // 查看
     lookFn(rows) {
-      // this.rows = rows;
-      this.formProps.isLook = true; //是否查看
-      this.formProps.isShowTitle = true // 是否展示title
-      this.formProps.isDialog = true //是否是弹框形式展示
-      // sessionStorage.setItem("rows", JSON.stringify(rows));
+      this.formprops.isLook = true; //是否查看
+      this.formprops.isShowTitle = true // 是否展示title
+      this.formprops.isDialog = true //是否是弹框形式展示
       sessionStorage.setItem("itemRow", JSON.stringify(rows));
       this.prizeCycleListDetailsVisible = true;
     },
     // 编辑
     onEdit(rows) {
-      // this.rows = rows;
-
-      this.formProps.isLook = false; //是否查看
-      this.formProps.isShowTitle = true // 是否展示title
-      this.formProps.isDialog = false // 是不是弹框
-
-
+      this.formprops.isLook = false; //是否查看
+      this.formprops.isShowTitle = true // 是否展示title
+      this.formprops.isDialog = false // 是不是弹框
+      this.formprops.id=rows.id;
       sessionStorage.setItem("itemRow", JSON.stringify(rows));
-      // location.href = `./prizeCycleFormDetail.html?id=${rows.id}&islook=0&isshowtoptitle=1&type=page`
-
-      // sessionStorage.setItem("formProps",this.formProps) ; //
-      location.href = `./prizeCycleFormDetail.html?formProps=${this.formProps}`
+      location.href = `./prizeCycleFormDetail.html?formprops=${JSON.stringify(this.formprops)}`
     },
 
     // 跳转到新增执行方案
@@ -406,7 +398,7 @@ module.exports = {
     this.fetchList()
   },
   mounted() {
-    window.listData = this;
+    window.list = this;
   },
   components: {
     'prize-cycle-list-details': httpVueLoader('../components/prizeCycleListDetails.vue'), //奖品周期方案详情

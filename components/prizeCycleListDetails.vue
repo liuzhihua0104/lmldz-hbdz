@@ -1,7 +1,7 @@
  <template>
-  <el-form :disabled="formProps.isLook" label-position="right" label-width="200px" :rules="formRules" ref="formData" :model="formData">
+  <el-form :disabled="formprops.isLook" label-position="right" label-width="200px" :rules="formRules" ref="formData" :model="formData">
 
-    <div class="top-title" v-if="formProps.isShowTitle">奖品周期方案详情</div>
+    <div class="top-title" v-if="formprops.isShowTitle">奖品周期方案详情</div>
     <div class="title">
       基本信息</div>
     <el-row>
@@ -118,7 +118,7 @@
         <el-button class="back" @click="goBack">返回</el-button>
         <el-button type="primary" @click="saveFn('formData')">保存</el-button>
       </div> -->
-        <div v-show="!formProps.isDialog" style="text-align:center;margin-top:20px">
+        <div v-show="!formprops.isDialog" style="text-align:center;margin-top:20px">
           <el-button class="back" @click="goBack">返回</el-button>
           <el-button type="primary" @click="saveFn('formData')">保存</el-button>
         </div>
@@ -173,45 +173,19 @@ function getAllDay() {
 
 }
 
-
-// 递归处理城市数据
-function parseJson(arr) {
-  arr = arr.slice()
-  function toParse(arr) {
-    arr.forEach(function (item) {
-      item.value = item.code;
-      item.label = item.name;
-
-
-      if (item.children && item.children.length > 0 && Array.isArray(item.children)) {
-        toParse(item["children"])
-      } else {
-        delete item.children
-      }
-
-      delete item.level
-      delete item.pcode
-      delete item.pname
-      delete item.tier
-      delete item.code
-      delete item.name
-    })
-    return arr
-  }
-  return toParse(arr)
-}
 module.exports = {
-  // props: ["type", "islook", "id", "isshowtoptitle", "prizeid", "sourceid"],
-
   props: {
-    formProps: {
+    formprops: {
       type: Object,
-      default: {
-        isLook: true, //是否是查看
-        isShowTitle: false,//是否显示title
-        isDialog: true, //是否是弹框,除了弹框就是页面，主要用于控制按钮的展示
-      }
-    }
+      // 对象或数组默认值必须从一个工厂函数获取
+      default: () => {
+        return {
+          isLook: true, //是否是查看
+          isShowTitle: false,//是否显示title
+          isDialog: true, //是否是弹框,除了弹框就是页面，主要用于控制按钮的展示 }
+        };
+      },
+    },
   },
 
   data() {
@@ -255,10 +229,9 @@ module.exports = {
 
     }
   },
-  watch: {
-  },
   mounted() {
-    window.detailData = this;
+    window.form = this;
+    console.log('aaa', this.aaaaa)
   },
 
   methods: {
@@ -345,15 +318,6 @@ module.exports = {
 
 
       // this.rangeListData
-
-
-
-
-
-
-
-
-
 
 
       return paramsForm;
