@@ -37,7 +37,7 @@ module.exports = {
   data: function () {
     return {
       treeData: treeData,
-      value: [11],
+      value: [],
       SHOW_PARENT,
 
     }
