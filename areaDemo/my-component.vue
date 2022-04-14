@@ -1,8 +1,8 @@
 <template>
 
   <div style="padding:20px">
+    123
     <a-tree-select treeNodeFilterProp="title" :allowClear="true" v-model="value" style="width: 100%" :tree-data="treeData" tree-checkable :show-checked-strategy="SHOW_PARENT" search-placeholder="请选择" />
-
   </div>
 </template>
  
@@ -29,19 +29,19 @@ function parseJson(arr) {
 let TreeSelect = antd.TreeSelect
 const SHOW_PARENT = TreeSelect.SHOW_PARENT;
 
-let treeData=parseJson(areaOptions)
+let treeData = parseJson(areaOptions)
 
 
 module.exports = {
   data: function () {
     return {
-      treeData:treeData,
+      treeData: treeData,
       value: [11],
       SHOW_PARENT
     }
   },
-  mounted(){
-    console.log(this.treeData)
+  mounted() {
+    // console.log(this.treeData)
   }
 }
 </script>
