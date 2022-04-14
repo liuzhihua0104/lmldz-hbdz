@@ -1,7 +1,7 @@
 <template>
 
   <div style="padding:20px;width:1000px">
-    <a-tree-select style="width:100%;max-height:100px;overflow-y:scroll;border:1px solid grey" dropdown-class-name="dropdownClassName" tree-node-filter-prop="title" :allow-clear="true" v-model="value" style="width: 100%" :tree-data="treeData" tree-checkable :show-checked-strategy="SHOW_PARENT" search-placeholder="请选择" />
+    <a-tree-select  dropdown-class-name="dropdownClassName" tree-node-filter-prop="title" :allow-clear="true" v-model="value" style="width: 100%" :tree-data="treeData" tree-checkable :show-checked-strategy="SHOW_PARENT" search-placeholder="请选择" />
 
   </div>
 </template>
